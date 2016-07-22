@@ -1,0 +1,77 @@
+rep_site_homepage:
+    pattern:  /
+    defaults: { _controller: RepSiteBundle:Page:index }
+
+########################################################################
+
+rep_site_artistas:
+    path:     /artistas
+    defaults: { _controller: RepSiteBundle:Page:artistas }
+    
+rep_site_artistas_cadastra:
+    pattern:     /artistas/cadastra/{id_artista}
+    defaults: { _controller: RepSiteBundle:Artista:cadastrar, id_artista: -1 }
+    requirements:
+        _method: POST
+
+rep_site_artistas_form:
+    pattern: /artistas/form/{id_artista}
+    defaults: {_controller: RepSiteBundle:Artista:form, id_artista: -1}
+    
+########################################################################
+
+rep_site_musicas:
+    path:     /musicas
+    defaults: { _controller: RepSiteBundle:Page:musicas }
+    
+rep_site_musicas_cadastra:
+    pattern:     /musicas/cadastra/{id_musica}
+    defaults: { _controller: RepSiteBundle:Musica:cadastrar, id_musica: -1 }
+    requirements:
+        _method: POST
+
+rep_site_musicas_form:
+    pattern: /musicas/form/{id_musica}
+    defaults: {_controller: RepSiteBundle:Musica:form, id_musica: -1}
+    
+########################################################################
+
+rep_site_eventos:
+    path:     /eventos
+    defaults: { _controller: RepSiteBundle:Page:eventos }
+    
+rep_site_eventos_cadastra:
+    pattern:     /eventos/cadastra/{id_evento}
+    defaults: { _controller: RepSiteBundle:Evento:cadastrar, id_evento: -1 }
+    requirements:
+        _method: POST
+
+rep_site_eventos_form:
+    pattern: /eventos/form/{id_evento}
+    defaults: {_controller: RepSiteBundle:Evento:form, id_evento: -1}
+    
+########################################################################
+
+rep_site_tipos_evento:
+    path:     /tipos-evento
+    defaults: { _controller: RepSiteBundle:Page:tiposEvento }
+    
+rep_site_tipos_evento_cadastra:
+    pattern:     /tipos-evento/cadastra/{id_tipo_evento}
+    defaults: { _controller: RepSiteBundle:TipoEvento:cadastrar, id_tipo_evento: -1 }
+    requirements:
+        _method: POST
+
+rep_site_tipos_evento_form:
+    pattern: /tipos-evento/form/{id_tipo_evento}
+    defaults: {_controller: RepSiteBundle:TipoEvento:form, id_tipo_evento: -1}
+    
+########################################################################
+
+rep_site_musicas_evento:
+    path:     /musicas-evento/{id_evento}
+    defaults: { _controller: RepSiteBundle:MusicaEvento:musicasEvento, id_evento: -1 }
+
+rep_site_atualiza_musicas_evento:
+    path:     /musicas-evento/{id_evento}/atualiza
+    defaults: { _controller: RepSiteBundle:MusicaEvento:atualizaMusicasEvento, id_evento: -1 }

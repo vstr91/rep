@@ -1,0 +1,23 @@
+<table class="table table-hover table-striped text-center">
+    <thead>
+        <tr>
+            <td>Nome</td>
+            <td>Data</td>
+            <td>Tipo</td>
+            <td>A&ccedil;&otilde;es</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evento in eventos %}
+            <tr>
+                <td>{{ evento.nome }}</td>
+                <td>{{ evento.data|date('d/m/Y') }} - {{ evento.data|date('H:i') }}h</td>
+                <td>{{ evento.tipoEvento.nome }}</td>
+                <td>
+                    <a class="link-editar-evento" href="#{{ evento.id }}">Editar</a><br/>
+                    <a class="link-ver-evento" href="{{ path('rep_site_musicas_evento', {'id_evento': evento.id}) }}">Ver Detalhes</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,97 @@
+{% extends "::base.html.twig" %}
+{% block conteudo %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h3 class="text-center">Repert&oacute;rio Atual</h3>
+                <div class="coluna-lista-musicas">
+                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
+                          with {'musicas': musicasAtivas} %}
+                </div>
+                
+            </div>
+            <div class="col-md-4">
+                <h3 class="text-center">M&uacute;sicas na Fila</h3>
+                <div class="coluna-lista-musicas">
+                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
+                          with {'musicas': musicasEmEspera} %}
+                </div>  
+            </div>
+            <div class="col-md-4">
+                <h3 class="text-center">Pr&oacute;ximos Eventos</h3>
+                <div class="coluna-lista-musicas">
+                    {% include 'RepSiteBundle:Evento:tabela-cadastrados-index.html.twig' 
+                          with {'eventos': proximosEventos} %}
+                </div>
+                <a href="{{ path('rep_site_eventos') }}" class="btn btn-brand">Gerenciar Eventos</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-edicao">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                    <h4 class="modal-title" id="titulo-modal">Editar M&uacute;sica</h4>
+                </div>
+                <div class="modal-inner" id="body-edicao">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('.link-editar').click(function () {
+
+            $idMusica = $(this).attr('href').replace('#', '');
+
+            $url = '{{ path('rep_site_musicas_form') }}' + "/" + $idMusica;
+
+            $('#titulo-modal').html("Editar M&uacute;sica");
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#body-edicao').html(response);
+                    $('#btn-editar').show();
+                    $('#modal-edicao').modal('show');
+                }
+            });
+
+            return false;
+
+        });
+        
+        $('.link-editar-evento').click(function () {
+
+            $idEvento = $(this).attr('href').replace('#', '');
+
+            $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
+
+            $('#titulo-modal').html("Editar Evento");
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#body-edicao').html(response);
+                    $('#btn-editar').show();
+                    $('#modal-edicao').modal('show');
+                }
+            });
+
+            return false;
+
+        });
+    </script>
+{% endblock %}

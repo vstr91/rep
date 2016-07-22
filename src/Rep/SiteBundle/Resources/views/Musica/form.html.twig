@@ -1,0 +1,22 @@
+<form id="form-musica-edita" 
+      action="{{ path('rep_site_musicas_cadastra', {'id_musica': musica.id}) }}" 
+      method="POST" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+{#        <input type="submit" class="hide" id="btn-submit" value="Cadastrar" />#}
+    </p>
+</form>
+<script type="text/javascript">
+    {#$('#form-parada').submit(function(){
+        $(this).ajaxSubmit(function(data){
+            console.log(data);
+            $(".caixaForm").dialog('close');
+            return false;
+        });
+        return false;
+    });#}
+    
+    $('#btn-editar').click(function(){
+        $('#form-musica-edita').submit();
+    });
+</script>

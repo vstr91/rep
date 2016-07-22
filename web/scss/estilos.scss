@@ -1,0 +1,63 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13/05/2016, 13:35:14
+    Author     : Almir
+*/
+
+.previa-imagem{
+    width: 100%;
+    height: auto;
+}
+
+.table-responsive{
+    box-shadow: none;
+}
+
+table.dataTable thead .sorting { background: url(images/sort_both.png) no-repeat center right !important; }
+table.dataTable thead .sorting_asc { background: url(images/sort_asc.png) no-repeat center right !important; }
+table.dataTable thead .sorting_desc { background: url(images/sort_desc.png) no-repeat center right !important; }
+
+table.dataTable thead .sorting_asc_disabled { background: url(images/sort_asc_disabled.png) no-repeat center right !important; }
+table.dataTable thead .sorting_desc_disabled { background: url(images/sort_desc_disabled.png) no-repeat center right !important; }
+
+.conectadas{
+    border: 1px solid black;
+    min-height: 300px;
+    max-height: 300px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+.id-musica{
+    display: none;
+}
+
+.conectadas .musicas-evento{
+    text-align: center !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.tile-collapse.active, .tile.active{
+    margin: 0 !important;
+}
+
+.observacao-musica{
+    width: 96%;
+    margin: 2%;
+}
+
+.musicas-evento{
+    overflow: hidden;
+}
+
+.coluna-lista-musicas{
+    overflow: auto;
+    max-height: 500px;
+}

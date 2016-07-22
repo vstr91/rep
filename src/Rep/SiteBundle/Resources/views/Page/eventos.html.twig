@@ -1,0 +1,65 @@
+{% extends "::base.html.twig" %}
+{% block conteudo %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form name="form-evento" id="form-evento" method="POST" 
+                      action="{{ path('rep_site_eventos_cadastra', {'id_evento': -1}) }}">
+                    {{ form_widget(formEvento) }}
+                    <input type="submit" value="Cadastrar" class="btn btn-brand-accent" />
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">Eventos Cadastrados</h3>
+                {% include 'RepSiteBundle:Evento:tabela-cadastrados.html.twig' 
+                          with {'eventos': eventos} %}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-edicao">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                    <h4 class="modal-title">Editar Evento</h4>
+                </div>
+                <div class="modal-inner" id="body-edicao">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('.link-editar-evento').click(function () {
+
+            $idEvento = $(this).attr('href').replace('#', '');
+
+            $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#body-edicao').html(response);
+                    $('#btn-editar').show();
+                    $('#modal-edicao').modal('show');
+                }
+            });
+
+            return false;
+
+        });
+        
+    </script>
+{% endblock %}

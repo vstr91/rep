@@ -1,0 +1,3 @@
+rep_site:
+    resource: "@RepSiteBundle/Resources/config/routing.yml"
+    prefix:   /

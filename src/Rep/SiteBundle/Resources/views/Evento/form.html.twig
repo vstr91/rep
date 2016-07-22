@@ -1,0 +1,43 @@
+<form id="form-evento-edita" 
+      action="{{ path('rep_site_eventos_cadastra', {'id_evento': evento.id}) }}" 
+      method="POST" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+{#        <input type="submit" class="hide" id="btn-submit" value="Cadastrar" />#}
+    </p>
+</form>
+<script type="text/javascript">
+    {#$('#form-parada').submit(function(){
+        $(this).ajaxSubmit(function(data){
+            console.log(data);
+            $(".caixaForm").dialog('close');
+            return false;
+        });
+        return false;
+    });#}
+    
+    jQuery.datetimepicker.setLocale('pt');
+    
+    $('.datetimepicker').datetimepicker({
+            format: "d-m-Y H:i",
+            timepicker: true,
+            datepicker: true,
+            i18n:{
+                pt:{
+                    months:[
+                     'Janeiro','Fevereiro','Março','Abril',
+                     'Maio','Junho','Julho','Agosto',
+                     'Setembro','Outubro','Novembro','Dezembro'
+                    ],
+                    dayOfWeek:[
+                     "Dom", "Seg", "Ter", "Qua", 
+                     "Qui", "Sex", "Sab"
+                    ]
+                }
+            }
+        });
+    
+    $('#btn-editar').click(function(){
+        $('#form-evento-edita').submit();
+    });
+</script>

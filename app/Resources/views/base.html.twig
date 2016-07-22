@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Repertori | Gerenciador de Repert&oacute;rios</title>
+
+        {% block css %}
+            <!-- Bootstrap -->
+            <link href="{{ asset('css/base.css') }}" rel="stylesheet" />
+            <link href="{{ asset('css/project.css') }}" rel="stylesheet" />
+            
+            <link href="{{ asset('css/estilos.css') }}" rel="stylesheet" />
+            <link href="{{ asset('css/jquery.datetimepicker.css') }}" rel="stylesheet" />
+
+            <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+            <!--[if lt IE 9]>
+              <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+              <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+            <![endif]-->
+        {% endblock %}
+    </head>
+    <body style="background-color: #EFEFEF">
+        {% block body %}
+            {% block menu %}
+                <header class="header header-brand">
+                    <ul class="nav nav-list pull-left">
+                        <li>
+                            <a data-toggle="menu" href="#doc-menu">
+                                <span class="icon icon-lg">menu</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="header-affix header-logo margin-left-no margin-right-no affix"><a href="{{ path('rep_site_homepage') }}">Repertori</a></span>
+                </header>
+                <nav aria-hidden="true" class="menu menu-left" id="doc-menu" tabindex="-1">
+                    <div class="menu-scroll">
+                        <div class="menu-content">
+                            <h3 class="menu-logo">Op&ccedil;&otilde;es</h3>
+                            <ul class="nav">
+                                    <li><h4 class="text-brand-accent padding-left">Op&ccedil;&otilde;es Gerais</h4></li>
+                                    <li>
+                                        <a class="waves-attach" id="link-gerenciar-artistas" 
+                                           href="{{ path('rep_site_artistas') }}">Gerenciar Artistas</a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" id="link-gerenciar-musicas" 
+                                           href="{{ path('rep_site_musicas') }}">Gerenciar M&uacute;sicas</a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" id="link-gerenciar-eventos" 
+                                           href="{{ path('rep_site_tipos_evento') }}">Gerenciar Tipos de Evento</a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" id="link-gerenciar-eventos" 
+                                           href="{{ path('rep_site_eventos') }}">Gerenciar Eventos</a>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            {% endblock %}
+            {% block conteudo %}
+                <div class="modal fade" id="modal-edicao">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-heading">
+                                <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                                <h4 class="modal-title">Editar Usu&aacute;rio</h4>
+                            </div>
+                            <div class="modal-inner" id="body-edicao">
+
+                            </div>
+                            <div class="modal-footer">
+                                <p class="text-right">
+                                    <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+            {% block rodape %}
+                {#<footer class="footer">
+                    <div class="fbtn-container">
+                        <div class="fbtn-inner">
+                            <a class="fbtn fbtn-brand-accent fbtn-lg" data-toggle="dropdown">
+                                <span class="fbtn-text">Links</span>
+                                <span class="fbtn-ori icon">apps</span>
+                                <span class="fbtn-sub icon">close</span>
+                            </a>
+                            <div class="fbtn-dropdown">
+                                <a class="fbtn" href="#">
+                                    <span class="fbtn-text">App Android</span>
+                                    <span class="icon">android</span>
+                                </a>
+                                <a class="fbtn" href="#">
+                                    <span class="fbtn-text">App iOS</span>
+                                    <span class="icon">phone_iphone</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>#}
+            {% endblock %}
+        {% endblock %}
+        {% block js %}
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            {#            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>#}
+            <script src="{{ asset('js/jquery.js') }}"></script>
+            <script src="{{ asset('js/base.min.js') }}"></script>
+            <script src="{{ asset('js/project.min.js') }}"></script>
+            <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+            <script type="text/javascript">
+                jQuery.datetimepicker.setLocale('pt');
+
+                $('.datetimepicker').datetimepicker({
+                    format: "d-m-Y H:i",
+                    timepicker: true,
+                    datepicker: true,
+                    step: 30,
+                    i18n:{
+                        pt:{
+                            months:[
+                             'Janeiro','Fevereiro','Março','Abril',
+                             'Maio','Junho','Julho','Agosto',
+                             'Setembro','Outubro','Novembro','Dezembro'
+                            ],
+                            dayOfWeek:[
+                             "Dom", "Seg", "Ter", "Qua", 
+                             "Qui", "Sex", "Sab"
+                            ]
+                        }
+                    }
+                });
+            </script>
+        {% endblock %}
+    </body>
+</html>
