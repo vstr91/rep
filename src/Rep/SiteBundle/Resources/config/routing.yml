@@ -18,6 +18,10 @@ rep_site_artistas_form:
     pattern: /artistas/form/{id_artista}
     defaults: {_controller: RepSiteBundle:Artista:form, id_artista: -1}
     
+rep_site_artistas_musicas:
+    pattern: /artistas/musicas/{id_artista}
+    defaults: {_controller: RepSiteBundle:Artista:musicas, id_artista: -1}
+    
 ########################################################################
 
 rep_site_musicas:
@@ -75,3 +79,19 @@ rep_site_musicas_evento:
 rep_site_atualiza_musicas_evento:
     path:     /musicas-evento/{id_evento}/atualiza
     defaults: { _controller: RepSiteBundle:MusicaEvento:atualizaMusicasEvento, id_evento: -1 }
+    
+rep_site_form_cadastra_musicas_evento:
+    path:     /musicas-evento/{id_evento}/cadastra/form
+    defaults: { _controller: RepSiteBundle:MusicaEvento:formCadastraMusica, id_evento: -1 }
+    
+rep_site_cadastra_musicas_evento:
+    path:     /musicas-evento/{id_evento}/cadastra
+    defaults: { _controller: RepSiteBundle:MusicaEvento:cadastraMusica, id_evento: -1 }
+    
+rep_site_tabela_musicas_evento:
+    path:     /musicas-evento/{id_evento}/repertorio
+    defaults: { _controller: RepSiteBundle:MusicaEvento:carregaRepertorio, id_evento: -1 }
+    
+rep_site_remove_musica_evento:
+    path:     /musicas-evento/{id_evento}/repertorio/remove/{id_musica}
+    defaults: { _controller: RepSiteBundle:MusicaEvento:removeMusicaEvento, id_evento: -1, id_musica: -1 }

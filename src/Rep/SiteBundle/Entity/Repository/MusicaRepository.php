@@ -21,4 +21,21 @@ class MusicaRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('m')
+                ->select('m.id', 'm.nome', 'a.id AS artista', 'm.status')
+                ->distinct()
+                ->leftJoin("RepSiteBundle:Artista", "a", "WITH", "a.id = m.artista")
+                ->where("m.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('m.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }

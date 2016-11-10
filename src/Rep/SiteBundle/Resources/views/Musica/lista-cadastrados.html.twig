@@ -1,18 +1,20 @@
-<div class="text-center conectadas tile-wrap" id="lista-cadastradas-evento">
-
+<table id="tabela-cadastradas-evento" class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <td>Cont.</td>
+            <td>M&uacute;sica</td>
+            <td>Artista</td>
+            <td>A&ccedil;&otilde;es</td>
+        </tr>
+    </thead>
+    <tbody>
     {% for musica in musicas %}
-        <div class="tile tile-collapse musicas-evento">
-            <div data-toggle="tile" data-target="#{{ musica.id }}">
-                <div class="tile-inner">
-                    <span class="id-musica">{{ musica.id }}</span>{{ musica.nome }} 
-                    ({{ musica.artista.nome }})
-                </div>
-            </div>
-            <div id="{{ musica.id }}" class="tile-active-show collapse">
-                <p><b>Observa&ccedil;&otilde;es</b></p>
-                <textarea type="text" name="obs[]" id="obs[]" class="observacao-musica" rows="5"></textarea>
-            </div>
-        </div>
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ musica.nome }}</td>
+            <td>{{ musica.artista.nome }}</td>
+            <td><a href="#{{ musica.id }}" class="link-remover-musica">Remover</a></td>
+        </tr>
     {% endfor %}
-
-</div>
+    </tbody>
+</table>

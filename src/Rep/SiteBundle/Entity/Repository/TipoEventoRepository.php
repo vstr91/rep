@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class TipoEventoRepository extends EntityRepository
 {
+    
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('te')
+                ->select('te.id, te.nome, te.status')
+                ->distinct()
+                ->where("te.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('te.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }

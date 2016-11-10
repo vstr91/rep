@@ -7,69 +7,111 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4" id="coluna-lista-evento">
-                <h3 class="text-center">Repert&oacute;rio do Evento</h3>
-                {% include 'RepSiteBundle:MusicaEvento:lista-cadastrados.html.twig' 
+            <div class="col-md-12" id="coluna-repertorio">
+                <h3 class="text-center">Repert&oacute;rio</h3>
+                <div id="caixa-repertorio">
+                    {% include 'RepSiteBundle:Musica:lista-cadastrados.html.twig' 
                           with {'musicas': musicasEvento} %}
-            </div>
-            <div class="col-md-4" id="coluna-lista-repertorio">
-                <h3 class="text-center">Repert&oacute;rio Ativo</h3>
-                {% include 'RepSiteBundle:Musica:lista-cadastrados.html.twig' 
-                          with {'musicas': musicasAtivas} %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p class="text-red text-bold">Inclus&atilde;o / exclus&atilde;o de m&uacute;sicas nas listas s&atilde;o 
-                    salvas automaticamente. Utilize o bot&atilde;o abaixo apenas em caso de altera&ccedil;&atilde;o 
-                    nas observa&ccedil;&otilde;es</p>
-                <button id="btn-salvar" class="btn btn-brand-accent">Salvar Observa&ccedil;&otilde;es</button>
+                </div>
+                <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
+                <a href="{{ path('rep_site_eventos') }}" class="btn btn-brand" id="btn-voltar">Voltar</a>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-edicao">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                    <h4 class="modal-title">Adicionar M&uacute;sica</h4>
+                </div>
+                <div class="modal-inner" id="body-edicao">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <div class="modal fade" id="modal-load">
+        <div class="modal-dialog">
+            <div class="modal-content" id="content-load">
+                <div class="modal-inner text-center">
+                    <img src="{{ asset('imagens/load.gif') }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 {% block js %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('js/jquery-ui.min.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}" />
+    <script src="{{ asset('js/jquery.form.min.js') }}"></script>
     <script type="text/javascript">
 
-        function salvarDados() {
-            var musicasEvento = [];
-
-            $('#coluna-lista-evento > #lista-cadastradas-evento > .musicas-evento > div > div').each(function () {
-                var obs = $(this).parent().next('div').children('.observacao-musica').val();
-                musicasEvento.push($(this).children('.id-musica').html() + "|" + obs);
-            });
+        function carregarTabela() {
+            $url = '{{ path('rep_site_tabela_musicas_evento', {'id_evento': evento.id}) }}';
 
             $.ajax({
-                type: 'POST',
-                url: '{{ path('rep_site_atualiza_musicas_evento',{id_evento: evento.id}) }}',
-                data: {
-                    'musicas': musicasEvento
-                },
+                type: 'GET',
+                url: $url,
                 success: function (response) {
-                    
-                    if(response != null && response != ''){
-                        alert(response);
-                    }
-                    
+                    $('#caixa-repertorio').html(response);
                 }
             });
         }
 
-        $('.conectadas').sortable({
-            connectWith: '.conectadas',
-            appendTo: 'body',
-            forcePlaceholderSize: false,
-            receive: function (event, ui) {
-                salvarDados();
-            }
-        }).disableSelection();
-        
-        $('#btn-salvar').click(function(){
-            salvarDados();
+        $(document).ready(function () {
+            
+            $('#btn-adiciona-musica').click(function () {
+
+                $url = '{{ path('rep_site_form_cadastra_musicas_evento', {'id_evento': evento.id}) }}';
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-edicao').html(response);
+                        $('#btn-editar').show();
+                        $('#modal-edicao').modal('show');
+                    }
+                });
+
+                return false;
+
+            });
+
+            $(document).on('click', '.link-remover-musica', function(){
+
+                $id = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_remove_musica_evento', {'id_evento': evento.id}) }}/' + $id;
+
+                $('#modal-load').modal('show');
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#modal-load').modal('hide');
+                        carregarTabela();
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $('#btn-editar').click(function(){
+                $('#form-adiciona-musica-evento').submit();
+                $('#modal-edicao').modal('hide');
+            });
+
         });
-        
     </script>
 {% endblock %}

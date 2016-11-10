@@ -21,4 +21,33 @@ class ArtistaRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('a')
+//                ->select('b.id, b.nome, b.status, l.id AS local')
+                ->select('a.id, a.nome, a.status')
+                ->distinct()
+//                ->leftJoin("CircularSiteBundle:Local", "l", "WITH", "l.id = b.local")
+                ->where("a.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('a.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
+    public function listarTodosPorQuantidadeMusicas(){
+        $qb = $this->createQueryBuilder('a')
+                ->select('a as artista', 'COUNT(m.id) AS musicas')
+                ->innerJoin('RepSiteBundle:Musica', 'm', 'WITH', 'm.artista = a.id')
+                ->groupBy('a')
+                ->addOrderBy('musicas', 'DESC')
+                ->addOrderBy('a.nome', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
+    
 }

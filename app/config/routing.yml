@@ -1,3 +1,8 @@
 rep_site:
     resource: "@RepSiteBundle/Resources/config/routing.yml"
     prefix:   /
+    
+rest : 
+  type : rest 
+  resource : "routing_rest.yml"
+  prefix : /api

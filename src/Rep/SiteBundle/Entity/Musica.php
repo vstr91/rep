@@ -8,11 +8,10 @@
 
 namespace Rep\SiteBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
 
 /**
  * Description of Musica
@@ -26,6 +25,7 @@ use JMS\Serializer\Annotation\Expose;
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\MusicaRepository")
  * @ORM\Table(name="musica")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity({"nome", "artista"}, message="Já existe uma música com esse título vinculada a esse artista")
  * 
  */
 class Musica extends EntidadeBase {
@@ -40,8 +40,9 @@ class Musica extends EntidadeBase {
     protected $nome;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Artista")
+     * @ORM\ManyToOne(targetEntity="Artista", inversedBy="musicas")
      * @ORM\JoinColumn(name="id_artista", referencedColumnName="id")
+     * @OrderBy({"artista" = "DESC"})
      * 
      */
     protected $artista;
@@ -156,10 +157,10 @@ class Musica extends EntidadeBase {
     /**
      * Set artista
      *
-     * @param \Rep\SiteBundle\Entity\Artista $artista
+     * @param Artista $artista
      * @return Musica
      */
-    public function setArtista(\Rep\SiteBundle\Entity\Artista $artista = null)
+    public function setArtista(Artista $artista = null)
     {
         $this->artista = $artista;
 
@@ -169,7 +170,7 @@ class Musica extends EntidadeBase {
     /**
      * Get artista
      *
-     * @return \Rep\SiteBundle\Entity\Artista 
+     * @return Artista 
      */
     public function getArtista()
     {

@@ -31,9 +31,9 @@ class MusicaEventoController extends Controller {
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->findBy(array('evento' => $id_evento, 'status' => 0));
+                ->listarTodasPorEvento($id_evento);
         
-        $musicasAtivas = $em->getRepository('RepSiteBundle:MusicaEvento')->listaMusicasAtivasAusentesNoEvento($id_evento);
+        $musicas = $em->getRepository('RepSiteBundle:Musica')->findBy(array('status' => 0));
         
         //die(var_dump($musicasAtivas));
         
@@ -42,7 +42,7 @@ class MusicaEventoController extends Controller {
                     'usuario' => $user,
                     'evento' => $evento,
                     'musicasEvento' => $musicasEvento,
-                    'musicasAtivas' => $musicasAtivas
+                    'musicasAtivas' => $musicas
                 ));
         
     }
@@ -78,6 +78,120 @@ class MusicaEventoController extends Controller {
             $em->persist($musicaEvento);
             
         }
+        
+        $em->flush();
+        
+        return new \Symfony\Component\HttpFoundation\Response();
+        
+    }
+    
+    public function formCadastraMusicaAction($id_evento){
+        $evento = null;
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        
+        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listaMusicasAtivasAusentesNoEvento($id_evento);
+        
+        return $this->render('RepSiteBundle:MusicaEvento:adiciona-musica.html.twig', 
+                array(
+                    'usuario' => $user,
+                    'evento' => $evento,
+                    'musicas' => $musicasEvento
+                ));
+        
+    }
+    
+    public function cadastraMusicaAction($id_evento){
+        $evento = null;
+        $request = $this->getRequest();
+        
+        $musicas = $request->request->get('musica');
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        
+        foreach($musicas as $musica){
+            $umaMusica = $em->find('RepSiteBundle:Musica', $musica);
+            
+            $umaMusicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->
+                findOneBy(array('musica' => $umaMusica, 'evento' => $evento));
+            
+            if($umaMusicaEvento == null){
+                $umaMusicaEvento = new MusicaEvento();
+            }
+            
+            $umaMusicaEvento->setMusica($umaMusica);
+            $umaMusicaEvento->setEvento($evento);
+            $umaMusicaEvento->setStatus(0);
+            
+            $em->persist($umaMusicaEvento);
+            
+        }
+        
+        $em->flush();
+        
+        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listarTodasPorEvento($id_evento);
+        
+        return $this->redirect($this->generateUrl('rep_site_musicas_evento', array('id_evento' => $id_evento, 
+            'musicas' => $musicasEvento)));
+        
+    }
+    
+    public function carregaRepertorioAction($id_evento){
+        $evento = null;
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        
+        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listarTodasPorEvento($id_evento);
+        
+        return $this->render('RepSiteBundle:MusicaEvento:tabela-repertorio.html.twig', 
+                array(
+                    'usuario' => $user,
+                    'evento' => $evento,
+                    'musicas' => $musicasEvento
+                ));
+        
+    }
+    
+    public function removeMusicaEventoAction($id_evento, $id_musica){
+        $evento = null;
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        
+        $musica = $em->find('RepSiteBundle:Musica', $id_musica);
+        
+        $musicaEvento = new MusicaEvento();
+        
+        $musicaEvento->setMusica($musica);
+        $musicaEvento->setEvento($evento);
+        
+        $musicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->
+                findOneBy(array('musica' => $musica, 'evento' => $evento));
+        
+        $musicaEvento->setStatus(2);
+        
+        $em->persist($musicaEvento);
         
         $em->flush();
         

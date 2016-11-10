@@ -63,4 +63,34 @@ class MusicaEventoRepository extends EntityRepository
         
     }
     
+    public function listarTodasPorEvento($id_evento){
+        $qb = $this->createQueryBuilder('me')
+                ->select('m')
+                ->innerJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->andWhere('me.evento = :evento')
+                ->andWhere('me.status = 0')
+                ->setParameter(':evento', $id_evento)
+                ->addOrderBy('m.nome');
+
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('me')
+                ->select('me.id', 'me.observacao', 'm.id AS musica', 'e.id AS evento', 'me.status')
+                ->distinct()
+                ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = me.musica")
+                ->leftJoin("RepSiteBundle:Evento", "e", "WITH", "e.id = me.evento")
+                ->where("me.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('me.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }

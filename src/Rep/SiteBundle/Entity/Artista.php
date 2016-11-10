@@ -8,8 +8,8 @@
 
 namespace Rep\SiteBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 //use JMS\Serializer\Annotation\ExclusionPolicy;
 //use JMS\Serializer\Annotation\Expose;
@@ -26,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\ArtistaRepository")
  * @ORM\Table(name="artista")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("nome", message="O artista já foi cadastrado")
  * 
  */
 class Artista extends EntidadeBase {
@@ -33,12 +34,21 @@ class Artista extends EntidadeBase {
     /**
      * @var string
      *
-     * @ORM\Column(name="nome", type="string", length=100)
+     * @ORM\Column(name="nome", type="string", length=100, unique=true)
      * @Assert\NotBlank()
      * 
      */
     private $nome;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Musica", mappedBy="artista")
+     */
+    private $musicas;
+    
+    public function __construct() {
+        $this->musicas = new \Doctrine\Common\Collections\ArrayCollection;
+    }
+
     public function __toString() {
         return $this->getNome();
     }
@@ -144,5 +154,39 @@ class Artista extends EntidadeBase {
     public function getUltimaAlteracao()
     {
         return $this->ultimaAlteracao;
+    }
+
+    /**
+     * Add musica
+     *
+     * @param \Rep\SiteBundle\Entity\Musica $musica
+     *
+     * @return Artista
+     */
+    public function addMusica(\Rep\SiteBundle\Entity\Musica $musica)
+    {
+        $this->musicas[] = $musica;
+
+        return $this;
+    }
+
+    /**
+     * Remove musica
+     *
+     * @param \Rep\SiteBundle\Entity\Musica $musica
+     */
+    public function removeMusica(\Rep\SiteBundle\Entity\Musica $musica)
+    {
+        $this->musicas->removeElement($musica);
+    }
+
+    /**
+     * Get musicas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMusicas()
+    {
+        return $this->musicas;
     }
 }

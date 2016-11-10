@@ -8,14 +8,13 @@
                     {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
                           with {'musicas': musicasAtivas} %}
                 </div>
-                
             </div>
             <div class="col-md-4">
-                <h3 class="text-center">M&uacute;sicas na Fila</h3>
+                <h3 class="text-center">M&uacute;sicas por Artista</h3>
                 <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
-                          with {'musicas': musicasEmEspera} %}
-                </div>  
+                    {% include 'RepSiteBundle:Artista:tabela-cadastrados-index.html.twig' 
+                          with {'artistas': artistas} %}
+                </div>
             </div>
             <div class="col-md-4">
                 <h3 class="text-center">Pr&oacute;ximos Eventos</h3>
@@ -24,6 +23,15 @@
                           with {'eventos': proximosEventos} %}
                 </div>
                 <a href="{{ path('rep_site_eventos') }}" class="btn btn-brand">Gerenciar Eventos</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h3 class="text-center">M&uacute;sicas na Fila</h3>
+                <div class="coluna-lista-musicas">
+                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
+                          with {'musicas': musicasEmEspera} %}
+                </div>  
             </div>
         </div>
     </div>
@@ -71,7 +79,7 @@
             return false;
 
         });
-        
+
         $('.link-editar-evento').click(function () {
 
             $idEvento = $(this).attr('href').replace('#', '');
@@ -93,5 +101,28 @@
             return false;
 
         });
+        
+        $('.link-ver-musicas').click(function () {
+
+            $idArtista = $(this).attr('href').replace('#', '');
+
+            $url = '{{ path('rep_site_artistas_musicas') }}' + "/" + $idArtista;
+
+            $('#titulo-modal').html("Lista de Músicas");
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#body-edicao').html(response);
+                    $('#btn-editar').hide();
+                    $('#modal-edicao').modal('show');
+                }
+            });
+
+            return false;
+
+        });
+        
     </script>
 {% endblock %}

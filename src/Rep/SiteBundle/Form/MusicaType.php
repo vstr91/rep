@@ -2,6 +2,7 @@
 
 namespace Rep\SiteBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +20,11 @@ class MusicaType extends AbstractType
             ->add('status', 'choice', array(
                     'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo')
                 ))
-            ->add('artista')
+            ->add('artista', null, array(
+                'query_builder' => function(EntityRepository $repository) { 
+                    return $repository->createQueryBuilder('a')->orderBy('a.nome', 'ASC');
+                }
+            ))
         ;
     }
     

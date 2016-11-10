@@ -1,0 +1,8 @@
+#pais : 
+#  type: rest
+#  resource:     "CircularSiteBundle:PaisRest"
+#  name_prefix:  api_
+  
+rep_api_get_dados:
+    pattern: /recebe-dados/{hash}/{data}
+    defaults: {_controller: RepSiteBundle:RepRest:getDados}

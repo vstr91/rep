@@ -100,4 +100,17 @@ class ArtistaController extends Controller {
                 ));
     }
     
+    public function musicasAction($id_artista){
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getManager();
+        $musicas = $em->getRepository('RepSiteBundle:Musica')
+                ->findBy(array('artista' => $id_artista));
+        
+        return $this->render('RepSiteBundle:Artista:musicas.html.twig',
+                array(
+                    'musicas' => $musicas
+                ));
+    }
+    
 }

@@ -28,9 +28,26 @@ class EventoRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e')
                 ->select('e')
                 ->distinct()
-                ->addOrderBy('e.data');
+                ->addOrderBy('e.dataCadastro', 'DESC');
         
         return $qb->getQuery()->getResult();
+    }
+    
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('e')
+                ->select('e.id, e.nome, e.data, e.status, te.id AS tipo_evento')
+                ->distinct()
+                ->leftJoin("RepSiteBundle:TipoEvento", "te", "WITH", "te.id = e.tipoEvento")
+                ->where("e.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('e.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
     }
     
 }

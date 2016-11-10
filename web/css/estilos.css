@@ -60,4 +60,26 @@ table.dataTable thead .sorting_desc_disabled {
   overflow: auto;
   max-height: 500px; }
 
+#lista-cadastradas-evento {
+  list-style: none; }
+
+#lista-cadastradas-evento li {
+  padding: 10px;
+  text-align: center;
+  background-color: #EFEFEF;
+  border: 1px solid black; }
+
+.caixa-excluir {
+  padding: 5px;
+  text-align: right; }
+
+#content-load {
+  background-color: transparent;
+  box-shadow: none; }
+
+#caixa-lista-musicas {
+  height: 300px;
+  max-height: 300px;
+  overflow-y: auto; }
+
 /*# sourceMappingURL=estilos.css.map */

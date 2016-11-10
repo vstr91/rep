@@ -1,0 +1,18 @@
+<table class="table table-hover table-striped text-center">
+    <thead>
+        <tr>
+            <td>Artista</td>
+            <td>M&uacute;sicas</td>
+            <td>A&ccedil;&otilde;es</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for art in artistas %}
+            <tr>
+                <td>{{ art.artista.nome }}</td>
+                <td>{{ art.artista.musicas|length }}</td>
+                <td><a href="#{{ art.artista.id }}" class="link-ver-musicas">Ver</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
