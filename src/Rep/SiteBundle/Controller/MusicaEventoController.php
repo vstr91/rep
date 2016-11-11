@@ -35,14 +35,15 @@ class MusicaEventoController extends Controller {
         
         $musicas = $em->getRepository('RepSiteBundle:Musica')->findBy(array('status' => 0));
         
-        //die(var_dump($musicasAtivas));
+        $referer = $request->headers->get('referer');
         
         return $this->render('RepSiteBundle:MusicaEvento:musicas-evento.html.twig', 
                 array(
                     'usuario' => $user,
                     'evento' => $evento,
                     'musicasEvento' => $musicasEvento,
-                    'musicasAtivas' => $musicas
+                    'musicasAtivas' => $musicas,
+                    'referer' => $referer
                 ));
         
     }

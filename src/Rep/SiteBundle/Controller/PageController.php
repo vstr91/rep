@@ -16,6 +16,10 @@ class PageController extends Controller
         
         $artistas = $em->getRepository('RepSiteBundle:Artista')->listarTodosPorQuantidadeMusicas();
         
+        $musicas = $em->getRepository('RepSiteBundle:Musica')->listarTodasPorSituacao();
+        
+        $execucoes = $em->getRepository('RepSiteBundle:Musica')->listarTodasPorDataExecucao();
+        
         $musicasAtivas = $em->getRepository('RepSiteBundle:Musica')
                 ->findBy(array('status' => 0), array('nome' => 'ASC'));
         $musicasEmEspera = $em->getRepository('RepSiteBundle:Musica')
@@ -28,7 +32,9 @@ class PageController extends Controller
             'musicasAtivas' => $musicasAtivas,
             'musicasEmEspera' => $musicasEmEspera,
             'proximosEventos' => $proximosEventos,
-            'artistas' => $artistas
+            'artistas' => $artistas,
+            'musicas' => $musicas,
+            'execucoes' => $execucoes
         ));
     }
     

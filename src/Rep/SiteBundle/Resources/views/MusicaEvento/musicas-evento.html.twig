@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="text-center">{{ evento.nome }}</h3>
+                <h3 class="text-center">{{ evento.nome }}<br /><small>{{ evento.data|date('d/m/Y H:i') }}</small></h3>
             </div>
         </div>
         <div class="row">
@@ -14,7 +14,7 @@
                           with {'musicas': musicasEvento} %}
                 </div>
                 <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
-                <a href="{{ path('rep_site_eventos') }}" class="btn btn-brand" id="btn-voltar">Voltar</a>
+                <a href="{{ referer }}" class="btn btn-brand" id="btn-voltar">Voltar</a>
             </div>
         </div>
     </div>

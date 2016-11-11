@@ -38,4 +38,36 @@ class MusicaRepository extends EntityRepository
         
     }
     
+    public function listarTodasPorSituacao(){
+        $qb = $this->createQueryBuilder('m')
+                ->select('m.status', 'COUNT(m.id) AS quantidade')
+                ->groupBy('m.status')
+                ;
+
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function listarTodasPorDataExecucao(){
+        
+        $sql = "SELECT m.nome, 
+(
+	SELECT MAX(e.data)
+	FROM musica_evento me INNER JOIN
+		  evento e ON e.id = me.id_evento
+	WHERE e.id = me.id_evento
+	AND   me.id_musica = m.id 
+	AND   me.`status` <> 2
+	AND   e.data <= NOW()
+) AS 'execucao'
+FROM musica m
+GROUP BY m.nome
+ORDER BY execucao";
+        
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+    
 }

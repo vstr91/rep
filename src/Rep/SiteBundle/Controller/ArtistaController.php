@@ -105,7 +105,7 @@ class ArtistaController extends Controller {
         
         $em = $this->getDoctrine()->getManager();
         $musicas = $em->getRepository('RepSiteBundle:Musica')
-                ->findBy(array('artista' => $id_artista));
+                ->findBy(array('artista' => $id_artista), array('nome' => 'ASC'));
         
         return $this->render('RepSiteBundle:Artista:musicas.html.twig',
                 array(

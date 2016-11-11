@@ -43,6 +43,7 @@ class ArtistaRepository extends EntityRepository
         $qb = $this->createQueryBuilder('a')
                 ->select('a as artista', 'COUNT(m.id) AS musicas')
                 ->innerJoin('RepSiteBundle:Musica', 'm', 'WITH', 'm.artista = a.id')
+                ->where('m.status != 2')
                 ->groupBy('a')
                 ->addOrderBy('musicas', 'DESC')
                 ->addOrderBy('a.nome', 'ASC');

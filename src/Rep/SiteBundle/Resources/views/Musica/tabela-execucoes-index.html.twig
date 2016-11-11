@@ -1,0 +1,47 @@
+<table class="table table-hover table-striped text-center">
+    <thead>
+        <tr>
+            <td>Nome</td>
+            <td>Data</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for musica in musicas %}
+            
+            {% set difference = date('now'|date('d/m/Y')).diff(date(musica.execucao)) %}
+            
+            {% if musica.execucao is null %}
+                <tr class="destaque">
+                    <td>{{ musica.nome }}</td>
+                    {% if musica.execucao is null %}
+                        <td>N/D</td>
+                    {% else %}
+                        <td>{{ musica.execucao|date('d/m/Y') }} - {{ difference.days }}</td>
+                    {% endif %}
+
+                </tr>
+            {% elseif difference.days > 20 %}
+                <tr class="destaque-segundo-nivel">
+                    <td>{{ musica.nome }}</td>
+                    {% if musica.execucao is null %}
+                        <td>N/D</td>
+                    {% else %}
+                        <td>{{ musica.execucao|date('d/m/Y') }}</td>
+                    {% endif %}
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ musica.nome }}</td>
+                    {% if musica.execucao is null %}
+                        <td>N/D</td>
+                    {% else %}
+                        <td>{{ musica.execucao|date('d/m/Y') }}</td>
+                    {% endif %}
+
+                </tr>
+            {% endif %}
+            
+        {% endfor %}
+    </tbody>
+</table>

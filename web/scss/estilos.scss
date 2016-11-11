@@ -8,6 +8,10 @@ and open the template in the editor.
     Author     : Almir
 */
 
+$vermelho: #DD0000;
+$branco: #FFFFFF;
+$laranja: #FF8C00;
+
 .previa-imagem{
     width: 100%;
     height: auto;
@@ -87,4 +91,14 @@ table.dataTable thead .sorting_desc_disabled { background: url(images/sort_desc_
     height: 300px;
     max-height: 300px;
     overflow-y: auto;
+}
+
+.destaque{
+    background-color: $vermelho !important;
+    color: $branco !important;
+}
+
+.destaque-segundo-nivel{
+    background-color: $laranja !important;
+    color: $branco !important;
 }

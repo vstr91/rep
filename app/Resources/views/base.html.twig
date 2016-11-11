@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Repertori | Gerenciador de Repert&oacute;rios</title>
+        <title>Gerenciador de Repert&oacute;rio</title>
 
         {% block css %}
             <!-- Bootstrap -->
@@ -33,7 +33,8 @@
                             </a>
                         </li>
                     </ul>
-                    <span class="header-affix header-logo margin-left-no margin-right-no affix"><a href="{{ path('rep_site_homepage') }}">Repertori</a></span>
+                    <span class="header-affix header-logo margin-left-no margin-right-no affix">
+                        <a href="{{ path('rep_site_homepage') }}">Gerenciador de Repert&oacute;rio</a></span>
                 </header>
                 <nav aria-hidden="true" class="menu menu-left" id="doc-menu" tabindex="-1">
                     <div class="menu-scroll">
@@ -41,6 +42,10 @@
                             <h3 class="menu-logo">Op&ccedil;&otilde;es</h3>
                             <ul class="nav">
                                     <li><h4 class="text-brand-accent padding-left">Op&ccedil;&otilde;es Gerais</h4></li>
+                                    <li>
+                                        <a class="waves-attach" 
+                                           href="{{ path('rep_site_homepage') }}">P&aacute;gina Inicial</a>
+                                    </li>
                                     <li>
                                         <a class="waves-attach" id="link-gerenciar-artistas" 
                                            href="{{ path('rep_site_artistas') }}">Gerenciar Artistas</a>
