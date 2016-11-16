@@ -18,7 +18,8 @@ class MusicaType extends AbstractType
         $builder
             ->add('nome')
             ->add('status', 'choice', array(
-                    'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo')
+                    'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo', 
+                        '3' => 'Sugestão')
                 ))
             ->add('artista', null, array(
                 'query_builder' => function(EntityRepository $repository) { 

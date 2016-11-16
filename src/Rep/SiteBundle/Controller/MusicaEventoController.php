@@ -100,6 +100,10 @@ class MusicaEventoController extends Controller {
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
                 ->listaMusicasAtivasAusentesNoEvento($id_evento);
         
+        if(sizeof($musicasEvento) == 0){
+            $musicasEvento = $em->getRepository('RepSiteBundle:Musica')->listarTodasAtivas();
+        }
+        
         return $this->render('RepSiteBundle:MusicaEvento:adiciona-musica.html.twig', 
                 array(
                     'usuario' => $user,

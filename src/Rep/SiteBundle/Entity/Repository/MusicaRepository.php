@@ -21,6 +21,15 @@ class MusicaRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    public function listarTodasAtivas(){
+        $qb = $this->createQueryBuilder('m')
+                ->select('m')
+                ->where('m.status = 0')
+                ->addOrderBy('m.nome');
+
+        return $qb->getQuery()->getResult();
+    }
+    
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('m')
                 ->select('m.id', 'm.nome', 'a.id AS artista', 'm.status')
@@ -49,7 +58,7 @@ class MusicaRepository extends EntityRepository
     
     public function listarTodasPorDataExecucao(){
         
-        $sql = "SELECT m.nome, 
+        $sql = "SELECT m.nome, a.nome AS artista,
 (
 	SELECT MAX(e.data)
 	FROM musica_evento me INNER JOIN
@@ -59,9 +68,10 @@ class MusicaRepository extends EntityRepository
 	AND   me.`status` <> 2
 	AND   e.data <= NOW()
 ) AS 'execucao'
-FROM musica m
+FROM musica m INNER JOIN
+     artista a ON a.id = m.id_artista
 GROUP BY m.nome
-ORDER BY execucao";
+ORDER BY execucao, m.nome";
         
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();

@@ -12,6 +12,17 @@ $vermelho: #DD0000;
 $branco: #FFFFFF;
 $laranja: #FF8C00;
 
+html, body{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+}
+
+.row{
+    max-width: 100%;
+}
+
 .previa-imagem{
     width: 100%;
     height: auto;
@@ -62,8 +73,8 @@ table.dataTable thead .sorting_desc_disabled { background: url(images/sort_desc_
 }
 
 .coluna-lista-musicas{
-    overflow: auto;
-    max-height: 500px;
+    overflow-y: auto;
+    max-height: 600px;
 }
 
 #lista-cadastradas-evento{
@@ -101,4 +112,12 @@ table.dataTable thead .sorting_desc_disabled { background: url(images/sort_desc_
 .destaque-segundo-nivel{
     background-color: $laranja !important;
     color: $branco !important;
+}
+
+.linhas-index{
+    margin: 0;
+}
+
+.footer-vostre{
+    position: relative !important;
 }

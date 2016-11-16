@@ -2,17 +2,19 @@
     <thead>
         <tr>
             <td>Nome</td>
+            <td>Artista</td>
             <td>Data</td>
         </tr>
     </thead>
     <tbody>
         {% for musica in musicas %}
             
-            {% set difference = date('now'|date('d/m/Y')).diff(date(musica.execucao)) %}
+            {% set difference = date('now'|date('Y-m-d')).diff(date(musica.execucao|default('2000-01-01'))) %}
             
             {% if musica.execucao is null %}
                 <tr class="destaque">
                     <td>{{ musica.nome }}</td>
+                    <td>{{ musica.artista }}</td>
                     {% if musica.execucao is null %}
                         <td>N/D</td>
                     {% else %}
@@ -23,6 +25,7 @@
             {% elseif difference.days > 20 %}
                 <tr class="destaque-segundo-nivel">
                     <td>{{ musica.nome }}</td>
+                    <td>{{ musica.artista }}</td>
                     {% if musica.execucao is null %}
                         <td>N/D</td>
                     {% else %}
@@ -33,6 +36,7 @@
             {% else %}
                 <tr>
                     <td>{{ musica.nome }}</td>
+                    <td>{{ musica.artista }}</td>
                     {% if musica.execucao is null %}
                         <td>N/D</td>
                     {% else %}

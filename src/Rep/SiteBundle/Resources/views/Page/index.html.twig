@@ -1,7 +1,7 @@
 {% extends "::base.html.twig" %}
 {% block conteudo %}
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row linhas-index">
             <div class="col-md-4">
                 <h3 class="text-center">Repert&oacute;rio Atual</h3>
                 <div class="coluna-lista-musicas">
@@ -10,11 +10,11 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <h3 class="text-center">M&uacute;sicas por Artista<br /><small>Ativas e em Espera</small></h3>
+                <h3 class="text-center">M&uacute;sicas em Espera</h3>
                 <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Artista:tabela-cadastrados-index.html.twig' 
-                          with {'artistas': artistas} %}
-                </div>
+                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
+                          with {'musicas': musicasEmEspera} %}
+                </div>  
             </div>
             <div class="col-md-4">
                 <h3 class="text-center">Pr&oacute;ximos Eventos</h3>
@@ -25,22 +25,15 @@
                 <a href="{{ path('rep_site_eventos') }}" class="btn btn-brand">Gerenciar Eventos</a>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <h3 class="text-center">M&uacute;sicas em Espera</h3>
+        <div class="row linhas-index">
+            <div class="col-md-5 col-md-offset-1">
+                <h3 class="text-center">M&uacute;sicas Sugeridas</h3>
                 <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
-                          with {'musicas': musicasEmEspera} %}
-                </div>  
+                    {% include 'RepSiteBundle:Musica:tabela-sugestoes-index.html.twig' 
+                          with {'musicas': musicasSugestao} %}
+                </div>
             </div>
-            <div class="col-md-4">
-                <h3 class="text-center">M&uacute;sicas por Situa&ccedil;&atilde;o</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:grafico-situacao-index.html.twig' 
-                          with {'musicas': musicas} %}
-                </div>  
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <h3 class="text-center">M&uacute;sicas - &Uacute;ltimas Execu&ccedil;&otilde;es</h3>
                 <div class="coluna-lista-musicas">
                     {% include 'RepSiteBundle:Musica:tabela-execucoes-index.html.twig' 
@@ -48,7 +41,24 @@
                 </div>  
             </div>
         </div>
+        <div class="row linhas-index">
+            <div class="col-md-5 col-md-offset-1">
+                <h3 class="text-center">M&uacute;sicas por Situa&ccedil;&atilde;o</h3>
+                <div class="coluna-lista-musicas">
+                    {% include 'RepSiteBundle:Musica:grafico-situacao-index.html.twig' 
+                          with {'musicas': musicas} %}
+                </div>  
+            </div>
+            <div class="col-md-5">
+                <h3 class="text-center">M&uacute;sicas por Artista</h3>
+                <div class="coluna-lista-musicas">
+                    {% include 'RepSiteBundle:Artista:tabela-cadastrados-index.html.twig' 
+                          with {'artistas': artistas} %}
+                </div>
+            </div>
+        </div>
     </div>
+    <p>&nbsp;</p>
     <div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -116,7 +126,7 @@
             return false;
 
         });
-        
+
         $('.link-ver-musicas').click(function () {
 
             $idArtista = $(this).attr('href').replace('#', '');
@@ -138,106 +148,107 @@
             return false;
 
         });
-        
+
         // ######### ARTISTAS ###########
-        
+
         var labels = [
-            {% for art in artistas %}
+        {% for art in artistas %}
                     "{{ art.artista.nome }}"
-                    {% if not loop.last %}
-                        ,
-                    {% endif %}
-            {% endfor %}
-        ];
-        
-        var data = [
-            {% for art in artistas %}
-                    {{ art.musicas }}
-                    {% if not loop.last %}
-                        ,
-                    {% endif %}
-            {% endfor %}
-        ];
+            {% if not loop.last %}
+                                    ,
+            {% endif %}
+        {% endfor %}
+                ];
 
-        var ctx = $("#myChart");
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: [
-                        {% for art in artistas %}
-                            'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, .7)'
-                            {% if not loop.last %}
-                                ,
-                            {% endif %}
-                        {% endfor %}
-                    ]
-                }]
-            },
-            options: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        });
-        
-        // ######### FIM ARTISTAS #############
-        
-        // ######### MUSICAS ###########
-        
-        var labels2 = [
-            {% for mus in musicas %}
-                
-                {% if mus.status == 0 %}
-                    "Ativo"
-                {% elseif mus.status == 1 %}
-                    "Em Espera"
-                {% else %}
+                var data = [
+        {% for art in artistas %}
+            {{ art.musicas }}
+            {% if not loop.last %}
+                            ,
+            {% endif %}
+        {% endfor %}
+                ];
+
+                var ctx = $("#myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                                data: data,
+                                backgroundColor: [
+        {% for art in artistas %}
+                                                'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, .7)'
+            {% if not loop.last %}
+                                                            ,
+            {% endif %}
+        {% endfor %}
+                                            ]
+                                        }]
+                                },
+                                options: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            });
+
+                            // ######### FIM ARTISTAS #############
+
+                            // ######### MUSICAS ###########
+
+                            var labels2 = [
+        {% for mus in musicas %}
+
+            {% if mus.status == 0 %}
+                            "Ativo"
+            {% elseif mus.status == 1 %}
+                            "Em Espera"
+            {% elseif mus.status == 3 %}
+                            "Sugestão"
+            {% else %}
                     "Inativo"
-                {% endif %}
+            {% endif %}
 
-                {% if not loop.last %}
-                    ,
-                {% endif %}
-            {% endfor %}
-        ];
-        
-        var data2 = [
-            {% for mus in musicas %}
-                    {{ mus.quantidade }}
-                    {% if not loop.last %}
-                        ,
-                    {% endif %}
-            {% endfor %}
-        ];
+            {% if not loop.last %}
+                            ,
+            {% endif %}
+        {% endfor %}
+                ];
+                        var data2 = [
+        {% for mus in musicas %}
+            {{ mus.quantidade }}
+            {% if not loop.last %}
+                                    ,
+            {% endif %}
+        {% endfor %}
+                        ];
 
-        var ctx2 = $("#myChart2");
-        var myChart2 = new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: labels2,
-                datasets: [{
-                    data: data2,
-                    backgroundColor: [
-                        {% for mus in musicas %}
-                            'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, .7)'
-                            {% if not loop.last %}
-                                ,
-                            {% endif %}
-                        {% endfor %}
-                    ]
-                }]
-            },
-            options: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        });
-        
-        // ######### FIM MUSICAS #############
-        
+                var ctx2 = $("#myChart2");
+                var myChart2 = new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: labels2,
+                        datasets: [{
+                                data: data2,
+                                backgroundColor: [
+        {% for mus in musicas %}
+                                                'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, .7)'
+            {% if not loop.last %}
+                                                            ,
+            {% endif %}
+        {% endfor %}
+                                            ]
+                                        }]
+                                },
+                                options: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            });
+
+                            // ######### FIM MUSICAS #############
+
     </script>
 {% endblock %}

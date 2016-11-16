@@ -24,6 +24,8 @@ class PageController extends Controller
                 ->findBy(array('status' => 0), array('nome' => 'ASC'));
         $musicasEmEspera = $em->getRepository('RepSiteBundle:Musica')
                 ->findBy(array('status' => 1), array('nome' => 'ASC'));
+        $musicasSugestao = $em->getRepository('RepSiteBundle:Musica')
+                ->findBy(array('status' => 3), array('nome' => 'ASC'));
         
         $proximosEventos = $em->getRepository('RepSiteBundle:Evento')
                 ->listarProximosEventos();
@@ -31,6 +33,7 @@ class PageController extends Controller
         return $this->render('RepSiteBundle:Page:index.html.twig', array(
             'musicasAtivas' => $musicasAtivas,
             'musicasEmEspera' => $musicasEmEspera,
+            'musicasSugestao' => $musicasSugestao,
             'proximosEventos' => $proximosEventos,
             'artistas' => $artistas,
             'musicas' => $musicas,

@@ -7,6 +7,15 @@ and open the template in the editor.
     Created on : 13/05/2016, 13:35:14
     Author     : Almir
 */
+html, body {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  max-width: 100%; }
+
+.row {
+  max-width: 100%; }
+
 .previa-imagem {
   width: 100%;
   height: auto; }
@@ -57,8 +66,8 @@ table.dataTable thead .sorting_desc_disabled {
   overflow: hidden; }
 
 .coluna-lista-musicas {
-  overflow: auto;
-  max-height: 500px; }
+  overflow-y: auto;
+  max-height: 600px; }
 
 #lista-cadastradas-evento {
   list-style: none; }
@@ -89,5 +98,11 @@ table.dataTable thead .sorting_desc_disabled {
 .destaque-segundo-nivel {
   background-color: #FF8C00 !important;
   color: #FFFFFF !important; }
+
+.linhas-index {
+  margin: 0; }
+
+.footer-vostre {
+  position: relative !important; }
 
 /*# sourceMappingURL=estilos.css.map */

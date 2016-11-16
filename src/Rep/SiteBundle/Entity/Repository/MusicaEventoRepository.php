@@ -23,7 +23,7 @@ class MusicaEventoRepository extends EntityRepository
           ->getResult();
         
         if(sizeof($musicasEvento) > 0){
-            return $qb->select('m1')
+            $result = $qb->select('m1')
             ->distinct()
             ->from("RepSiteBundle:Musica", "m1")
             ->where('m1.id NOT IN (:musicasEvento)')
@@ -33,16 +33,19 @@ class MusicaEventoRepository extends EntityRepository
             ->getQuery()
             ->getResult();
         } else{
-            return $qb->select('m')
+            $qb = $this->createQueryBuilder('me');
+            
+            $result = $qb->select('mu')
             ->distinct()
-            ->from("RepSiteBundle:Musica", "m")
-                    ->where('m.id NOT IN (0)')
-                    ->andWhere('m.status = 0')
-                    ->addOrderBy('m.nome')
+            ->from("RepSiteBundle:Musica", "mu")
+                    ->where('mu.id NOT IN (0)')
+                    ->andWhere('mu.status = 0')
+                    ->addOrderBy('mu.nome')
             ->getQuery()
             ->getResult();
         }
-                
+         
+        return $result;
         
     }
     
