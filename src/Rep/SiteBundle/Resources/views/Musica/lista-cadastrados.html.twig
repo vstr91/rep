@@ -7,14 +7,25 @@
             <td>A&ccedil;&otilde;es</td>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="body-musicas-evento">
+    {% set contador = 0 %}
     {% for musica in musicas %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ musica.nome }}</td>
-            <td>{{ musica.artista.nome }}</td>
-            <td><a href="#{{ musica.id }}" class="link-remover-musica">Remover</a></td>
-        </tr>
+        
+        {% if musica.id is defined %}
+            <tr>
+                <td class="index-musica" data-id="{{ musica.id }}">{{ loop.index - contador }}</td>
+                <td>{{ musica.nome }}</td>
+                <td>{{ musica.artista.nome }}</td>
+                <td><a href="#{{ musica.id }}" class="link-remover-musica">Remover</a></td>
+            </tr>
+        {% else %}
+            {% set contador = contador+1 %}
+            <tr>
+                <td class="text-center index-musica" data-id="-1" colspan="4">INTERVALO</td>
+            </tr>
+        {% endif %}
+        
+        
     {% endfor %}
     </tbody>
 </table>

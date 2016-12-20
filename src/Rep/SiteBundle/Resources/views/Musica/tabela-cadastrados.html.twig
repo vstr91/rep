@@ -3,6 +3,7 @@
         <tr>
             <td>Nome</td>
             <td>Artista</td>
+            <td>Tom</td>
             <td>Status</td>
             <td>A&ccedil;&otilde;es</td>
         </tr>
@@ -12,6 +13,7 @@
             <tr>
                 <td>{{ musica.nome }}</td>
                 <td>{{ musica.artista.nome }}</td>
+                <td>{{ musica.tom }}</td>
                 <td>
                     {% if musica.status == 0 %}
                         Ativo

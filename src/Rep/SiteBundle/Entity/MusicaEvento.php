@@ -39,6 +39,12 @@ class MusicaEvento extends EntidadeBase {
     protected $observacao;
     
     /**
+     * @ORM\Column(type="integer")
+     * 
+     */
+    protected $ordem;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Musica")
      * @ORM\JoinColumn(name="id_musica", referencedColumnName="id")
      * 
@@ -199,5 +205,29 @@ class MusicaEvento extends EntidadeBase {
     public function getEvento()
     {
         return $this->evento;
+    }
+
+    /**
+     * Set ordem
+     *
+     * @param integer $ordem
+     *
+     * @return MusicaEvento
+     */
+    public function setOrdem($ordem)
+    {
+        $this->ordem = $ordem;
+
+        return $this;
+    }
+
+    /**
+     * Get ordem
+     *
+     * @return integer
+     */
+    public function getOrdem()
+    {
+        return $this->ordem;
     }
 }

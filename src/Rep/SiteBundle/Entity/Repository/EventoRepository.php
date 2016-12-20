@@ -28,7 +28,7 @@ class EventoRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e')
                 ->select('e')
                 ->distinct()
-                ->addOrderBy('e.dataCadastro', 'DESC');
+                ->addOrderBy('e.data', 'DESC');
         
         return $qb->getQuery()->getResult();
     }

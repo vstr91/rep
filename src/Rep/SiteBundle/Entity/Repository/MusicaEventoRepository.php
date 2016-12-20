@@ -18,7 +18,7 @@ class MusicaEventoRepository extends EntityRepository
         
         $musicasEvento = $qb->select('IDENTITY(me.musica)')
           ->where('me.evento = '.$id_evento)
-          ->andWhere('me.status = 0')
+          //->andWhere('me.status = 0')
           ->getQuery()
           ->getResult();
         
@@ -27,7 +27,7 @@ class MusicaEventoRepository extends EntityRepository
             ->distinct()
             ->from("RepSiteBundle:Musica", "m1")
             ->where('m1.id NOT IN (:musicasEvento)')
-                    ->andWhere('m1.status = 0')
+                    //->andWhere('m1.status = 0')
                     ->setParameter('musicasEvento', $musicasEvento)
                     ->addOrderBy('m1.nome')
             ->getQuery()
@@ -39,7 +39,7 @@ class MusicaEventoRepository extends EntityRepository
             ->distinct()
             ->from("RepSiteBundle:Musica", "mu")
                     ->where('mu.id NOT IN (0)')
-                    ->andWhere('mu.status = 0')
+                    //->andWhere('mu.status = 0')
                     ->addOrderBy('mu.nome')
             ->getQuery()
             ->getResult();
@@ -69,11 +69,11 @@ class MusicaEventoRepository extends EntityRepository
     public function listarTodasPorEvento($id_evento){
         $qb = $this->createQueryBuilder('me')
                 ->select('m')
-                ->innerJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->leftJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
                 ->andWhere('me.evento = :evento')
                 ->andWhere('me.status = 0')
                 ->setParameter(':evento', $id_evento)
-                ->addOrderBy('m.nome');
+                ->addOrderBy('me.ordem');
 
         return $qb->getQuery()->getResult();
     }

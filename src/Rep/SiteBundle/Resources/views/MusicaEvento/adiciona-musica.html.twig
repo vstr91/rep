@@ -18,7 +18,7 @@
             $('#modal-load').modal('show');
 
             $(this).ajaxSubmit({
-                success: function () {
+                success: function (response) {
                     carregarTabela();
                     $('#modal-load').modal('hide');
                 }

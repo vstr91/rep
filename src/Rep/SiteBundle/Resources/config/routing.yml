@@ -95,3 +95,11 @@ rep_site_tabela_musicas_evento:
 rep_site_remove_musica_evento:
     path:     /musicas-evento/{id_evento}/repertorio/remove/{id_musica}
     defaults: { _controller: RepSiteBundle:MusicaEvento:removeMusicaEvento, id_evento: -1, id_musica: -1 }
+    
+rep_site_form_cadastra_ordem_musicas_evento:
+    path:     /musicas-evento/{id_evento}/repertorio/ordem
+    defaults: { _controller: RepSiteBundle:MusicaEvento:ordemMusicaEvento, id_evento: -1 }
+    
+rep_site_cadastra_intervalo_evento:
+    path:     /musicas-evento/{id_evento}/cadastra/intervalo
+    defaults: { _controller: RepSiteBundle:MusicaEvento:cadastraIntervalo, id_evento: -1 }

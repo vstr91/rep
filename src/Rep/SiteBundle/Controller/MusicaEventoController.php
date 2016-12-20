@@ -56,6 +56,8 @@ class MusicaEventoController extends Controller {
         
         $em->getRepository('RepSiteBundle:MusicaEvento')->invalidaTodasMusicasEvento($id_evento);
         
+        $cont = 1;
+        
         foreach($musicas as $musica){
             
             $dados = explode("|", $musica);
@@ -74,9 +76,12 @@ class MusicaEventoController extends Controller {
             $musicaEvento->setEvento($evento);
             
             $musicaEvento->setStatus(0);
+            $musicaEvento->setOrdem($cont);
             $musicaEvento->setObservacao($dados[1]);
             
             $em->persist($musicaEvento);
+            
+            $cont++;
             
         }
         
@@ -125,10 +130,17 @@ class MusicaEventoController extends Controller {
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
         foreach($musicas as $musica){
+            
             $umaMusica = $em->find('RepSiteBundle:Musica', $musica);
             
             $umaMusicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->
                 findOneBy(array('musica' => $umaMusica, 'evento' => $evento));
+            
+            $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listarTodasPorEvento($id_evento);
+            
+        $total = count($musicasEvento)+1;
+        //die("Total: ".$total);
             
             if($umaMusicaEvento == null){
                 $umaMusicaEvento = new MusicaEvento();
@@ -137,8 +149,14 @@ class MusicaEventoController extends Controller {
             $umaMusicaEvento->setMusica($umaMusica);
             $umaMusicaEvento->setEvento($evento);
             $umaMusicaEvento->setStatus(0);
+            $umaMusicaEvento->setOrdem($total);
             
             $em->persist($umaMusicaEvento);
+            
+            if($umaMusica->getStatus() != 0){
+                $umaMusica->setStatus(0);
+                $em->persist($umaMusica);
+            }
             
         }
         
@@ -201,6 +219,73 @@ class MusicaEventoController extends Controller {
         $em->flush();
         
         return new \Symfony\Component\HttpFoundation\Response();
+        
+    }
+    
+    function ordemMusicaEventoAction($id_evento){
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $ordem = $this->get('request')->request->get('ordem');
+        
+        //die(var_dump($ordem));
+        
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        
+        foreach($ordem as $musica){
+            
+            $umaMusica = $em->find('RepSiteBundle:Musica', $musica['id']);
+            
+            $musicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->
+                    findOneBy(array('musica' => $umaMusica, 'evento' => $evento));
+            
+            if($musicaEvento == null){
+                $musicaEvento = new MusicaEvento();
+            }
+            
+            $musicaEvento->setMusica($umaMusica);
+            $musicaEvento->setEvento($evento);
+            
+            $musicaEvento->setStatus(0);
+            $musicaEvento->setOrdem($musica['ordem']);
+            
+            $em->persist($musicaEvento);
+            
+        }
+        
+        $em->flush();
+        
+        return new \Symfony\Component\HttpFoundation\Response('ok');
+        
+    }
+    
+    public function cadastraIntervaloAction($id_evento){
+        
+        $evento = null;
+        $request = $this->getRequest();
+        
+        $musicas = $request->request->get('musica');
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+
+        $umaMusicaEvento = new MusicaEvento();
+        
+        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+            ->listarTodasPorEvento($id_evento);
+
+        $total = count($musicasEvento)+1;
+
+        $umaMusicaEvento->setMusica(null);
+        $umaMusicaEvento->setEvento($evento);
+        $umaMusicaEvento->setStatus(0);
+        $umaMusicaEvento->setOrdem($total);
+        
+        $em->persist($umaMusicaEvento);
+        $em->flush();
+        
+        return new \Symfony\Component\HttpFoundation\Response('ok');
         
     }
     

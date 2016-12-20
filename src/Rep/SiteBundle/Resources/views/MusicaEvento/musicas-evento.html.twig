@@ -8,13 +8,14 @@
         </div>
         <div class="row">
             <div class="col-md-12" id="coluna-repertorio">
-                <h3 class="text-center">Repert&oacute;rio</h3>
+                <h3 class="text-center">Repert&oacute;rio<br /><small>Arraste para reordenar</small></h3>
                 <div id="caixa-repertorio">
                     {% include 'RepSiteBundle:Musica:lista-cadastrados.html.twig' 
                           with {'musicas': musicasEvento} %}
                 </div>
-                <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
-                <a href="{{ referer }}" class="btn btn-brand" id="btn-voltar">Voltar</a>
+{#                <a href="#" class="btn btn-brand-accent" id="btn-divisor">Adicionar Divisor de Bloco</a>&nbsp;&nbsp;#}
+                <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>&nbsp;&nbsp;
+                <a href="{{ referer }}" class="btn" id="btn-voltar">Voltar</a>
             </div>
         </div>
     </div>
@@ -52,6 +53,7 @@
 {% block js %}
     {{ parent() }}
     <script src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script src="{{ asset('js/Sortable.min.js') }}"></script>
     <script type="text/javascript">
 
         function carregarTabela() {
@@ -62,11 +64,52 @@
                 url: $url,
                 success: function (response) {
                     $('#caixa-repertorio').html(response);
+                    criarSort();
+                }
+            });
+        }
+        
+        function criarSort(){
+            var el = document.getElementById('body-musicas-evento');
+            var sortable = Sortable.create(el, {
+                draggable: 'tr',
+                onEnd: function (evt) {
+                    
+                    $('.index-musica').each(function(i, obj) {
+                        $(obj).html(i+1);
+                        
+                        $umaOrdem  = {
+                            'id': $(obj).data('id'),
+                            'ordem': i+1
+                        };
+                        
+                        $ordem.push($umaOrdem);
+                        
+                        console.log($umaOrdem);
+                        
+                        $url = '{{ path('rep_site_form_cadastra_ordem_musicas_evento', {'id_evento': evento.id}) }}';
+
+                        $.ajax({
+                            type: 'POST',
+                            data: {
+                                'ordem': $ordem
+                            },
+                            url: $url,
+                            success: function (response) {
+                                
+                            }
+                        });
+                        
+                    });
                 }
             });
         }
 
+        $ordem = [];
+
         $(document).ready(function () {
+            
+            criarSort();
             
             $('#btn-adiciona-musica').click(function () {
 
@@ -84,6 +127,23 @@
 
                 return false;
 
+            });
+            
+            $('#btn-divisor').click(function() {
+                $('#body-musicas-evento').append('<tr><td colspan="4" class="text-center">INTERVALO</td></tr>');
+                
+                $url = '{{ path('rep_site_cadastra_intervalo_evento', {'id_evento': evento.id}) }}';
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        
+                    }
+                });
+                
+                return false;
+                
             });
 
             $(document).on('click', '.link-remover-musica', function(){
