@@ -105,4 +105,7 @@ table.dataTable thead .sorting_desc_disabled {
 .footer-vostre {
   position: relative !important; }
 
+#btn-pdf {
+  float: right; }
+
 /*# sourceMappingURL=estilos.css.map */

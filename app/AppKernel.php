@@ -27,7 +27,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new SC\DatetimepickerBundle\SCDatetimepickerBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
+            new FOS\RestBundle\FOSRestBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

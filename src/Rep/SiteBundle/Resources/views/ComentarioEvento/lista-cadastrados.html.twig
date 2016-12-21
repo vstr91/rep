@@ -1,0 +1,5 @@
+{% for comentario in comentarios %}
+    <p>{{ comentario.texto }}</p>
+{% else %}
+    <p class="text-center">Nenhum coment&aacute;rio cadastrado. Seja o primeiro!</p>
+{% endfor %}

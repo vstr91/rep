@@ -9,8 +9,8 @@
 namespace Rep\SiteBundle\Controller;
 
 use Rep\SiteBundle\Entity\MusicaEvento;
-use Rep\SiteBundle\Form\MusicaType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of ArtistaController
@@ -36,6 +36,8 @@ class MusicaEventoController extends Controller {
         $musicas = $em->getRepository('RepSiteBundle:Musica')->findBy(array('status' => 0));
         
         $referer = $request->headers->get('referer');
+        $comentarios = $em->getRepository('RepSiteBundle:ComentarioEvento')
+                ->findBy(array("evento" => $id_evento));
         
         return $this->render('RepSiteBundle:MusicaEvento:musicas-evento.html.twig', 
                 array(
@@ -43,6 +45,7 @@ class MusicaEventoController extends Controller {
                     'evento' => $evento,
                     'musicasEvento' => $musicasEvento,
                     'musicasAtivas' => $musicas,
+                    'comentarios' => $comentarios,
                     'referer' => $referer
                 ));
         
@@ -87,7 +90,7 @@ class MusicaEventoController extends Controller {
         
         $em->flush();
         
-        return new \Symfony\Component\HttpFoundation\Response();
+        return new Response();
         
     }
     
@@ -218,7 +221,7 @@ class MusicaEventoController extends Controller {
         
         $em->flush();
         
-        return new \Symfony\Component\HttpFoundation\Response();
+        return new Response();
         
     }
     
@@ -255,7 +258,7 @@ class MusicaEventoController extends Controller {
         
         $em->flush();
         
-        return new \Symfony\Component\HttpFoundation\Response('ok');
+        return new Response('ok');
         
     }
     
@@ -285,7 +288,81 @@ class MusicaEventoController extends Controller {
         $em->persist($umaMusicaEvento);
         $em->flush();
         
-        return new \Symfony\Component\HttpFoundation\Response('ok');
+        return new Response('ok');
+        
+    }
+    
+    public function geraPdfAction($id_evento){
+        $evento = null;
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        
+        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listarTodasPorEvento($id_evento);
+        
+        $pdf = new \FPDF();
+
+        $pdf->AddFont('pfennigb','','pfennigb.php');
+        
+        $pdf->AddPage();
+        $pdf->SetFont('pfennigb','',16);
+        
+        $pdf->Cell(0,25,"LOGO",0,1, 'C');
+        $pdf->Cell(0,15,$evento->getNome(),0,1, 'C');
+        $pdf->Cell(0,15,$evento->getData()->format('d/m/Y H:i:s'),0,1, 'C');
+        
+        $pdf->SetFont('pfennigb','',20);
+        
+        $pdf->SetY(70);
+        
+        $cont = 0;
+        $x = 10.00125;
+        $y = 70;
+        $paginas = 1;
+        
+        foreach($musicasEvento as $musica){
+            
+            if($cont % 14 == 0 && $cont > 0){
+                
+                if($x == 10.00125){
+                    $x = 100;
+                    
+                    if($paginas > 1){
+                        $y = 20;
+                    } else{
+                        $y = 70;
+                    }
+                    
+                    
+                } else{
+                    $pdf->AddPage();
+                    $x = 10.00125;
+                    $y = 20;
+                    $paginas++;
+                }
+                
+                
+            }
+            
+            $pdf->SetXY($x, $y);
+            $y = $y + 15;
+            
+//            if($cont > 15){
+//                $pdf->SetX(100);
+//            }
+            
+            $pdf->MultiCell(98,7,($cont+1)." - ".mb_strtoupper($musica->getNome())." (".$musica->getTom().")",0,1);
+            $cont++;
+        }
+        
+        return new Response($pdf->Output(), 200, array(
+            'Content-Type' => 'application/pdf'));
         
     }
     

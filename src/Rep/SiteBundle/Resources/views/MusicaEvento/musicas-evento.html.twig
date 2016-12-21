@@ -16,8 +16,28 @@
 {#                <a href="#" class="btn btn-brand-accent" id="btn-divisor">Adicionar Divisor de Bloco</a>&nbsp;&nbsp;#}
                 <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>&nbsp;&nbsp;
                 <a href="{{ referer }}" class="btn" id="btn-voltar">Voltar</a>
+                <a href="{{ path('rep_site_gera_pdf_repertorio_evento', {'id_evento': evento.id}) }}" 
+                   class="btn btn-brand-accent right" id="btn-pdf" target="_blank">Gerar PDF</a><br /><br /><br /><br />
             </div>
         </div>
+                   <div class="row">
+                       <div class="col-md-12">
+                           <h3 class="text-center">Coment&aacute;rios</h3>
+                           <div id="caixa-comentarios">
+                                {% include 'RepSiteBundle:ComentarioEvento:lista-cadastrados.html.twig' 
+                                      with {'comentarios': comentarios} %}
+                            </div>
+                       </div>
+                   </div>
+       <div class="row">
+           <div class="col-md-11">
+               <input type="text" class="form-control" id="input-comentario" placeholder="Faça um comentário aqui" />
+               <br /><br />
+           </div>
+           <div class="col-md-1">
+               <button type="button" class="btn btn-brand-accent" id="btn-enviar-comentario">Enviar</button>
+           </div>
+       </div>
     </div>
     <div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
@@ -69,6 +89,19 @@
             });
         }
         
+        function carregarComentarios() {
+            $url = '{{ path('rep_site_tabela_comentarios_evento', {'id_evento': evento.id}) }}';
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#caixa-comentarios').html(response);
+                    $('#input-comentario').val('');
+                }
+            });
+        }
+        
         function criarSort(){
             var el = document.getElementById('body-musicas-evento');
             var sortable = Sortable.create(el, {
@@ -85,22 +118,21 @@
                         
                         $ordem.push($umaOrdem);
                         
-                        console.log($umaOrdem);
-                        
-                        $url = '{{ path('rep_site_form_cadastra_ordem_musicas_evento', {'id_evento': evento.id}) }}';
-
-                        $.ajax({
-                            type: 'POST',
-                            data: {
-                                'ordem': $ordem
-                            },
-                            url: $url,
-                            success: function (response) {
-                                
-                            }
-                        });
-                        
                     });
+                    
+                    $url = '{{ path('rep_site_form_cadastra_ordem_musicas_evento', {'id_evento': evento.id}) }}';
+
+                    $.ajax({
+                        type: 'POST',
+                        data: {
+                            'ordem': $ordem
+                        },
+                        url: $url,
+                        success: function (response) {
+
+                        }
+                    });
+                    
                 }
             });
         }
@@ -170,6 +202,31 @@
             $('#btn-editar').click(function(){
                 $('#form-adiciona-musica-evento').submit();
                 $('#modal-edicao').modal('hide');
+            });
+            
+            $('#btn-enviar-comentario').click(function(){
+                
+                $comentario = $('#input-comentario').val();
+                
+                if($comentario != null){
+                    $url = '{{ path('rep_site_form_cadastra_comentario_evento', {'id_evento': evento.id}) }}';
+
+                    $.ajax({
+                        type: 'POST',
+                        data: {
+                            'comentario': $comentario
+                        },
+                        url: $url,
+                        success: function (response) {
+                            carregarComentarios();
+                        }
+                    });
+                } else{
+                    alert("Por favor digite o comentário.");
+                }
+                
+                
+                
             });
 
         });
