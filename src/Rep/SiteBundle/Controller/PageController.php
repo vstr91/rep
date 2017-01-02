@@ -94,9 +94,17 @@ class PageController extends Controller
         $eventos = $em->getRepository('RepSiteBundle:Evento')
                 ->listarTodos();
         
+        $tiposEvento = $em->getRepository('RepSiteBundle:TipoEvento')
+                ->findAll();
+        
+        $eventosAtivos = $em->getRepository('RepSiteBundle:Evento')
+                ->listarTodosAtivos();
+        
         return $this->render('RepSiteBundle:Page:eventos.html.twig', array(
             'usuario' => $user,
             'eventos' => $eventos,
+            'eventosAtivos' => $eventosAtivos,
+            'tiposEvento' => $tiposEvento,
             'formEvento' => $formEvento->createView()
         ));
     }

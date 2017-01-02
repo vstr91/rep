@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MusicaEventoController extends Controller {
     
-    public function musicasEventoAction($id_evento){
+    public function musicasEventoAction($slug){
         $evento = null;
         $request = $this->getRequest();
         
@@ -28,16 +28,16 @@ class MusicaEventoController extends Controller {
         $em = $this->getDoctrine()->getManager();
         
         //verifica se ja existe registro
-        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        $evento = $em->getRepository('RepSiteBundle:Evento')->findOneBy(array('slug' => $slug));
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listarTodasPorEvento($id_evento);
+                ->listarTodasPorEvento($slug);
         
         $musicas = $em->getRepository('RepSiteBundle:Musica')->findBy(array('status' => 0));
         
         $referer = $request->headers->get('referer');
         $comentarios = $em->getRepository('RepSiteBundle:ComentarioEvento')
-                ->findBy(array("evento" => $id_evento));
+                ->listarTodosPorEvento($slug);
         
         return $this->render('RepSiteBundle:MusicaEvento:musicas-evento.html.twig', 
                 array(
@@ -166,10 +166,12 @@ class MusicaEventoController extends Controller {
         $em->flush();
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listarTodasPorEvento($id_evento);
+                ->listarTodasPorEvento($evento->getSlug());
+        
+        dump($musicasEvento);
         
         return $this->redirect($this->generateUrl('rep_site_musicas_evento', array('id_evento' => $id_evento, 
-            'musicas' => $musicasEvento)));
+            'musicas' => $musicasEvento, 'slug' => $evento->getSlug())));
         
     }
     
@@ -185,7 +187,7 @@ class MusicaEventoController extends Controller {
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listarTodasPorEvento($id_evento);
+                ->listarTodasPorEvento($evento->getSlug());
         
         return $this->render('RepSiteBundle:MusicaEvento:tabela-repertorio.html.twig', 
                 array(
@@ -304,7 +306,7 @@ class MusicaEventoController extends Controller {
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listarTodasPorEvento($id_evento);
+                ->listarTodasPorEvento($evento->getSlug());
         
         $pdf = new \FPDF();
 

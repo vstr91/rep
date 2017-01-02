@@ -73,8 +73,8 @@ rep_site_tipos_evento_form:
 ########################################################################
 
 rep_site_musicas_evento:
-    path:     /musicas-evento/{id_evento}
-    defaults: { _controller: RepSiteBundle:MusicaEvento:musicasEvento, id_evento: -1 }
+    path:     /musicas-evento/{slug}
+    defaults: { _controller: RepSiteBundle:MusicaEvento:musicasEvento, slug: -1 }
 
 rep_site_atualiza_musicas_evento:
     path:     /musicas-evento/{id_evento}/atualiza

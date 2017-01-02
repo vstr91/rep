@@ -42,6 +42,18 @@ class TipoEvento extends EntidadeBase {
      */
     protected $nome;
     
+    /**
+     * @Gedmo\Slug(fields={"nome"})
+     * @ORM\Column(unique=false)
+     */
+    private $slug;
+    
+    /**
+     * @ORM\Column(name="cor", type="string", length=100, unique=true)
+     * @Assert\NotBlank()
+     */
+    private $cor;
+    
     public function __toString() {
         return $this->getNome();
     }
@@ -146,5 +158,53 @@ class TipoEvento extends EntidadeBase {
     public function getUltimaAlteracao()
     {
         return $this->ultimaAlteracao;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return TipoEvento
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set cor
+     *
+     * @param string $cor
+     *
+     * @return TipoEvento
+     */
+    public function setCor($cor)
+    {
+        $this->cor = $cor;
+
+        return $this;
+    }
+
+    /**
+     * Get cor
+     *
+     * @return string
+     */
+    public function getCor()
+    {
+        return $this->cor;
     }
 }

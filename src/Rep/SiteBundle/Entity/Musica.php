@@ -61,6 +61,12 @@ class Musica extends EntidadeBase {
      */
     protected $artista;
     
+    /**
+     * @Gedmo\Slug(fields={"nome"})
+     * @ORM\Column(unique=false)
+     */
+    private $slug;
+    
     public function __toString() {
         return $this->getNome();
     }
@@ -213,5 +219,29 @@ class Musica extends EntidadeBase {
     public function getTom()
     {
         return $this->tom;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Musica
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

@@ -55,6 +55,12 @@ class Evento extends EntidadeBase {
      * 
      */
     protected $tipoEvento;
+    
+    /**
+     * @Gedmo\Slug(fields={"nome", "data"})
+     * @ORM\Column(unique=false)
+     */
+    private $slug;
 
 
     /**
@@ -203,5 +209,29 @@ class Evento extends EntidadeBase {
     public function getTipoEvento()
     {
         return $this->tipoEvento;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Evento
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

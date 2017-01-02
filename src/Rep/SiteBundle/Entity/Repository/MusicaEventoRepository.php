@@ -17,7 +17,7 @@ class MusicaEventoRepository extends EntityRepository
         $qb = $this->createQueryBuilder('me');
         
         $musicasEvento = $qb->select('IDENTITY(me.musica)')
-          ->where('me.evento = '.$id_evento)
+          ->where("me.evento = '".$id_evento."'")
           //->andWhere('me.status = 0')
           ->getQuery()
           ->getResult();
@@ -66,13 +66,14 @@ class MusicaEventoRepository extends EntityRepository
         
     }
     
-    public function listarTodasPorEvento($id_evento){
+    public function listarTodasPorEvento($slug){
         $qb = $this->createQueryBuilder('me')
                 ->select('m')
                 ->leftJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
-                ->andWhere('me.evento = :evento')
+                ->leftJoin("RepSiteBundle:Evento", 'e', 'WITH', 'e.id = me.evento')
+                ->andWhere('e.slug = :evento')
                 ->andWhere('me.status = 0')
-                ->setParameter(':evento', $id_evento)
+                ->setParameter(':evento', $slug)
                 ->addOrderBy('me.ordem');
 
         return $qb->getQuery()->getResult();

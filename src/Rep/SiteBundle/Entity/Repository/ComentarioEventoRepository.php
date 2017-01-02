@@ -28,4 +28,16 @@ class ComentarioEventoRepository extends \Doctrine\ORM\EntityRepository
         
     }
     
+    public function listarTodosPorEvento($slug){
+        $qb = $this->createQueryBuilder('ce')
+                ->select('ce')
+                ->leftJoin("RepSiteBundle:Evento", 'e', 'WITH', 'e.id = ce.evento')
+                ->andWhere('e.slug = :evento')
+                ->andWhere('ce.status = 0')
+                ->setParameter(':evento', $slug)
+                ->addOrderBy('ce.dataCadastro');
+
+        return $qb->getQuery()->getResult();
+    }
+    
 }

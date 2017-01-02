@@ -24,7 +24,7 @@ class ArtistaRepository extends EntityRepository
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('a')
 //                ->select('b.id, b.nome, b.status, l.id AS local')
-                ->select('a.id, a.nome, a.status, a.ultimaAlteracao AS ultima_alteracao')
+                ->select('a.id, a.nome, a.status, a.ultimaAlteracao AS ultima_alteracao, a.slug')
                 ->distinct()
 //                ->leftJoin("CircularSiteBundle:Local", "l", "WITH", "l.id = b.local")
                 ->where("a.ultimaAlteracao > :ultimaAlteracao")

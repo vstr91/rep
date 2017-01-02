@@ -11,6 +11,14 @@
                 <div id="calendar"></div>
             </div>
         </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Legenda</h3>
+                        {% for tipo in tiposEvento %}
+                            <p style="color: {{ tipo.cor }}">{{ tipo.nome }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
         <div class="row">
             <div class="col-md-12">
                 <h3 class="text-center">Eventos Cadastrados</h3>
@@ -89,9 +97,9 @@
         }
         
         function repertorioEvent(event) {
-            $id = event.id;
+            $slug = event.slug;
 
-            $url = '{{ path('rep_site_musicas_evento') }}' + "/" + $id;
+            $url = '{{ path('rep_site_musicas_evento') }}' + "/" + $slug;
             window.location.href = $url;
         }
 
@@ -156,12 +164,13 @@
                     $(e.element).popover('hide');
                 },
                 dataSource: [
-                    {% for evento in eventos %}
+                    {% for evento in eventosAtivos %}
                         {
-                            id: {{ evento.id }},
-                            color:{% if evento.tipoEvento.id == 1 %}'blue'{% else %}'red'{% endif %},
+                            id: '{{ evento.id }}',
+                            color: '{{ evento.tipoEvento.cor }}',
                             name: '{{ evento.nome }}',
                             hora: '{{ evento.data|date('H:i') }}',
+                            slug: '{{ evento.slug }}',
                             startDate: new Date({{ evento.data|date('Y') }}, {{ evento.data|date('m')-1 }}, {{ evento.data|date('d') }}),
                             endDate: new Date({{ evento.data|date('Y') }}, {{ evento.data|date('m')-1 }}, {{ evento.data|date('d') }})
                         }
@@ -179,7 +188,25 @@
             $('#btn-cadastrar').click(function(){
                 $('#form-evento').submit();
             });
-            
+           
+           $('.link-editar-evento').click(function(){
+               $idEvento = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: $url,
+                        success: function (response) {
+                            $('#body-edicao').html(response);
+                            $('#btn-editar').show();
+                            $('#modal-edicao').modal('show');
+                        }
+                    });
+
+                    return false;
+           });
+
         });
         
         

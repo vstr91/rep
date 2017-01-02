@@ -48,6 +48,12 @@ class Artista extends EntidadeBase {
      */
     private $musicas;
     
+    /**
+     * @Gedmo\Slug(fields={"nome"})
+     * @ORM\Column(unique=false)
+     */
+    private $slug;
+    
     public function __construct() {
         $this->musicas = new \Doctrine\Common\Collections\ArrayCollection;
     }
@@ -191,5 +197,29 @@ class Artista extends EntidadeBase {
     public function getMusicas()
     {
         return $this->musicas;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Artista
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

@@ -4,6 +4,7 @@
             <td>Nome</td>
             <td>Data</td>
             <td>Tipo</td>
+            <td>Status</td>
             <td>A&ccedil;&otilde;es</td>
         </tr>
     </thead>
@@ -14,8 +15,15 @@
                 <td>{{ evento.data|date('d/m/Y') }} - {{ evento.data|date('H:i') }}h</td>
                 <td>{{ evento.tipoEvento.nome }}</td>
                 <td>
+                    {% if evento.status == 0 %}
+                        Ativo
+                    {% else %}
+                        Inativo
+                    {% endif %}
+                </td>
+                <td>
                     <a class="link-editar-evento" href="#{{ evento.id }}">Editar</a><br/>
-                    <a class="link-ver-evento" href="{{ path('rep_site_musicas_evento', {'id_evento': evento.id}) }}">Gerenciar Repert&oacute;rio</a>
+                    <a class="link-ver-evento" href="{{ path('rep_site_musicas_evento', {'slug': evento.slug}) }}">Gerenciar Repert&oacute;rio</a>
                 </td>
             </tr>
         {% endfor %}
