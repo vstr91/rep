@@ -56,7 +56,7 @@ class RepRestController extends FOSRestController {
         
         $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
         
-        if(null == $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
+        if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
             $data = $data == '-' ? '2000-01-01' : $data;
 
             $artistas = $em->getRepository('RepSiteBundle:Artista')
@@ -69,9 +69,14 @@ class RepRestController extends FOSRestController {
                     ->listarTodosREST(null, $data);
             $musicasEventos = $em->getRepository('RepSiteBundle:MusicaEvento')
                     ->listarTodosREST(null, $data);
+            $comentariosEventos = $em->getRepository('RepSiteBundle:ComentarioEvento')
+                    ->listarTodosREST(null, $data);
+            
+//            $log = $em->getRepository('RepSiteBundle:LogEntry')
+//                    ->listarTodosREST(null, $data);
 
             $totalRegistros = count($artistas) + count($tiposEvento) + count($musicas) 
-                    + count($eventos) + count($musicasEventos);
+                    + count($eventos) + count($musicasEventos) + count($comentariosEventos);
             
             $view = View::create(
                     array(
@@ -80,7 +85,9 @@ class RepRestController extends FOSRestController {
                         "tipos_evento" => $tiposEvento,
                         "musicas" => $musicas,
                         "eventos" => $eventos,
-                        "musicas_eventos" => $musicasEventos
+                        "musicas_eventos" => $musicasEventos,
+                        "comentarios_eventos" => $comentariosEventos//,
+                        //"log" => $log
                     ), 200, array('totalRegistros' => $totalRegistros))->setTemplateVar("u");
             
             $em->getRepository('RepSiteBundle:APIToken')->atualizaToken($hashDescriptografado);

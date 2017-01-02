@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Description of Evento
@@ -25,6 +26,7 @@ use JMS\Serializer\Annotation\Expose;
  *
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\EventoRepository")
  * @ORM\Table(name="evento")
+ * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * 
  */
@@ -35,18 +37,21 @@ class Evento extends EntidadeBase {
      *
      * @ORM\Column(name="nome", type="string", length=100)
      * @Assert\NotBlank()
+     * @Gedmo\Versioned
      * 
      */
     protected $nome;
     
     /**
      * @ORM\Column(type="datetime")
+     * @Gedmo\Versioned
      */
     protected $data;
     
     /**
      * @ORM\ManyToOne(targetEntity="TipoEvento")
      * @ORM\JoinColumn(name="id_tipo_evento", referencedColumnName="id")
+     * @Gedmo\Versioned
      * 
      */
     protected $tipoEvento;

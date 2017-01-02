@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Description of MusicaEvento
@@ -25,6 +26,7 @@ use JMS\Serializer\Annotation\Expose;
  *
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\MusicaEventoRepository")
  * @ORM\Table(name="musica_evento")
+ * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * 
  */
@@ -40,6 +42,7 @@ class MusicaEvento extends EntidadeBase {
     
     /**
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      * 
      */
     protected $ordem;
@@ -47,6 +50,7 @@ class MusicaEvento extends EntidadeBase {
     /**
      * @ORM\ManyToOne(targetEntity="Musica")
      * @ORM\JoinColumn(name="id_musica", referencedColumnName="id")
+     * @Gedmo\Versioned
      * 
      */
     protected $musica;
@@ -54,6 +58,7 @@ class MusicaEvento extends EntidadeBase {
     /**
      * @ORM\ManyToOne(targetEntity="Evento")
      * @ORM\JoinColumn(name="id_evento", referencedColumnName="id")
+     * @Gedmo\Versioned
      * 
      */
     protected $evento;

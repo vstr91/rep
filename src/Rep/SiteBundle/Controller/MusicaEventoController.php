@@ -357,7 +357,7 @@ class MusicaEventoController extends Controller {
 //                $pdf->SetX(100);
 //            }
             
-            $pdf->MultiCell(98,7,($cont+1)." - ".mb_strtoupper($musica->getNome())." (".$musica->getTom().")",0,1);
+            $pdf->MultiCell(98,7,($cont+1)." - ".mb_strtoupper($musica->getNome(), 'utf-8')." (".$musica->getTom().")",0,1);
             $cont++;
         }
         

@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new SC\DatetimepickerBundle\SCDatetimepickerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

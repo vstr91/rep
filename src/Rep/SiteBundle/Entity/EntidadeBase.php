@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Description of EntidadeBase
@@ -33,6 +34,7 @@ abstract class EntidadeBase {
     
     /**
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      * 
      */
     protected $status = 0;

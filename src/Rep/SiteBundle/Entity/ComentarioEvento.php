@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Description of ComentarioEvento
@@ -25,6 +26,7 @@ use JMS\Serializer\Annotation\Expose;
  *
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\ComentarioEventoRepository")
  * @ORM\Table(name="comentario_evento")
+ * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * 
  */

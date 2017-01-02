@@ -32,7 +32,7 @@ class MusicaRepository extends EntityRepository
     
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('m')
-                ->select('m.id', 'm.nome', 'a.id AS artista', 'm.status')
+                ->select('m.id', 'm.nome', 'a.id AS artista', 'm.status', 'm.ultimaAlteracao AS ultima_alteracao')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:Artista", "a", "WITH", "a.id = m.artista")
                 ->where("m.ultimaAlteracao > :ultimaAlteracao")

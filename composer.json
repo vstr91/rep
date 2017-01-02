@@ -27,7 +27,8 @@
         "friendsofsymfony/rest-bundle": "^1.0",
         "paragonie/random_compat": "~1.4",
         "royopa/fpdf-symfony2": "dev-master",
-        "hwi/oauth-bundle": "dev-master"
+        "hwi/oauth-bundle": "dev-master",
+        "stof/doctrine-extensions-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

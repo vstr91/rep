@@ -11,6 +11,7 @@ namespace Rep\SiteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 //use JMS\Serializer\Annotation\ExclusionPolicy;
 //use JMS\Serializer\Annotation\Expose;
 
@@ -25,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\ArtistaRepository")
  * @ORM\Table(name="artista")
+ * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("nome", message="O artista já foi cadastrado")
  * 
@@ -36,6 +38,7 @@ class Artista extends EntidadeBase {
      *
      * @ORM\Column(name="nome", type="string", length=100, unique=true)
      * @Assert\NotBlank()
+     * @Gedmo\Versioned
      * 
      */
     private $nome;

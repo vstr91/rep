@@ -7,6 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+{#                <h3 class="text-center">Agenda de Eventos</h3>#}
                 <div id="calendar"></div>
             </div>
         </div>
@@ -87,11 +88,11 @@
             return false;
         }
         
-        function repertorioEvent() {
-            
-            //salvar no banco de dados
-            
-            $('#event-modal').modal('hide');
+        function repertorioEvent(event) {
+            $id = event.id;
+
+            $url = '{{ path('rep_site_musicas_evento') }}' + "/" + $id;
+            window.location.href = $url;
         }
 
         function saveEvent() {

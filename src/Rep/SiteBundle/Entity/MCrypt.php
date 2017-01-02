@@ -15,8 +15,8 @@ namespace Rep\SiteBundle\Entity;
  */
 class MCrypt {
 
-    private $iv = 'fbfac56378848a74'; #Same as in JAVA
-    private $key = '3c447059tye17a12'; #Same as in JAVA
+    private $iv = 'fbfac56366848brp'; #Same as in JAVA
+    private $key = '3c447059eba17brp'; #Same as in JAVA
 
     function __construct() {
         

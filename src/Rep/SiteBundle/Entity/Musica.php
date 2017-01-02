@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Description of Musica
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\MusicaRepository")
  * @ORM\Table(name="musica")
+ * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity({"nome", "artista"}, message="Já existe uma música com esse título vinculada a esse artista")
  * 
@@ -35,6 +37,7 @@ class Musica extends EntidadeBase {
      *
      * @ORM\Column(name="nome", type="string", length=100)
      * @Assert\NotBlank()
+     * @Gedmo\Versioned
      * 
      */
     protected $nome;
@@ -44,6 +47,7 @@ class Musica extends EntidadeBase {
      *
      * @ORM\Column(name="tom", type="string", length=5)
      * @Assert\NotBlank()
+     * @Gedmo\Versioned
      * 
      */
     protected $tom;
@@ -52,6 +56,7 @@ class Musica extends EntidadeBase {
      * @ORM\ManyToOne(targetEntity="Artista", inversedBy="musicas")
      * @ORM\JoinColumn(name="id_artista", referencedColumnName="id")
      * @OrderBy({"artista" = "DESC"})
+     * @Gedmo\Versioned
      * 
      */
     protected $artista;
