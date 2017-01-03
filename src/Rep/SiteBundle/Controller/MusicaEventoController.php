@@ -294,7 +294,7 @@ class MusicaEventoController extends Controller {
         
     }
     
-    public function geraPdfAction($id_evento){
+    public function geraPdfAction($slug){
         $evento = null;
         $request = $this->getRequest();
         
@@ -303,7 +303,7 @@ class MusicaEventoController extends Controller {
         $em = $this->getDoctrine()->getManager();
         
         //verifica se ja existe registro
-        $evento = $em->find('RepSiteBundle:Evento', $id_evento);
+        $evento = $em->getRepository('RepSiteBundle:Evento')->findOneBy(array('slug' => $slug));
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
                 ->listarTodasPorEvento($evento->getSlug());

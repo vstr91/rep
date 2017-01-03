@@ -82,7 +82,7 @@ class RepRestController extends FOSRestController {
                     array(
                         "meta" => array(array("registros" => $totalRegistros, "status" => 200, "mensagem" => "ok")),
                         "artistas" => $artistas, 
-                        "tipos_evento" => $tiposEvento,
+                        "tipos_eventos" => $tiposEvento,
                         "musicas" => $musicas,
                         "eventos" => $eventos,
                         "musicas_eventos" => $musicasEventos,

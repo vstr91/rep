@@ -15,7 +15,7 @@ class TipoEventoRepository extends EntityRepository
     
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('te')
-                ->select('te.id, te.nome, te.status, te.ultimaAlteracao AS ultima_alteracao, te.slug')
+                ->select('te.id, te.nome, te.status, te.ultimaAlteracao AS ultima_alteracao, te.slug, te.cor')
                 ->distinct()
                 ->where("te.ultimaAlteracao > :ultimaAlteracao")
                 ->setParameter('ultimaAlteracao', $dataUltimoAcesso)

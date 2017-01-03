@@ -16,7 +16,7 @@
                     <td>{{ evento.tipoEvento.nome }}</td>
                     <td>
                         <a class="link-editar-evento" href="#{{ evento.id }}">Editar</a><br />
-                        <a class="link-ver-evento" href="{{ path('rep_site_musicas_evento', {'id_evento': evento.id}) }}">Ver Detalhes</a>
+                        <a class="link-ver-evento" href="{{ path('rep_site_musicas_evento', {'slug': evento.slug}) }}">Ver Detalhes</a>
                     </td>
                 </tr>
             {% endfor %}

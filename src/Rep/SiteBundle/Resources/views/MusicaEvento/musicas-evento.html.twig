@@ -16,7 +16,7 @@
 {#                <a href="#" class="btn btn-brand-accent" id="btn-divisor">Adicionar Divisor de Bloco</a>&nbsp;&nbsp;#}
                 <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>&nbsp;&nbsp;
                 <a href="{{ referer }}" class="btn" id="btn-voltar">Voltar</a>
-                <a href="{{ path('rep_site_gera_pdf_repertorio_evento', {'id_evento': evento.id}) }}" 
+                <a href="{{ path('rep_site_gera_pdf_repertorio_evento', {'slug': evento.slug}) }}" 
                    class="btn btn-brand-accent right" id="btn-pdf" target="_blank">Gerar PDF</a><br /><br /><br /><br />
             </div>
         </div>

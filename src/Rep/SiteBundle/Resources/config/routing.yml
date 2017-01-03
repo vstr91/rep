@@ -105,8 +105,8 @@ rep_site_cadastra_intervalo_evento:
     defaults: { _controller: RepSiteBundle:MusicaEvento:cadastraIntervalo, id_evento: -1 }
     
 rep_site_gera_pdf_repertorio_evento:
-    path:     /musicas-evento/{id_evento}/repertorio/pdf
-    defaults: { _controller: RepSiteBundle:MusicaEvento:geraPdf, id_evento: -1 }
+    path:     /musicas-evento/{slug}/repertorio/pdf
+    defaults: { _controller: RepSiteBundle:MusicaEvento:geraPdf, slug: '' }
 
 ########################################################################
     

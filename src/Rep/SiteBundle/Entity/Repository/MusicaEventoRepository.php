@@ -82,7 +82,7 @@ class MusicaEventoRepository extends EntityRepository
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('me')
                 ->select('me.id', 'me.observacao', 'm.id AS musica', 'e.id AS evento', 'me.status', 
-                        'me.ultimaAlteracao AS ultima_alteracao')
+                        'me.ultimaAlteracao AS ultima_alteracao', 'me.ordem')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = me.musica")
                 ->leftJoin("RepSiteBundle:Evento", "e", "WITH", "e.id = me.evento")
