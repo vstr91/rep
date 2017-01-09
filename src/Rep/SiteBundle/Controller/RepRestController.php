@@ -140,6 +140,11 @@ class RepRestController extends FOSRestController {
 //                $umaMensagem->setDataCriacao($mensagem[0]['descricao'])
 
                 $em->persist($umComentario);
+                
+                $metadata = $this->em->getClassMetaData(get_class($umComentario));
+                $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+                $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
+                
                 $processadas[] = $comentarios[$i]['id'];
             }
             
