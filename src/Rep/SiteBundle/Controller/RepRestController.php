@@ -106,4 +106,66 @@ class RepRestController extends FOSRestController {
         
     }
     
+    public function setDadosAction($hash, $data) {
+        $em = $this->getDoctrine()->getManager();
+        
+        $crypto = new MCrypt();
+        
+        $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
+        
+        if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
+            
+            $dados = $this->getRequest()->request->all();
+            $total = $dados['total'];
+            $dados = json_decode($dados['dados'], TRUE);
+            
+            //die(var_dump($dados));
+            
+            $comentarios = $dados['comentarios'];
+            
+            $processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $umComentario = new \Rep\SiteBundle\Entity\ComentarioEvento();
+                $umComentario->setId($comentarios[$i]['id']);
+                $umComentario->setTexto($comentarios[$i]['texto']);
+                
+                $umEvento = new \Rep\SiteBundle\Entity\Evento();
+                $umEvento = $em->getRepository('RepSiteBundle:Evento')
+                        ->findOneBy(array('id' => $comentarios[$i]['evento']));
+                
+                $umComentario->setEvento($umEvento);
+                $umComentario->setStatus(0);
+//                $umaMensagem->setDataCriacao($mensagem[0]['descricao'])
+
+                $em->persist($umComentario);
+                $processadas[] = $comentarios[$i]['id'];
+            }
+            
+            //die(var_dump($processadas));
+            
+            $em->flush();
+            
+            $view = View::create(
+                            array(
+                        "meta" => array(array("registros" => count($processadas), "status" => 200, "mensagem" => "ok")),
+                        "processadas" => $processadas
+                            ), 200, array('totalRegistros' => count($processadas)))->setTemplateVar("u");
+            
+//            $em->getRepository('CircularSiteBundle:APIToken')->atualizaToken($hashDescriptografado);
+
+            return $this->handleView($view);           
+        } else {
+            $view = View::create(
+                    array(
+                        "meta" => array(array("registros" => 0, "status" => 403, "mensagem" => "Acesso negado."))
+                    ),
+                403, array('totalRegistros' => 0))->setTemplateVar("u");
+            
+            return $this->handleView($view);
+        }
+        
+    }
+    
 }

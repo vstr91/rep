@@ -17,7 +17,7 @@ class TipoEventoType extends AbstractType
         $builder
             ->add('nome')
             ->add('cor', null, array(
-                'label' => 'Cor (Em Hexadecimal ou Inglês)',
+                'label' => 'Cor',
                 'attr' => array(
                     'class' => 'color'
                 )

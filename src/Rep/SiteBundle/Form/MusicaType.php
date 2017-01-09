@@ -25,7 +25,8 @@ class MusicaType extends AbstractType
             ->add('artista', null, array(
                 'query_builder' => function(EntityRepository $repository) { 
                     return $repository->createQueryBuilder('a')->orderBy('a.nome', 'ASC');
-                }
+                },
+                'empty_value' => false
             ))
         ;
     }

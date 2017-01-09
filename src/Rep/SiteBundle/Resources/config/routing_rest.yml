@@ -10,3 +10,7 @@ rep_api_get_token:
 rep_api_get_dados:
     pattern: /recebe-dados/{hash}/{data}
     defaults: {_controller: RepSiteBundle:RepRest:getDados}
+    
+rep_api_set_dados:
+    pattern: /envia-dados/{hash}/{data}
+    defaults: {_controller: RepSiteBundle:RepRest:setDados}

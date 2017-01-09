@@ -132,18 +132,17 @@ class MusicaEventoController extends Controller {
         //verifica se ja existe registro
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
+        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listarTodasPorEvento($id_evento);
+            
+        $total = count($musicasEvento)+1;
+        
         foreach($musicas as $musica){
             
             $umaMusica = $em->find('RepSiteBundle:Musica', $musica);
             
             $umaMusicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->
                 findOneBy(array('musica' => $umaMusica, 'evento' => $evento));
-            
-            $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listarTodasPorEvento($id_evento);
-            
-        $total = count($musicasEvento)+1;
-        //die("Total: ".$total);
             
             if($umaMusicaEvento == null){
                 $umaMusicaEvento = new MusicaEvento();
@@ -161,14 +160,14 @@ class MusicaEventoController extends Controller {
                 $em->persist($umaMusica);
             }
             
+            $total++;
+            
         }
         
         $em->flush();
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
                 ->listarTodasPorEvento($evento->getSlug());
-        
-        dump($musicasEvento);
         
         return $this->redirect($this->generateUrl('rep_site_musicas_evento', array('id_evento' => $id_evento, 
             'musicas' => $musicasEvento, 'slug' => $evento->getSlug())));

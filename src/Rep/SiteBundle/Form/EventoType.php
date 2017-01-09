@@ -25,9 +25,11 @@ class EventoType extends AbstractType
                 )
             ))
             ->add('status', 'choice', array(
-                    'choices' => array('0' => 'Ativo', '2' => 'Inativo')
+                'choices' => array('0' => 'Ativo', '2' => 'Inativo')
                 ))
-            ->add('tipoEvento')
+            ->add('tipoEvento', null, array(
+                'empty_value' => false
+            ))
         ;
         
     }
