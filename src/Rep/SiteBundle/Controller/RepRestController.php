@@ -8,9 +8,13 @@
 
 namespace Rep\SiteBundle\Controller;
 
+use Doctrine\ORM\Id\AssignedGenerator;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Rep\SiteBundle\Entity\APIToken;
+use Rep\SiteBundle\Entity\ComentarioEvento;
+use Rep\SiteBundle\Entity\Evento;
 use Rep\SiteBundle\Entity\MCrypt;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -127,11 +131,11 @@ class RepRestController extends FOSRestController {
             
             for($i = 0; $i < $total; $i++){
                 
-                $umComentario = new \Rep\SiteBundle\Entity\ComentarioEvento();
+                $umComentario = new ComentarioEvento();
                 $umComentario->setId($comentarios[$i]['id']);
                 $umComentario->setTexto($comentarios[$i]['texto']);
                 
-                $umEvento = new \Rep\SiteBundle\Entity\Evento();
+                $umEvento = new Evento();
                 $umEvento = $em->getRepository('RepSiteBundle:Evento')
                         ->findOneBy(array('id' => $comentarios[$i]['evento']));
                 
@@ -141,9 +145,10 @@ class RepRestController extends FOSRestController {
 
                 $em->persist($umComentario);
                 
-                $metadata = $this->em->getClassMetaData(get_class($umComentario));
-                $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
-                $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
+                $metadata = $em->getClassMetaData(get_class($umComentario));
+                $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                $metadata->setIdGenerator(new AssignedGenerator());
+                $umComentario->setId($comentarios[$i]['id']);
                 
                 $processadas[] = $comentarios[$i]['id'];
             }
