@@ -104,6 +104,18 @@ class Musica extends EntidadeBase {
     {
         return $this->id;
     }
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
 
     /**
      * Set status

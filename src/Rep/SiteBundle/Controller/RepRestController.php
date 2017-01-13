@@ -120,14 +120,14 @@ class RepRestController extends FOSRestController {
         if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
             
             $dados = $this->getRequest()->request->all();
-            $total = $dados['total'];
             $dados = json_decode($dados['dados'], TRUE);
             
-            //die(var_dump($dados));
+            //die(var_dump($dados['musicas']));
             
             $comentarios = $dados['comentarios'];
+            $total = count($comentarios);
             
-            $processadas = array();
+            //$processadas = array();
             
             for($i = 0; $i < $total; $i++){
                 
@@ -150,7 +150,39 @@ class RepRestController extends FOSRestController {
                 $metadata->setIdGenerator(new AssignedGenerator());
                 $umComentario->setId($comentarios[$i]['id']);
                 
-                $processadas[] = $comentarios[$i]['id'];
+                //$processadas[] = $comentarios[$i]['id'];
+            }
+            
+            // MUSICAS
+            
+            $musicas = $dados['musicas'];
+            $total = count($musicas);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $umMusica = new \Rep\SiteBundle\Entity\Musica();
+                $umMusica->setId($musicas[$i]['id']);
+                $umMusica->setNome($musicas[$i]['nome']);
+                $umMusica->setTom($musicas[$i]['tom']);
+                
+                $umArtista = new \Rep\SiteBundle\Entity\Artista();
+                $umArtista = $em->getRepository('RepSiteBundle:Artista')
+                        ->findOneBy(array('id' => $musicas[$i]['artista']));
+                
+                $umMusica->setArtista($umArtista);
+                $umMusica->setStatus($musicas[$i]['status']);
+                $umMusica->setSlug(NULL);
+                $umMusica->setDataCadastro($musicas[$i]['data_cadastro']);
+
+                $em->persist($umMusica);
+                
+                $metadata = $em->getClassMetaData(get_class($umMusica));
+                $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                $metadata->setIdGenerator(new AssignedGenerator());
+                $umMusica->setId($musicas[$i]['id']);
+                
+                //$processadas[] = $comentarios[$i]['id'];
             }
             
             //die(var_dump($processadas));
@@ -158,13 +190,11 @@ class RepRestController extends FOSRestController {
             $em->flush();
             
             $view = View::create(
-                            array(
-                        "meta" => array(array("registros" => count($processadas), "status" => 200, "mensagem" => "ok")),
-                        "processadas" => $processadas
-                            ), 200, array('totalRegistros' => count($processadas)))->setTemplateVar("u");
+                    array(
+                        "meta" => array(array("registros" => 0, "status" => 200, "mensagem" => "ok"))
+                    ),
+                200, array('totalRegistros' => 0))->setTemplateVar("u");
             
-//            $em->getRepository('CircularSiteBundle:APIToken')->atualizaToken($hashDescriptografado);
-
             return $this->handleView($view);           
         } else {
             $view = View::create(
