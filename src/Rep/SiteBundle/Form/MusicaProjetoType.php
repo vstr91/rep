@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MusicaType extends AbstractType
+class MusicaProjetoType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,8 +16,6 @@ class MusicaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nome')
-            ->add('tom')
             ->add('status', 'choice', array(
                 'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo', 
                     '3' => 'Sugestão')

@@ -5,6 +5,7 @@ namespace Rep\SiteBundle\Controller;
 use Rep\SiteBundle\Form\ArtistaType;
 use Rep\SiteBundle\Form\EventoType;
 use Rep\SiteBundle\Form\MusicaType;
+use Rep\SiteBundle\Form\ProjetoType;
 use Rep\SiteBundle\Form\TipoEventoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -126,6 +127,26 @@ class PageController extends Controller
             'usuario' => $user,
             'tiposEvento' => $tiposEvento,
             'formTipoEvento' => $formTipoEvento->createView()
+        ));
+    }
+    
+    public function projetosAction()
+    {
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $projetoType = new ProjetoType();
+        $formProjeto = $this->createForm($projetoType);
+        
+        $projetos = $em->getRepository('RepSiteBundle:Projeto')
+                ->findAll();
+        
+        return $this->render('RepSiteBundle:Page:projetos.html.twig', array(
+            'usuario' => $user,
+            'projetos' => $projetos,
+            'formProjeto' => $formProjeto->createView()
         ));
     }
     

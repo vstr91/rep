@@ -117,3 +117,19 @@ rep_site_tabela_comentarios_evento:
 rep_site_form_cadastra_comentario_evento:
     path:     /comentarios-evento/{id_evento}/cadastra/form
     defaults: { _controller: RepSiteBundle:ComentarioEvento:cadastraComentario, id_evento: -1 }
+    
+########################################################################
+
+rep_site_projetos:
+    path:     /projetos
+    defaults: { _controller: RepSiteBundle:Page:projetos }
+    
+rep_site_projetos_cadastra:
+    pattern:     /projetos/cadastra/{id_projeto}
+    defaults: { _controller: RepSiteBundle:Projeto:cadastrar, id_projeto: -1 }
+    requirements:
+        _method: POST
+
+rep_site_projetos_form:
+    pattern: /projetos/form/{id_projeto}
+    defaults: {_controller: RepSiteBundle:Projeto:form, id_projeto: -1}

@@ -13,9 +13,11 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Rep\SiteBundle\Entity\APIToken;
+use Rep\SiteBundle\Entity\Artista;
 use Rep\SiteBundle\Entity\ComentarioEvento;
 use Rep\SiteBundle\Entity\Evento;
 use Rep\SiteBundle\Entity\MCrypt;
+use Rep\SiteBundle\Entity\Musica;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -161,31 +163,124 @@ class RepRestController extends FOSRestController {
             
             for($i = 0; $i < $total; $i++){
                 
-                $umMusica = new \Rep\SiteBundle\Entity\Musica();
+                $existe = false;
+                //$umMusica = null;
+                $umMusica = null;
+                
+                $umMusica = $em->getRepository('RepSiteBundle:Musica')
+                        ->findOneBy(array('id' => $musicas[$i]['id']));
+                
+                if($umMusica == null){
+                    $umMusica = new Musica();
+                    $umMusica->setId($musicas[$i]['id']);
+                    //$umMusica->setDataCadastro($musicas[$i]['data_cadastro']);
+                } else{
+                    $existe = true;
+                }
+                
                 $umMusica->setId($musicas[$i]['id']);
                 $umMusica->setNome($musicas[$i]['nome']);
                 $umMusica->setTom($musicas[$i]['tom']);
                 
-                $umArtista = new \Rep\SiteBundle\Entity\Artista();
+                $umArtista = new Artista();
                 $umArtista = $em->getRepository('RepSiteBundle:Artista')
                         ->findOneBy(array('id' => $musicas[$i]['artista']));
                 
                 $umMusica->setArtista($umArtista);
                 $umMusica->setStatus($musicas[$i]['status']);
                 $umMusica->setSlug(NULL);
-                $umMusica->setDataCadastro($musicas[$i]['data_cadastro']);
 
                 $em->persist($umMusica);
                 
-                $metadata = $em->getClassMetaData(get_class($umMusica));
-                $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-                $metadata->setIdGenerator(new AssignedGenerator());
-                $umMusica->setId($musicas[$i]['id']);
-                
-                //$processadas[] = $comentarios[$i]['id'];
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umMusica));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umMusica->setId($musicas[$i]['id']);
+                }
             }
             
-            //die(var_dump($processadas));
+            // ARTISTAS
+            
+            $artistas = $dados['artistas'];
+            $total = count($artistas);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umArtista = null;
+                
+                $umArtista = $em->getRepository('RepSiteBundle:Artista')
+                        ->findOneBy(array('id' => $artistas[$i]['id']));
+                
+                if($umArtista == null){
+                    $umArtista = new Artista();
+                    $umArtista->setId($artistas[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umArtista->setNome($artistas[$i]['nome']);
+                $umArtista->setStatus($artistas[$i]['status']);
+                $umArtista->setSlug(NULL);
+                //$umArtista->setDataCadastro($artistas[$i]['data_cadastro']);
+
+                //die(var_dump($umArtista));
+                
+                $em->persist($umArtista);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umArtista));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umArtista->setId($artistas[$i]['id']);
+                }
+                
+            }
+            
+            // EVENTOS
+            
+            $eventos = $dados['eventos'];
+            $total = count($eventos);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umEvento = null;
+                
+                $umEvento = $em->getRepository('RepSiteBundle:Evento')
+                        ->findOneBy(array('id' => $eventos[$i]['id']));
+                
+                if($umEvento == null){
+                    $umEvento = new Evento();
+                    $umEvento->setId($eventos[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umEvento->setNome($eventos[$i]['nome']);
+                $umEvento->setStatus($eventos[$i]['status']);
+                $umEvento->setData(date_create_from_format('Y-m-d\TH:i:sO', $eventos[$i]['data']));
+                $umEvento->setSlug(NULL);
+                
+                $umTipoEvento = new \Rep\SiteBundle\Entity\TipoEvento();
+                $umTipoEvento = $em->getRepository('RepSiteBundle:TipoEvento')
+                        ->findOneBy(array('id' => $eventos[$i]['tipo_evento']));
+                
+                $umEvento->setTipoEvento($umTipoEvento);
+                
+                $em->persist($umEvento);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umEvento));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umEvento->setId($eventos[$i]['id']);
+                }
+                
+            }
             
             $em->flush();
             

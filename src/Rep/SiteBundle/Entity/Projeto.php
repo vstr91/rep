@@ -16,21 +16,21 @@ use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Description of Evento
+ * Description of Projeto
  *
  * @author Almir
  */
 
 /**
- * Musica
+ * Projeto
  *
- * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\EventoRepository")
- * @ORM\Table(name="evento")
+ * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\ProjetoRepository")
+ * @ORM\Table(name="projeto")
  * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * 
  */
-class Evento extends EntidadeBase {
+class Projeto extends EntidadeBase {
     
     /**
      * @var string
@@ -43,31 +43,19 @@ class Evento extends EntidadeBase {
     protected $nome;
     
     /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Versioned
-     */
-    protected $data;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TipoEvento")
-     * @ORM\JoinColumn(name="id_tipo_evento", referencedColumnName="id")
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $tipoEvento;
-    
-    /**
-     * @Gedmo\Slug(fields={"nome", "data"})
+     * @Gedmo\Slug(fields={"nome"})
      * @ORM\Column(unique=false)
      */
     private $slug;
+
 
 
     /**
      * Set nome
      *
      * @param string $nome
-     * @return Evento
+     *
+     * @return Projeto
      */
     public function setNome($nome)
     {
@@ -79,7 +67,7 @@ class Evento extends EntidadeBase {
     /**
      * Get nome
      *
-     * @return string 
+     * @return string
      */
     public function getNome()
     {
@@ -87,148 +75,11 @@ class Evento extends EntidadeBase {
     }
 
     /**
-     * Set data
-     *
-     * @param \DateTime $data
-     * @return Evento
-     */
-    public function setData($data)
-    {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * Get data
-     *
-     * @return \DateTime 
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    
-    /**
-     * Set id
-     *
-     * @return integer 
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        
-        return $this;
-    }
-
-    /**
-     * Set status
-     *
-     * @param integer $status
-     * @return Evento
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set dataCadastro
-     *
-     * @param \DateTime $dataCadastro
-     * @return Evento
-     */
-    public function setDataCadastro($dataCadastro)
-    {
-        $this->dataCadastro = $dataCadastro;
-
-        return $this;
-    }
-
-    /**
-     * Get dataCadastro
-     *
-     * @return \DateTime 
-     */
-    public function getDataCadastro()
-    {
-        return $this->dataCadastro;
-    }
-
-    /**
-     * Set ultimaAlteracao
-     *
-     * @param \DateTime $ultimaAlteracao
-     * @return Evento
-     */
-    public function setUltimaAlteracao($ultimaAlteracao)
-    {
-        $this->ultimaAlteracao = $ultimaAlteracao;
-
-        return $this;
-    }
-
-    /**
-     * Get ultimaAlteracao
-     *
-     * @return \DateTime 
-     */
-    public function getUltimaAlteracao()
-    {
-        return $this->ultimaAlteracao;
-    }
-
-    /**
-     * Set tipoEvento
-     *
-     * @param \Rep\SiteBundle\Entity\TipoEvento $tipoEvento
-     * @return Evento
-     */
-    public function setTipoEvento(\Rep\SiteBundle\Entity\TipoEvento $tipoEvento = null)
-    {
-        $this->tipoEvento = $tipoEvento;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoEvento
-     *
-     * @return \Rep\SiteBundle\Entity\TipoEvento 
-     */
-    public function getTipoEvento()
-    {
-        return $this->tipoEvento;
-    }
-
-    /**
      * Set slug
      *
      * @param string $slug
      *
-     * @return Evento
+     * @return Projeto
      */
     public function setSlug($slug)
     {
@@ -245,5 +96,87 @@ class Evento extends EntidadeBase {
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return Projeto
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set dataCadastro
+     *
+     * @param \DateTime $dataCadastro
+     *
+     * @return Projeto
+     */
+    public function setDataCadastro($dataCadastro)
+    {
+        $this->dataCadastro = $dataCadastro;
+
+        return $this;
+    }
+
+    /**
+     * Get dataCadastro
+     *
+     * @return \DateTime
+     */
+    public function getDataCadastro()
+    {
+        return $this->dataCadastro;
+    }
+
+    /**
+     * Set ultimaAlteracao
+     *
+     * @param \DateTime $ultimaAlteracao
+     *
+     * @return Projeto
+     */
+    public function setUltimaAlteracao($ultimaAlteracao)
+    {
+        $this->ultimaAlteracao = $ultimaAlteracao;
+
+        return $this;
+    }
+
+    /**
+     * Get ultimaAlteracao
+     *
+     * @return \DateTime
+     */
+    public function getUltimaAlteracao()
+    {
+        return $this->ultimaAlteracao;
     }
 }
