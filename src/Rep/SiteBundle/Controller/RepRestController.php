@@ -282,6 +282,53 @@ class RepRestController extends FOSRestController {
                 
             }
             
+            // MUSICAS EVENTOS
+            
+            $musicasEventos = $dados['musicas_eventos'];
+            $total = count($musicasEventos);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umMusicaEvento = null;
+                
+                $umMusicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
+                        ->findOneBy(array('id' => $musicasEventos[$i]['id']));
+                
+                if($umMusicaEvento == null){
+                    $umMusicaEvento = new \Rep\SiteBundle\Entity\MusicaEvento();
+                    $umMusicaEvento->setId($musicasEventos[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umMusicaEvento->setOrdem($musicasEventos[$i]['ordem']);
+                $umMusicaEvento->setStatus($musicasEventos[$i]['status']);
+                
+                $umMusica = new \Rep\SiteBundle\Entity\Musica();
+                $umMusica = $em->getRepository('RepSiteBundle:Musica')
+                        ->findOneBy(array('id' => $musicasEventos[$i]['musica']));
+                
+                $umMusicaEvento->setMusica($umMusica);
+                
+                $umEvento = new \Rep\SiteBundle\Entity\Evento();
+                $umEvento = $em->getRepository('RepSiteBundle:Evento')
+                        ->findOneBy(array('id' => $musicasEventos[$i]['evento']));
+                
+                $umMusicaEvento->setEvento($umEvento);
+                
+                $em->persist($umMusicaEvento);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umMusicaEvento));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umEvento->setId($musicasEventos[$i]['id']);
+                }
+                
+            }
+            
             $em->flush();
             
             $view = View::create(
