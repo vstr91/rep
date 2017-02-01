@@ -324,7 +324,7 @@ class RepRestController extends FOSRestController {
                     $metadata = $em->getClassMetaData(get_class($umMusicaEvento));
                     $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
                     $metadata->setIdGenerator(new AssignedGenerator());
-                    $umEvento->setId($musicasEventos[$i]['id']);
+                    $umMusicaEvento->setId($musicasEventos[$i]['id']);
                 }
                 
             }

@@ -18,7 +18,7 @@ class MusicaEventoRepository extends EntityRepository
         
         $musicasEvento = $qb->select('IDENTITY(me.musica)')
           ->where("me.evento = '".$id_evento."'")
-          //->andWhere('me.status = 0')
+          ->andWhere('me.status = 0')
           ->getQuery()
           ->getResult();
         
@@ -77,6 +77,19 @@ class MusicaEventoRepository extends EntityRepository
                 ->addOrderBy('me.ordem');
 
         return $qb->getQuery()->getResult();
+    }
+    
+    public function contarTodasPorEvento($slug){
+        $qb = $this->createQueryBuilder('me')
+                ->select('count(me.id)')
+                ->leftJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->leftJoin("RepSiteBundle:Evento", 'e', 'WITH', 'e.id = me.evento')
+                ->andWhere('e.slug = :evento')
+                ->andWhere('me.status = 0')
+                ->setParameter(':evento', $slug)
+                ->addOrderBy('me.ordem');
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
     
     public function listarTodosREST($limite = null, $dataUltimoAcesso){

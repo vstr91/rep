@@ -39,6 +39,8 @@ class MusicaEventoController extends Controller {
         $comentarios = $em->getRepository('RepSiteBundle:ComentarioEvento')
                 ->listarTodosPorEvento($slug);
         
+        $this->corrigirOrdem($evento);
+        
         return $this->render('RepSiteBundle:MusicaEvento:musicas-evento.html.twig', 
                 array(
                     'usuario' => $user,
@@ -132,10 +134,12 @@ class MusicaEventoController extends Controller {
         //verifica se ja existe registro
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
-        $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listarTodasPorEvento($id_evento);
-            
-        $total = count($musicasEvento)+1;
+        $total = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->contarTodasPorEvento($evento->getSlug());
+        
+        $total = $total+1;
+        
+        $this->corrigirOrdem($evento);
         
         foreach($musicas as $musica){
             
@@ -364,6 +368,31 @@ class MusicaEventoController extends Controller {
         
         return new Response($pdf->Output(), 200, array(
             'Content-Type' => 'application/pdf'));
+        
+    }
+    
+    function corrigirOrdem(\Rep\SiteBundle\Entity\Evento $evento){
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $musicas = $em->getRepository('RepSiteBundle:MusicaEvento')
+                ->listarTodasPorEvento($evento->getSlug());
+        
+        $total = count($musicas);
+        
+        for($i = 0; $i < $total; $i++){
+            $musica = $musicas[$i];
+            $musicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->findOneBy(array('musica' => $musica, 'evento' => $evento));
+            
+            $musicaEvento->setOrdem($i+1);
+            
+            $em->persist($musicaEvento);
+        }
+        
+        $em->flush();
         
     }
     
