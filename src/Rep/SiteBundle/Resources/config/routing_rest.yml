@@ -14,3 +14,7 @@ rep_api_get_dados:
 rep_api_set_dados:
     pattern: /envia-dados/{hash}/{data}
     defaults: {_controller: RepSiteBundle:RepRest:setDados}
+    
+rep_api_valida_token:
+    pattern: /valida-token
+    defaults: {_controller: RepSiteBundle:RepRest:validaToken}

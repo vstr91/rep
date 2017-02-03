@@ -350,4 +350,50 @@ class RepRestController extends FOSRestController {
         
     }
     
+    public function validaTokenAction() {
+        $em = $this->getDoctrine()->getManager();
+
+        // Get $id_token via HTTPS POST.
+        $CLIENT_ID = "763791909416-aim4u63mdttsktinjqroogqdndlibf7l.apps.googleusercontent.com";
+        $idToken = $this->get('request')->request->get('idToken');
+        
+        $client = new \Google_Client(['client_id' => $CLIENT_ID]);
+        $payload = $client->verifyIdToken($idToken);
+        
+        if ($payload) {
+            $email = $payload['email'];
+            $userid = $payload['sub'];
+            
+            $usuario = $em->getRepository('RepSiteBundle:Usuario')
+                        ->findOneBy(array('email' => $email));
+            
+            if($usuario != null){
+                
+                if($usuario->getGoogleId() == null){
+                    $usuario->setGoogleID($userid);
+                    $em->persist($usuario);
+                    $em->flush();
+                }
+                
+                $view = View::create(
+                    array(
+                        "meta" => array(array("registros" => 0, "status" => 200, "mensagem" => "ok"))
+                    ),
+                    200, array('totalRegistros' => 0))->setTemplateVar("u");
+
+                return $this->handleView($view); 
+                
+            } else {
+                $view = View::create(
+                        array(
+                            "meta" => array(array("registros" => 0, "status" => 403, "mensagem" => "Acesso negado."))
+                        ),
+                    403, array('totalRegistros' => 0))->setTemplateVar("u");
+
+                return $this->handleView($view);
+            }
+            
+        }
+        
+    }
 }
