@@ -51,6 +51,13 @@ class Usuario extends BaseUser {
      */
     private $googleID;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="google_access_token", type="string", nullable=true)
+     */
+    private $googleAccessToken;
+    
 
     /**
      * Set facebookID
@@ -99,4 +106,14 @@ class Usuario extends BaseUser {
     {
         return $this->googleID;
     }
+    
+    function getGoogleAccessToken() {
+        return $this->googleAccessToken;
+    }
+
+    function setGoogleAccessToken($googleAccessToken) {
+        $this->googleAccessToken = $googleAccessToken;
+    }
+
+    
 }

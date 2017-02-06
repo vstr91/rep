@@ -256,4 +256,52 @@ class Musica extends EntidadeBase {
     {
         return $this->slug;
     }
+
+    /**
+     * Set usuarioCadastro
+     *
+     * @param \Rep\SiteBundle\Entity\Usuario $usuarioCadastro
+     *
+     * @return Musica
+     */
+    public function setUsuarioCadastro(\Rep\SiteBundle\Entity\Usuario $usuarioCadastro = null)
+    {
+        $this->usuarioCadastro = $usuarioCadastro;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioCadastro
+     *
+     * @return \Rep\SiteBundle\Entity\Usuario
+     */
+    public function getUsuarioCadastro()
+    {
+        return $this->usuarioCadastro;
+    }
+
+    /**
+     * Set usuarioUltimaAlteracao
+     *
+     * @param \Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao
+     *
+     * @return Musica
+     */
+    public function setUsuarioUltimaAlteracao(\Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao = null)
+    {
+        $this->usuarioUltimaAlteracao = $usuarioUltimaAlteracao;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioUltimaAlteracao
+     *
+     * @return \Rep\SiteBundle\Entity\Usuario
+     */
+    public function getUsuarioUltimaAlteracao()
+    {
+        return $this->usuarioUltimaAlteracao;
+    }
 }

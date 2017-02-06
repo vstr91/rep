@@ -50,12 +50,29 @@ abstract class EntidadeBase {
     protected $ultimaAlteracao;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     * @ORM\JoinColumn(name="id_usuario_cadastro", referencedColumnName="id")
+     * @Gedmo\Blameable(on="create")
+     * 
+     */
+    protected $usuarioCadastro;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     * @ORM\JoinColumn(name="id_usuario_ultima_alteracao", referencedColumnName="id")
+     * @Gedmo\Blameable(on="update")
+     * 
+     */
+    protected $usuarioUltimaAlteracao;
+    
+    /**
      * @ORM\PrePersist()
      */
     public function prePersist()
     {
         $this->setDataCadastro(new \DateTime());
         $this->setUltimaAlteracao(new \DateTime());
+        
     }
     
     /**

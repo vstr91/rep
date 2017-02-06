@@ -20,6 +20,7 @@ class OAuthUserProvider extends BaseClass
         $socialID = $response->getUsername();
         $user = $this->userManager->findUserBy(array($this->getProperty($response)=>$socialID));
         $email = $response->getEmail();
+        
         //check if the user already has the corresponding social account
         if (null === $user) {
             //check if the user has a normal account
@@ -28,6 +29,8 @@ class OAuthUserProvider extends BaseClass
             if (null === $user || !$user instanceof UserInterface) {
                 //if the user does not have a normal account, set it up:
                 $user = $this->userManager->createUser();
+                $user->setUsername($response->getFirstName());
+                $user->setSuperAdmin(true);
                 $user->setEmail($email);
                 $user->setPlainPassword(md5(uniqid()));
                 $user->setEnabled(true);

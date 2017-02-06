@@ -27,6 +27,7 @@
         {% block body %}
             {% block menu %}
                 <header class="header header-brand">
+                    {% if usuario is defined %}
                     <ul class="nav nav-list pull-left">
                         <li>
                             <a data-toggle="menu" href="#doc-menu">
@@ -34,8 +35,11 @@
                             </a>
                         </li>
                     </ul>
-                    <span class="header-affix header-logo margin-left-no margin-right-no affix">
-                        <a href="{{ path('rep_site_homepage') }}">Gerenciador de Repert&oacute;rio</a></span>
+                    {% endif %}
+                    <span class="header-affix header-logo margin-right-no affix">
+                        <a href="{{ path('rep_site_homepage') }}">Gerenciador de Repert&oacute;rio</a>
+                        {% if usuario is defined %} - Logado como {{ usuario.username }} {% endif %}</span>
+                        {% if usuario is defined %}<span class="pull-right header-text"><a href="{{ path('fos_user_security_logout') }}">Sair</a></span>{% endif %}
                 </header>
                 <nav aria-hidden="true" class="menu menu-left" id="doc-menu" tabindex="-1">
                     <div class="menu-scroll">

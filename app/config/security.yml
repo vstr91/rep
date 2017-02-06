@@ -44,9 +44,10 @@ security:
                     service: app.provider.oauth
 
     access_control:
-        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/usuarios/form, role: ROLE_ADMIN }

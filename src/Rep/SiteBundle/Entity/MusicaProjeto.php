@@ -177,4 +177,52 @@ class MusicaProjeto extends EntidadeBase {
     {
         return $this->projeto;
     }
+
+    /**
+     * Set usuarioCadastro
+     *
+     * @param \Rep\SiteBundle\Entity\Usuario $usuarioCadastro
+     *
+     * @return MusicaProjeto
+     */
+    public function setUsuarioCadastro(\Rep\SiteBundle\Entity\Usuario $usuarioCadastro = null)
+    {
+        $this->usuarioCadastro = $usuarioCadastro;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioCadastro
+     *
+     * @return \Rep\SiteBundle\Entity\Usuario
+     */
+    public function getUsuarioCadastro()
+    {
+        return $this->usuarioCadastro;
+    }
+
+    /**
+     * Set usuarioUltimaAlteracao
+     *
+     * @param \Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao
+     *
+     * @return MusicaProjeto
+     */
+    public function setUsuarioUltimaAlteracao(\Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao = null)
+    {
+        $this->usuarioUltimaAlteracao = $usuarioUltimaAlteracao;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioUltimaAlteracao
+     *
+     * @return \Rep\SiteBundle\Entity\Usuario
+     */
+    public function getUsuarioUltimaAlteracao()
+    {
+        return $this->usuarioUltimaAlteracao;
+    }
 }

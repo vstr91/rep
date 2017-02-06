@@ -38,7 +38,8 @@ class PageController extends Controller
             'proximosEventos' => $proximosEventos,
             'artistas' => $artistas,
             'musicas' => $musicas,
-            'execucoes' => $execucoes
+            'execucoes' => $execucoes,
+            'usuario' => $this->getUser()
         ));
     }
     
