@@ -33,16 +33,17 @@ class MusicaEventoRepository extends EntityRepository
             ->getQuery()
             ->getResult();
         } else{
-            $qb = $this->createQueryBuilder('me');
-            
-            $result = $qb->select('mu')
-            ->distinct()
-            ->from("RepSiteBundle:Musica", "mu")
-                    ->where('mu.id NOT IN (0)')
-                    //->andWhere('mu.status = 0')
-                    ->addOrderBy('mu.nome')
-            ->getQuery()
-            ->getResult();
+//            $qb = $this->createQueryBuilder('me');
+//            
+//            $result = $qb->select('mu')
+//            ->distinct()
+//            ->from("RepSiteBundle:Musica", "mu")
+//                    ->where('mu.id NOT IN (0)')
+//                    //->andWhere('mu.status = 0')
+//                    ->addOrderBy('mu.nome')
+//            ->getQuery()
+//            ->getResult();
+            return null;
         }
          
         return $result;

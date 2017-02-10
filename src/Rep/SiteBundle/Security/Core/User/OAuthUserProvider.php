@@ -28,12 +28,13 @@ class OAuthUserProvider extends BaseClass
  
             if (null === $user || !$user instanceof UserInterface) {
                 //if the user does not have a normal account, set it up:
-                $user = $this->userManager->createUser();
-                $user->setUsername($response->getFirstName());
-                $user->setSuperAdmin(true);
-                $user->setEmail($email);
-                $user->setPlainPassword(md5(uniqid()));
-                $user->setEnabled(true);
+//                $user = $this->userManager->createUser();
+//                $user->setUsername($response->getFirstName());
+//                $user->setSuperAdmin(true);
+//                $user->setEmail($email);
+//                $user->setPlainPassword(md5(uniqid()));
+//                $user->setEnabled(true);
+                return null;
             }
             //then set its corresponding social id
             $service = $response->getResourceOwner()->getName();
