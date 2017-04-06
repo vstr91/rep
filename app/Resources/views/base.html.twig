@@ -4,16 +4,13 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Gerenciador de Repert&oacute;rio</title>
+        <title>Gerenciador</title>
 
         {% block css %}
             <!-- Bootstrap -->
             <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" />
-            <link href="{{ asset('css/base.css') }}" rel="stylesheet" />
-            <link href="{{ asset('css/project.css') }}" rel="stylesheet" />
-            
+
             <link href="{{ asset('css/estilos.css') }}" rel="stylesheet" />
-            <link href="{{ asset('css/jquery.datetimepicker.css') }}" rel="stylesheet" />
 
             <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
             <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,139 +20,84 @@
             <![endif]-->
         {% endblock %}
     </head>
-    <body style="background-color: #EFEFEF">
+    <body>
         {% block body %}
-            {% block menu %}
-                <header class="header header-brand">
-                    {% if usuario is defined %}
-                    <ul class="nav nav-list pull-left">
-                        <li>
-                            <a data-toggle="menu" href="#doc-menu">
-                                <span class="icon icon-lg">menu</span>
-                            </a>
-                        </li>
-                    </ul>
-                    {% endif %}
-                    <span class="header-affix header-logo margin-right-no affix">
-                        <a href="{{ path('rep_site_homepage') }}">Gerenciador de Repert&oacute;rio</a>
-                    </span>
-                    {% if usuario is defined %}<span class="header-text">Logado como {{ usuario.username }}</span> {% endif %}
-                        {% if usuario is defined %}<span class="pull-right header-text"><a href="{{ path('fos_user_security_logout') }}">Sair</a></span>{% endif %}
-                </header>
-                <nav aria-hidden="true" class="menu menu-left" id="doc-menu" tabindex="-1">
-                    <div class="menu-scroll">
-                        <div class="menu-content">
-                            <h3 class="menu-logo">Op&ccedil;&otilde;es</h3>
-                            <ul class="nav">
-                                    <li><h4 class="text-brand-accent padding-left">Op&ccedil;&otilde;es Gerais</h4></li>
-                                    <li>
-                                        <a class="waves-attach" 
-                                           href="{{ path('rep_site_homepage') }}">P&aacute;gina Inicial</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" id="link-gerenciar-artistas" 
-                                           href="{{ path('rep_site_artistas') }}">Gerenciar Artistas</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" id="link-gerenciar-musicas" 
-                                           href="{{ path('rep_site_musicas') }}">Gerenciar M&uacute;sicas</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" id="link-gerenciar-eventos" 
-                                           href="{{ path('rep_site_tipos_evento') }}">Gerenciar Tipos de Evento</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" id="link-gerenciar-eventos" 
-                                           href="{{ path('rep_site_eventos') }}">Gerenciar Eventos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" id="link-sair" 
-                                           href="{{ path('fos_user_security_logout') }}">Sair do Sistema</a>
-                                    </li>
-                                    {#<li>
-                                        <a class="waves-attach" id="link-gerenciar-projetos" 
-                                           href="{{ path('rep_site_projetos') }}">Gerenciar Projetos</a>
-                                    </li>#}
-                            </ul>
+            {% block topo %}
+                <div class="navbar" id="menu-principal">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button class="navbar-toggle v-botao-collapse" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Navega&ccedil;&atilde;o</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a href="#" class="navbar-brand">Gerenciador</a>
+                        </div>
+                        <div class="collapse navbar-collapse">
+
                         </div>
                     </div>
-                </nav>
-            {% endblock %}
+                </div>
+            {% endblock topo %}
             {% block conteudo %}
-                <div class="modal fade" id="modal-edicao">
+                <div class="container-fluid" id="container-principal">
+                    <div class="row height-100">
+                        <div class="col-md-2 height-100" id="coluna-menu">
+                            {% block lateral %}
+                                <div id="menu-lateral" class="list-group">
+                                    <a href="{{ path('rep_site_homepage') }}" class="list-group-item">Eventos</a>
+                                    <a href="#" class="list-group-item">Repert&oacute;rio</a>
+                                    <div class="list-group-item-info text-center">Outras Configura&ccedil;&otilde;es</div>
+                                    <a href="{{ path('rep_site_projetos') }}" class="list-group-item">Projetos</a>
+                                    <a href="{{ path('rep_site_musicas') }}" class="list-group-item">Banco de M&uacute;sicas</a>
+                                    <a href="{{ path('rep_site_artistas') }}" class="list-group-item">Artistas</a>
+                                    <a href="{{ path('rep_site_tipos_evento') }}" class="list-group-item">Tipos de Eventos</a>
+                                </div>
+                            {% endblock lateral %}
+                        </div>
+                        <div class="col-md-10" id="conteudo">
+                            <div class="row" id="conteudo-principal">
+                                <div class="col-md-12">
+                                    {% block principal %}
+                                        BBB
+                                    {% endblock principal %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-heading">
-                                <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                                <h4 class="modal-title">Editar Usu&aacute;rio</h4>
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="titulo-modal"></h4>
                             </div>
-                            <div class="modal-inner" id="body-edicao">
-
+                            <div class="modal-body" id="body-modal">
+                                
                             </div>
                             <div class="modal-footer">
-                                <p class="text-right">
-                                    <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                                    <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
-                                </p>
+                                <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                                <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            {% endblock %}
+            {% endblock conteudo %}
             {% block rodape %}
-                <footer class="footer footer-vostre">
+                {#<footer class="footer footer-vostre">
                     <p>Desenvolvido por <a href="http://vostre.com.br" target="_blank">Vostr&egrave;</a></p>
-                    {#<div class="fbtn-container">
-                        <div class="fbtn-inner">
-                            <a class="fbtn fbtn-brand-accent fbtn-lg" data-toggle="dropdown">
-                                <span class="fbtn-text">Links</span>
-                                <span class="fbtn-ori icon">apps</span>
-                                <span class="fbtn-sub icon">close</span>
-                            </a>
-                            <div class="fbtn-dropdown">
-                                <a class="fbtn" href="#">
-                                    <span class="fbtn-text">App Android</span>
-                                    <span class="icon">android</span>
-                                </a>
-                                <a class="fbtn" href="#">
-                                    <span class="fbtn-text">App iOS</span>
-                                    <span class="icon">phone_iphone</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>#}
-                </footer>
+                </footer>#}
             {% endblock %}
         {% endblock %}
         {% block js %}
             <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
             {#            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>#}
             <script src="{{ asset('js/jquery.js') }}"></script>
-            <script src="{{ asset('js/base.min.js') }}"></script>
-            <script src="{{ asset('js/project.min.js') }}"></script>
-            <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
             <script type="text/javascript">
-                jQuery.datetimepicker.setLocale('pt');
-
-                $('.datetimepicker').datetimepicker({
-                    format: "d/m/Y H:i",
-                    timepicker: true,
-                    datepicker: true,
-                    step: 30,
-                    i18n:{
-                        pt:{
-                            months:[
-                             'Janeiro','Fevereiro','Março','Abril',
-                             'Maio','Junho','Julho','Agosto',
-                             'Setembro','Outubro','Novembro','Dezembro'
-                            ],
-                            dayOfWeek:[
-                             "Dom", "Seg", "Ter", "Qua", 
-                             "Qui", "Sex", "Sab"
-                            ]
-                        }
-                    }
-                });
             </script>
         {% endblock %}
     </body>

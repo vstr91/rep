@@ -3,8 +3,6 @@
         <tr>
             <td>Nome</td>
             <td>Artista</td>
-            <td>Tom</td>
-            <td>Status</td>
             <td>A&ccedil;&otilde;es</td>
         </tr>
     </thead>
@@ -13,18 +11,6 @@
             <tr>
                 <td>{{ musica.nome }}</td>
                 <td>{{ musica.artista.nome }}</td>
-                <td>{{ musica.tom }}</td>
-                <td>
-                    {% if musica.status == 0 %}
-                        Ativo
-                    {% elseif musica.status == 1 %}
-                        Em Espera
-                    {% elseif musica.status == 2 %}
-                        Inativo
-                    {% elseif musica.status == 3 %}
-                        Sugest&atilde;o
-                    {% endif %}
-                </td>
                 <td>
                     <a class="link-editar" href="#{{ musica.id }}">Editar</a>
                 </td>

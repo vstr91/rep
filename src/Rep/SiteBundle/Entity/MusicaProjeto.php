@@ -47,6 +47,16 @@ class MusicaProjeto extends EntidadeBase {
      */
     protected $projeto;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tom", type="string", length=5)
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
+     * 
+     */
+    protected $tom;
+    
 
     /**
      * Get id
@@ -224,5 +234,29 @@ class MusicaProjeto extends EntidadeBase {
     public function getUsuarioUltimaAlteracao()
     {
         return $this->usuarioUltimaAlteracao;
+    }
+
+    /**
+     * Set tom
+     *
+     * @param string $tom
+     *
+     * @return MusicaProjeto
+     */
+    public function setTom($tom)
+    {
+        $this->tom = $tom;
+
+        return $this;
+    }
+
+    /**
+     * Get tom
+     *
+     * @return string
+     */
+    public function getTom()
+    {
+        return $this->tom;
     }
 }

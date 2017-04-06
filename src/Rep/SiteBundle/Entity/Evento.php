@@ -62,6 +62,13 @@ class Evento extends EntidadeBase {
      */
     private $slug;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Projeto")
+     * @ORM\JoinColumn(name="id_projeto", referencedColumnName="id")
+     * @Gedmo\Versioned
+     * 
+     */
+    protected $projeto;
 
     /**
      * Set nome
@@ -293,5 +300,29 @@ class Evento extends EntidadeBase {
     public function getUsuarioUltimaAlteracao()
     {
         return $this->usuarioUltimaAlteracao;
+    }
+
+    /**
+     * Set projeto
+     *
+     * @param \Rep\SiteBundle\Entity\Projeto $projeto
+     *
+     * @return Evento
+     */
+    public function setProjeto(\Rep\SiteBundle\Entity\Projeto $projeto = null)
+    {
+        $this->projeto = $projeto;
+
+        return $this;
+    }
+
+    /**
+     * Get projeto
+     *
+     * @return \Rep\SiteBundle\Entity\Projeto
+     */
+    public function getProjeto()
+    {
+        return $this->projeto;
     }
 }

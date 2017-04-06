@@ -43,16 +43,6 @@ class Musica extends EntidadeBase {
     protected $nome;
     
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tom", type="string", length=5)
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $tom;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="Artista", inversedBy="musicas")
      * @ORM\JoinColumn(name="id_artista", referencedColumnName="id")
      * @OrderBy({"artista" = "DESC"})
@@ -207,30 +197,6 @@ class Musica extends EntidadeBase {
     public function getArtista()
     {
         return $this->artista;
-    }
-
-    /**
-     * Set tom
-     *
-     * @param string $tom
-     *
-     * @return Musica
-     */
-    public function setTom($tom)
-    {
-        $this->tom = $tom;
-
-        return $this;
-    }
-
-    /**
-     * Get tom
-     *
-     * @return string
-     */
-    public function getTom()
-    {
-        return $this->tom;
     }
 
     /**

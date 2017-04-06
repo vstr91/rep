@@ -47,6 +47,13 @@ class Projeto extends EntidadeBase {
      * @ORM\Column(unique=false)
      */
     private $slug;
+    
+    /**
+     * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
+     * 
+     */
+    protected $principal = 0;
 
 
 
@@ -227,4 +234,33 @@ class Projeto extends EntidadeBase {
     {
         return $this->usuarioUltimaAlteracao;
     }
+
+    /**
+     * Set principal
+     *
+     * @param integer $principal
+     *
+     * @return Projeto
+     */
+    public function setPrincipal($principal)
+    {
+        $this->principal = $principal;
+
+        return $this;
+    }
+
+    /**
+     * Get principal
+     *
+     * @return integer
+     */
+    public function getPrincipal()
+    {
+        return $this->principal;
+    }
+    
+    public function __toString() {
+        return $this->getNome();
+    }
+    
 }

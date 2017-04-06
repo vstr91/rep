@@ -17,11 +17,10 @@ class MusicaType extends AbstractType
     {
         $builder
             ->add('nome')
-            ->add('tom')
-            ->add('status', 'choice', array(
-                'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo', 
-                    '3' => 'Sugestão')
-            ))
+//            ->add('status', 'choice', array(
+//                'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo', 
+//                    '3' => 'Sugestão')
+//            ))
             ->add('artista', null, array(
                 'query_builder' => function(EntityRepository $repository) { 
                     return $repository->createQueryBuilder('a')->orderBy('a.nome', 'ASC');

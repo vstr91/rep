@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-{% block conteudo %}
+{% block principal %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal-edicao">
+    {#<div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-heading">
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>#}
 {% endblock %}
 {% block js %}
     {{ parent() }}
@@ -52,9 +52,9 @@
                 type: 'GET',
                 url: $url,
                 success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#btn-editar').show();
-                    $('#modal-edicao').modal('show');
+                    $('#body-modal').html(response);
+                    $('#titulo-modal').html("Editar Projeto");
+                    $('#modal').modal('show');
                 }
             });
 

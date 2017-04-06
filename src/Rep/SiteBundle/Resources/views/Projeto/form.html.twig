@@ -1,5 +1,5 @@
 <form id="form-projeto-edita" 
-      action="{{ path('rep_site_projeto_cadastra', {'id_projeto': projeto.id}) }}" 
+      action="{{ path('rep_site_projetos_cadastra', {'id_projeto': projeto.id}) }}" 
       method="POST" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>

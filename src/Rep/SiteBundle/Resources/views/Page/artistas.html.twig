@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-{% block conteudo %}
+{% block principal %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -51,9 +51,9 @@
                 type: 'GET',
                 url: $url,
                 success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#btn-editar').show();
-                    $('#modal-edicao').modal('show');
+                    $('#body-modal').html(response);
+                    $('#titulo-modal').html("Editar Artista");
+                    $('#modal').modal('show');
                 }
             });
 

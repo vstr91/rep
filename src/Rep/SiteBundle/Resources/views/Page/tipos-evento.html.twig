@@ -3,7 +3,7 @@
     {{ parent() }}
     <link href="{{ asset('css/colorpicker.css') }}" rel="stylesheet" />
 {% endblock %}
-{% block conteudo %}
+{% block principal %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -19,25 +19,6 @@
                 <h3 class="text-center">Tipos de Evento Cadastrados</h3>
                 {% include 'RepSiteBundle:TipoEvento:tabela-cadastrados.html.twig' 
                           with {'tiposEvento': tiposEvento} %}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-edicao">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                    <h4 class="modal-title">Editar Tipo de Evento</h4>
-                </div>
-                <div class="modal-inner" id="body-edicao">
-
-                </div>
-                <div class="modal-footer">
-                    <p class="text-right">
-                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
-                    </p>
-                </div>
             </div>
         </div>
     </div>
@@ -77,9 +58,9 @@
                 type: 'GET',
                 url: $url,
                 success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#btn-editar').show();
-                    $('#modal-edicao').modal('show');
+                    $('#body-modal').html(response);
+                    $('#titulo-modal').html("Editar Tipo de Evento");
+                    $('#modal').modal('show');
                 }
             });
 

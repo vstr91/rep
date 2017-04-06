@@ -15,31 +15,24 @@ class PageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $artistas = $em->getRepository('RepSiteBundle:Artista')->listarTodosPorQuantidadeMusicas();
+        $eventoType = new EventoType();
+        $formEvento = $this->createForm($eventoType);
         
-        $musicas = $em->getRepository('RepSiteBundle:Musica')->listarTodasPorSituacao();
+        $eventos = $em->getRepository('RepSiteBundle:Evento')
+                ->listarTodos();
         
-        $execucoes = $em->getRepository('RepSiteBundle:Musica')->listarTodasPorDataExecucao();
+        $tiposEvento = $em->getRepository('RepSiteBundle:TipoEvento')
+                ->findAll();
         
-        $musicasAtivas = $em->getRepository('RepSiteBundle:Musica')
-                ->findBy(array('status' => 0), array('nome' => 'ASC'));
-        $musicasEmEspera = $em->getRepository('RepSiteBundle:Musica')
-                ->findBy(array('status' => 1), array('nome' => 'ASC'));
-        $musicasSugestao = $em->getRepository('RepSiteBundle:Musica')
-                ->findBy(array('status' => 3), array('nome' => 'ASC'));
-        
-        $proximosEventos = $em->getRepository('RepSiteBundle:Evento')
-                ->listarProximosEventos();
+        $eventosAtivos = $em->getRepository('RepSiteBundle:Evento')
+                ->listarTodosAtivos();
         
         return $this->render('RepSiteBundle:Page:index.html.twig', array(
-            'musicasAtivas' => $musicasAtivas,
-            'musicasEmEspera' => $musicasEmEspera,
-            'musicasSugestao' => $musicasSugestao,
-            'proximosEventos' => $proximosEventos,
-            'artistas' => $artistas,
-            'musicas' => $musicas,
-            'execucoes' => $execucoes,
-            'usuario' => $this->getUser()
+            'usuario' => $this->getUser(),
+            'eventos' => $eventos,
+            'eventosAtivos' => $eventosAtivos,
+            'tiposEvento' => $tiposEvento,
+            'formEvento' => $formEvento->createView()
         ));
     }
     

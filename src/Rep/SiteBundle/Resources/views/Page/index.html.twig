@@ -1,118 +1,20 @@
 {% extends "::base.html.twig" %}
-{% block conteudo %}
-    <div class="container-fluid">
-        <div class="row linhas-index">
-            <div class="col-md-4">
-                <h3 class="text-center">Repert&oacute;rio Atual</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
-                          with {'musicas': musicasAtivas} %}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <h3 class="text-center">M&uacute;sicas em Espera</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:tabela-cadastrados-index.html.twig' 
-                          with {'musicas': musicasEmEspera} %}
-                </div>  
-            </div>
-            <div class="col-md-4">
-                <h3 class="text-center">Pr&oacute;ximos Eventos</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Evento:tabela-cadastrados-index.html.twig' 
-                          with {'eventos': proximosEventos} %}
-                </div>
-                <a href="{{ path('rep_site_eventos') }}" class="btn btn-brand">Gerenciar Eventos</a>
-            </div>
-        </div>
-        <div class="row linhas-index">
-            <div class="col-md-5 col-md-offset-1">
-                <h3 class="text-center">M&uacute;sicas Sugeridas</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:tabela-sugestoes-index.html.twig' 
-                          with {'musicas': musicasSugestao} %}
-                </div>
-            </div>
-            <div class="col-md-5">
-                <h3 class="text-center">M&uacute;sicas - &Uacute;ltimas Execu&ccedil;&otilde;es</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:tabela-execucoes-index.html.twig' 
-                          with {'musicas': execucoes} %}
-                </div>  
-            </div>
-        </div>
-        <div class="row linhas-index">
-            <div class="col-md-5 col-md-offset-1">
-                <h3 class="text-center">M&uacute;sicas por Situa&ccedil;&atilde;o</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Musica:grafico-situacao-index.html.twig' 
-                          with {'musicas': musicas} %}
-                </div>  
-            </div>
-            <div class="col-md-5">
-                <h3 class="text-center">M&uacute;sicas por Artista</h3>
-                <div class="coluna-lista-musicas">
-                    {% include 'RepSiteBundle:Artista:tabela-cadastrados-index.html.twig' 
-                          with {'artistas': artistas} %}
-                </div>
-            </div>
-        </div>
-    </div>
-    <p>&nbsp;</p>
-    <div class="modal fade" id="modal-edicao">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                    <h4 class="modal-title" id="titulo-modal">Editar M&uacute;sica</h4>
-                </div>
-                <div class="modal-inner" id="body-edicao">
-
-                </div>
-                <div class="modal-footer">
-                    <p class="text-right">
-                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+{% block principal %}
+    {% include 'RepSiteBundle:Page:eventos.html.twig' %}
 {% endblock %}
 {% block js %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('/js/Chart.bundle.min.js') }}"></script>
-    <script type="text/javascript">
-        $('.link-editar').click(function () {
-
-            $idMusica = $(this).attr('href').replace('#', '');
-
-            $url = '{{ path('rep_site_musicas_form') }}' + "/" + $idMusica;
-
-            $('#titulo-modal').html("Editar M&uacute;sica");
-
-            $.ajax({
-                type: 'GET',
-                url: $url,
-                success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#btn-editar').show();
-                    $('#modal-edicao').modal('show');
-                }
-            });
-
-            return false;
-
-        });
-
-        $('.link-editar-evento').click(function () {
-
-            $idEvento = $(this).attr('href').replace('#', '');
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-year-calendar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.css') }}" />
+    <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap-year-calendar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/calendar-pt.js') }}"></script>
+    <script type="text/javascript">     
+        function editEvent(event) {
+            $idEvento = event.id;
 
             $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
 
-            $('#titulo-modal').html("Editar Evento");
-
             $.ajax({
                 type: 'GET',
                 url: $url,
@@ -124,131 +26,145 @@
             });
 
             return false;
+        }
+        
+        function repertorioEvent(event) {
+            $slug = event.slug;
 
-        });
+            $url = '{{ path('rep_site_musicas_evento') }}' + "/" + $slug;
+            window.location.href = $url;
+        }
 
-        $('.link-ver-musicas').click(function () {
+        function saveEvent() {
+            
+            //salvar no banco de dados
+            
+            $('#event-modal').modal('hide');
+        }
 
-            $idArtista = $(this).attr('href').replace('#', '');
+        $(document).ready(function() {
+            
+            jQuery.datetimepicker.setLocale('pt');
+            
+                $('.datetimepicker').datetimepicker({
+                    format: "d/m/Y H:i",
+                    timepicker: true,
+                    datepicker: true,
+                    step: 30,
+                    i18n:{
+                        pt:{
+                            months:[
+                             'Janeiro','Fevereiro','Março','Abril',
+                             'Maio','Junho','Julho','Agosto',
+                             'Setembro','Outubro','Novembro','Dezembro'
+                            ],
+                            dayOfWeek:[
+                             "Dom", "Seg", "Ter", "Qua", 
+                             "Qui", "Sex", "Sab"
+                            ]
+                        }
+                    }
+                });
+                
+            var currentYear = new Date().getFullYear();
 
-            $url = '{{ path('rep_site_artistas_musicas') }}' + "/" + $idArtista;
+            $('#calendar').calendar({
+                enableContextMenu: true,
+                enableRangeSelection: false,
+                language: 'pt',
+                contextMenuItems:[
+                    {
+                        text: 'Editar',
+                        click: editEvent
+                    },
+                    {
+                        text: 'Ver Repertório',
+                        click: repertorioEvent
+                    }
+                ],
+                selectRange: function(e) {
+                    editEvent({ startDate: e.startDate, endDate: e.endDate });
+                },
+                mouseOnDay: function(e) {
+                    if(e.events.length > 0) {
+                        var content = '';
 
-            $('#titulo-modal').html("Lista de Músicas");
+                        for(var i in e.events) {
+                            content += '<div class="event-tooltip-content">'
+                                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                            + '<div class="event-location">' + e.events[i].hora + '</div>'
+                                        + '</div>';
+                        }
 
-            $.ajax({
-                type: 'GET',
-                url: $url,
-                success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#btn-editar').hide();
-                    $('#modal-edicao').modal('show');
-                }
+                        $(e.element).popover({ 
+                            trigger: 'manual',
+                            container: 'body',
+                            html:true,
+                            content: content
+                        });
+
+                        $(e.element).popover('show');
+                    }
+                },
+                clickDay: function(e){
+                    $('.datetimepicker').datetimepicker({value: new Date(e.date)});
+                    $('#modal-cadastro').modal('show');
+                },
+                mouseOutDay: function(e) {
+                    if(e.events.length > 0) {
+                        $(e.element).popover('hide');
+                    }
+                },
+                dayContextMenu: function(e) {
+                    $(e.element).popover('hide');
+                },
+                dataSource: [
+                    {% for evento in eventosAtivos %}
+                        {
+                            id: '{{ evento.id }}',
+                            color: '{{ evento.tipoEvento.cor }}',
+                            name: '{{ evento.nome }}',
+                            hora: '{{ evento.data|date('H:i') }}',
+                            slug: '{{ evento.slug }}',
+                            startDate: new Date({{ evento.data|date('Y') }}, {{ evento.data|date('m')-1 }}, {{ evento.data|date('d') }}),
+                            endDate: new Date({{ evento.data|date('Y') }}, {{ evento.data|date('m')-1 }}, {{ evento.data|date('d') }})
+                        }
+                        
+                        {% if not loop.last %},{% endif %}
+                        
+                    {% endfor %}
+                ]
             });
 
-            return false;
+            $('#save-event').click(function() {
+                saveEvent();
+            });
+            
+            $('#btn-cadastrar').click(function(){
+                $('#form-evento').submit();
+            });
+           
+           $('.link-editar-evento').click(function(){
+               $idEvento = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: $url,
+                        success: function (response) {
+                            $('#body-edicao').html(response);
+                            $('#btn-editar').show();
+                            $('#modal-edicao').modal('show');
+                        }
+                    });
+
+                    return false;
+           });
 
         });
-
-        // ######### ARTISTAS ###########
-
-        var labels = [
-        {% for art in artistas %}
-                    "{{ art.artista.nome }}"
-            {% if not loop.last %}
-                                    ,
-            {% endif %}
-        {% endfor %}
-                ];
-
-                var data = [
-        {% for art in artistas %}
-            {{ art.musicas }}
-            {% if not loop.last %}
-                            ,
-            {% endif %}
-        {% endfor %}
-                ];
-
-                var ctx = $("#myChart");
-                var myChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                                data: data,
-                                backgroundColor: [
-        {% for art in artistas %}
-                                                'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, .7)'
-            {% if not loop.last %}
-                                                            ,
-            {% endif %}
-        {% endfor %}
-                                            ]
-                                        }]
-                                },
-                                options: {
-                                    legend: {
-                                        position: 'bottom'
-                                    }
-                                }
-                            });
-
-                            // ######### FIM ARTISTAS #############
-
-                            // ######### MUSICAS ###########
-
-                            var labels2 = [
-        {% for mus in musicas %}
-
-            {% if mus.status == 0 %}
-                            "Ativo"
-            {% elseif mus.status == 1 %}
-                            "Em Espera"
-            {% elseif mus.status == 3 %}
-                            "Sugestão"
-            {% else %}
-                    "Inativo"
-            {% endif %}
-
-            {% if not loop.last %}
-                            ,
-            {% endif %}
-        {% endfor %}
-                ];
-                        var data2 = [
-        {% for mus in musicas %}
-            {{ mus.quantidade }}
-            {% if not loop.last %}
-                                    ,
-            {% endif %}
-        {% endfor %}
-                        ];
-
-                var ctx2 = $("#myChart2");
-                var myChart2 = new Chart(ctx2, {
-                    type: 'pie',
-                    data: {
-                        labels: labels2,
-                        datasets: [{
-                                data: data2,
-                                backgroundColor: [
-        {% for mus in musicas %}
-                                                'rgba({{ random(255) }}, {{ random(255) }}, {{ random(255) }}, .7)'
-            {% if not loop.last %}
-                                                            ,
-            {% endif %}
-        {% endfor %}
-                                            ]
-                                        }]
-                                },
-                                options: {
-                                    legend: {
-                                        position: 'bottom'
-                                    }
-                                }
-                            });
-
-                            // ######### FIM MUSICAS #############
-
+        
+        
+        
     </script>
 {% endblock %}

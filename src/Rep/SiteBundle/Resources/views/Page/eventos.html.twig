@@ -1,6 +1,5 @@
-{% extends "::base.html.twig" %}
+{% extends "RepSiteBundle:Page:interno.html.twig" %}
 {% block conteudo %}
-    <div class="container">
         <div class="row">
             <div class="col-md-12">
 {#                <h3 class="text-center">Agenda de Eventos</h3>#}
@@ -15,30 +14,26 @@
                         {% endfor %}
                     </div>
                 </div>
-        <div class="row">
+        {#<div class="row">
             <div class="col-md-12">
                 <h3 class="text-center">Eventos Cadastrados</h3>
                 {% include 'RepSiteBundle:Evento:tabela-cadastrados.html.twig' 
                           with {'eventos': eventos} %}
             </div>
-        </div>
-    </div>
-            
+        </div>#}
     <div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                    <h4 class="modal-title">Editar Evento</h4>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titulo-modal">Editar Evento</h4>
                 </div>
-                <div class="modal-inner" id="body-edicao">
+                <div class="modal-body" id="body-edicao">
 
                 </div>
                 <div class="modal-footer">
-                    <p class="text-right">
-                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
-                    </p>
+                    <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
                 </div>
             </div>
         </div>
@@ -46,166 +41,21 @@
     <div class="modal fade" id="modal-cadastro">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                    <h4 class="modal-title">Cadastrar Evento</h4>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titulo-modal">Cadastrar Evento</h4>
                 </div>
-                <div class="modal-inner" id="body-edicao">
+                <div class="modal-body" id="body-edicao">
                     <form name="form-evento" id="form-evento" method="POST" 
-                      action="{{ path('rep_site_eventos_cadastra', {'id_evento': -1}) }}">
-                    {{ form_widget(formEvento) }}
-{#                    <input type="submit" value="Cadastrar" class="btn btn-brand-accent" />#}
-                </form>
+                          action="{{ path('rep_site_eventos_cadastra', {'id_evento': -1}) }}">
+                        {{ form_widget(formEvento) }}
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <p class="text-right">
-                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-brand-accent" id="btn-cadastrar">Salvar</button>
-                    </p>
+                    <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="btn-cadastrar">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
-{% endblock %}
-{% block js %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-year-calendar.css') }}" />
-    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/bootstrap-year-calendar.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/calendar-pt.js') }}"></script>
-    <script type="text/javascript">     
-        function editEvent(event) {
-            $idEvento = event.id;
-
-            $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
-
-            $.ajax({
-                type: 'GET',
-                url: $url,
-                success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#btn-editar').show();
-                    $('#modal-edicao').modal('show');
-                }
-            });
-
-            return false;
-        }
-        
-        function repertorioEvent(event) {
-            $slug = event.slug;
-
-            $url = '{{ path('rep_site_musicas_evento') }}' + "/" + $slug;
-            window.location.href = $url;
-        }
-
-        function saveEvent() {
-            
-            //salvar no banco de dados
-            
-            $('#event-modal').modal('hide');
-        }
-
-        $(document).ready(function() {
-            var currentYear = new Date().getFullYear();
-
-            $('#calendar').calendar({
-                enableContextMenu: true,
-                enableRangeSelection: false,
-                language: 'pt',
-                contextMenuItems:[
-                    {
-                        text: 'Editar',
-                        click: editEvent
-                    },
-                    {
-                        text: 'Ver Repertório',
-                        click: repertorioEvent
-                    }
-                ],
-                selectRange: function(e) {
-                    editEvent({ startDate: e.startDate, endDate: e.endDate });
-                },
-                mouseOnDay: function(e) {
-                    if(e.events.length > 0) {
-                        var content = '';
-
-                        for(var i in e.events) {
-                            content += '<div class="event-tooltip-content">'
-                                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
-                                            + '<div class="event-location">' + e.events[i].hora + '</div>'
-                                        + '</div>';
-                        }
-
-                        $(e.element).popover({ 
-                            trigger: 'manual',
-                            container: 'body',
-                            html:true,
-                            content: content
-                        });
-
-                        $(e.element).popover('show');
-                    }
-                },
-                clickDay: function(e){
-                    $('.datetimepicker').datetimepicker({value: new Date(e.date)});
-                    $('#modal-cadastro').modal('show');
-                },
-                mouseOutDay: function(e) {
-                    if(e.events.length > 0) {
-                        $(e.element).popover('hide');
-                    }
-                },
-                dayContextMenu: function(e) {
-                    $(e.element).popover('hide');
-                },
-                dataSource: [
-                    {% for evento in eventosAtivos %}
-                        {
-                            id: '{{ evento.id }}',
-                            color: '{{ evento.tipoEvento.cor }}',
-                            name: '{{ evento.nome }}',
-                            hora: '{{ evento.data|date('H:i') }}',
-                            slug: '{{ evento.slug }}',
-                            startDate: new Date({{ evento.data|date('Y') }}, {{ evento.data|date('m')-1 }}, {{ evento.data|date('d') }}),
-                            endDate: new Date({{ evento.data|date('Y') }}, {{ evento.data|date('m')-1 }}, {{ evento.data|date('d') }})
-                        }
-                        
-                        {% if not loop.last %},{% endif %}
-                        
-                    {% endfor %}
-                ]
-            });
-
-            $('#save-event').click(function() {
-                saveEvent();
-            });
-            
-            $('#btn-cadastrar').click(function(){
-                $('#form-evento').submit();
-            });
-           
-           $('.link-editar-evento').click(function(){
-               $idEvento = $(this).attr('href').replace('#', '');
-
-                $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
-
-                    $.ajax({
-                        type: 'GET',
-                        url: $url,
-                        success: function (response) {
-                            $('#body-edicao').html(response);
-                            $('#btn-editar').show();
-                            $('#modal-edicao').modal('show');
-                        }
-                    });
-
-                    return false;
-           });
-
-        });
-        
-        
-        
-    </script>
 {% endblock %}

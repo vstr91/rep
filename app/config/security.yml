@@ -52,4 +52,4 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/usuarios/form, role: ROLE_ADMIN }
         - { path: ^/usuarios$, role: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
-        - { path: ^/, role: ROLE_ADMIN }
+#        - { path: ^/, role: ROLE_ADMIN }

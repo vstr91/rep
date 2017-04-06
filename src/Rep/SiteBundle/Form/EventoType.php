@@ -18,16 +18,19 @@ class EventoType extends AbstractType
             ->add('nome')
             ->add('data', 'datetime', array(
                 'widget' => "single_text",
-                'format' => 'dd-MM-yyyy HH:mm',
+                'format' => 'dd/MM/yyyy HH:mm',
                 'html5' => false,
                 'attr' => array(
-                    'class' => 'datetimepicker form-control'
+                    'class' => 'datetimepicker'
                 )
             ))
             ->add('status', 'choice', array(
                 'choices' => array('0' => 'Ativo', '2' => 'Inativo')
                 ))
             ->add('tipoEvento', null, array(
+                'empty_value' => false
+            ))
+            ->add('projeto', null, array(
                 'empty_value' => false
             ))
         ;
