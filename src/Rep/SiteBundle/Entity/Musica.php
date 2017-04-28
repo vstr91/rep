@@ -52,6 +52,16 @@ class Musica extends EntidadeBase {
     protected $artista;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tom", type="string", length=5)
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
+     * 
+     */
+    protected $tom;
+    
+    /**
      * @Gedmo\Slug(fields={"nome"})
      * @ORM\Column(unique=false)
      */
@@ -269,5 +279,29 @@ class Musica extends EntidadeBase {
     public function getUsuarioUltimaAlteracao()
     {
         return $this->usuarioUltimaAlteracao;
+    }
+
+    /**
+     * Set tom
+     *
+     * @param string $tom
+     *
+     * @return Musica
+     */
+    public function setTom($tom)
+    {
+        $this->tom = $tom;
+
+        return $this;
+    }
+
+    /**
+     * Get tom
+     *
+     * @return string
+     */
+    public function getTom()
+    {
+        return $this->tom;
     }
 }

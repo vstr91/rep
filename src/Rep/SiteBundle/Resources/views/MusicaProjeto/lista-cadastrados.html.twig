@@ -1,0 +1,14 @@
+<div class="text-center conectadas tile-wrap" id="lista-cadastradas-evento">
+
+    {% for musicaEv in musicas %}
+        <div class="tile tile-collapse musicas-evento">
+            <div data-toggle="tile" data-target="#{{ musicaEv.musica.id }}">
+                <div class="tile-inner">
+                    <span class="id-musica">{{ musicaEv.musica.id }}</span>{{ musicaEv.musica.nome }} 
+                    ({{ musicaEv.musica.artista.nome }})
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>

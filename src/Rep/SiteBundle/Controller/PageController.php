@@ -144,4 +144,34 @@ class PageController extends Controller
         ));
     }
     
+    public function musicasProjetosAction($projeto)
+    {
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $musicaProjetoType = new \Rep\SiteBundle\Form\MusicaProjetoType();
+        $formMusicaProjeto = $this->createForm($musicaProjetoType);
+        
+        $projeto = $em->getRepository('RepSiteBundle:Projeto')->findOneBy(array('slug' => $projeto));
+        
+        $musicasProjeto = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                ->listarTodasPorProjeto($projeto->getSlug(), 0);
+        
+        $musicasProjetoFila = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                ->listarTodasPorProjeto($projeto->getSlug(), 1);
+        
+        dump($musicasProjeto);
+        dump($musicasProjetoFila);
+        
+        return $this->render('RepSiteBundle:Page:musicas-projetos.html.twig', array(
+            'usuario' => $user,
+            'projeto' => $projeto,
+            'musicasProjeto' => $musicasProjeto,
+            'musicasProjetoFila' => $musicasProjetoFila,
+            'formMusicaProjeto' => $formMusicaProjeto->createView()
+        ));
+    }
+    
 }

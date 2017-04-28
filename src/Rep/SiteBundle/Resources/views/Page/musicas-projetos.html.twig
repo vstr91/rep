@@ -1,0 +1,236 @@
+{% extends "::base.html.twig" %}
+{% block principal %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {#<form name="form-musica-projeto" id="form-musica-projeto" method="POST" 
+                      action="{{ path('rep_site_musicas_projetos_cadastra', {'id_musica': -1, 'projeto': projeto.slug}) }}">
+                    {{ form_widget(formMusicaProjeto) }}
+                    <input type="submit" value="Cadastrar" class="btn btn-brand-accent" />
+                </form>#}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">{{ projeto.nome }}<br /><small><a href="#" id="link-muda-projeto">Mudar Projeto</a></small></h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
+                <h3 class="text-center">M&uacute;sicas Ativas</h3>
+                <div id="caixa-repertorio">
+                {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
+                          with {'musicas': musicasProjeto} %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">M&uacute;sicas Na Fila</h3>
+                <div id="caixa-repertorio-fila">
+                {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
+                          with {'musicas': musicasProjetoFila} %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-adicao">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Adicionar M&uacute;sica</h4>
+                </div>
+                <div class="modal-body" id="body-adicao">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+                
+    <div class="modal fade" id="modal-edicao">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Editar Status M&uacute;sica</h4>
+                </div>
+                <div class="modal-body" id="body-edicao">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="btn-editar-musica">Salvar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titulo-modal"></h4>
+                </div>
+                <div class="modal-body" id="body-modal">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+    <div class="modal fade" id="modal-load">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id="content-load">
+                    <div class="modal-inner text-center">
+                        <img src="{{ asset('imagens/load.gif') }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal-muda-projeto">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titulo-modal">Escolha o Projeto</h4>
+                </div>
+                <div class="modal-body" id="body-muda-projeto">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script type="text/javascript">
+        
+        function carregarTabela() {
+            $url = '{{ path('rep_site_tabela_musicas_projeto', {'id_projeto': projeto.id, 'status': 0}) }}';
+            $urlFila = '{{ path('rep_site_tabela_musicas_projeto', {'id_projeto': projeto.id, 'status': 1}) }}';
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#caixa-repertorio').html(response);
+                }
+            });
+            
+            $.ajax({
+                type: 'GET',
+                url: $urlFila,
+                success: function (response) {
+                    $('#caixa-repertorio-fila').html(response);
+                }
+            });
+            
+        }
+        
+        $(document).ready(function(){
+            $('#btn-adiciona-musica').click(function () {
+
+                $url = '{{ path('rep_site_form_cadastra_musicas_projeto', {'id_projeto': projeto.id}) }}';
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-adicao').html(response);
+                        $('#btn-editar').show();
+                        $('#modal-adicao').modal('show');
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $(document).on('click', '.link-remover-musica', function(){
+
+                $id = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_remove_musica_projeto', {'id_projeto': projeto.id}) }}/' + $id;
+
+                $('#modal-load').modal('show');
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#modal-load').modal('hide');
+                        carregarTabela();
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $(document).on('click', '.link-editar-musica', function(){
+
+                $id = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_musicas_projetos_form') }}' + "/" + $id;
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-edicao').html(response);
+                        $('#modal-edicao').modal('show');
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $('#btn-editar').click(function(){
+                $('#form-adiciona-musica-projeto').submit();
+                $('#modal-adicao').modal('hide');
+            });
+            
+            $('#link-muda-projeto').click(function(){
+                
+                $url = '{{ path('rep_site_projetos_muda') }}';
+                
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-muda-projeto').html(response);
+                        $('#modal-muda-projeto').modal('show');
+                    }
+                });
+
+                return false;
+            });
+            
+            $('#btn-editar-musica').click(function(){
+                $('#form-musica-projeto-edita').submit();
+                $('#modal-edicao').modal('hide');
+            });
+            
+        });
+    </script>
+{% endblock %}

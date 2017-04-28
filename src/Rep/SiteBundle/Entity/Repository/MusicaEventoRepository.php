@@ -13,39 +13,58 @@ use Doctrine\ORM\EntityRepository;
 class MusicaEventoRepository extends EntityRepository
 {
     
-    function listaMusicasAtivasAusentesNoEvento($id_evento){
-        $qb = $this->createQueryBuilder('me');
-        
-        $musicasEvento = $qb->select('IDENTITY(me.musica)')
-          ->where("me.evento = '".$id_evento."'")
-          ->andWhere('me.status = 0')
-          ->getQuery()
-          ->getResult();
-        
-        if(sizeof($musicasEvento) > 0){
-            $result = $qb->select('m1')
-            ->distinct()
-            ->from("RepSiteBundle:Musica", "m1")
-            ->where('m1.id NOT IN (:musicasEvento)')
-                    //->andWhere('m1.status = 0')
-                    ->setParameter('musicasEvento', $musicasEvento)
-                    ->addOrderBy('m1.nome')
-            ->getQuery()
-            ->getResult();
-        } else{
-//            $qb = $this->createQueryBuilder('me');
-//            
-//            $result = $qb->select('mu')
+    function listaMusicasAtivasAusentesNoEvento($id_evento, $id_projeto){
+//        $qb = $this->createQueryBuilder('me');
+//        
+//        $musicasEvento = $qb->select('IDENTITY(me.musica)')
+//          ->leftJoin("RepSiteBundle:Evento", 'e', 'WITH', 'e.id = me.evento')
+//          ->where("me.evento = '".$id_evento."'")
+//          ->andWhere('me.status = 0')
+//          //->andWhere("e.projeto = :projeto")
+//          //      ->setParameter('projeto', "'".$id_projeto."'")
+//          ->getQuery()
+//          ->getResult();
+//        
+//        if(sizeof($musicasEvento) > 0){
+//            $result = $qb->select('m1')
 //            ->distinct()
-//            ->from("RepSiteBundle:Musica", "mu")
-//                    ->where('mu.id NOT IN (0)')
-//                    //->andWhere('mu.status = 0')
-//                    ->addOrderBy('mu.nome')
+//            ->from("RepSiteBundle:Musica", "m1")
+//                    ->innerJoin('RepSiteBundle:MusicaProjeto', 'mp', 'WITH', 'mp.musica = m1.id')
+//            ->where('m1.id NOT IN (:musicasEvento)')
+//                    //->andWhere('m1.status = 0')
+//                    ->andWhere('mp.projeto = :projeto')
+//                    ->setParameter('musicasEvento', $musicasEvento)
+//                    ->setParameter('projeto', "'".$id_projeto."'")
+//                    ->addOrderBy('m1.nome')
 //            ->getQuery()
 //            ->getResult();
-            return null;
-        }
-         
+//        } else{
+////            $qb = $this->createQueryBuilder('me');
+////            
+////            $result = $qb->select('mu')
+////            ->distinct()
+////            ->from("RepSiteBundle:Musica", "mu")
+////                    ->where('mu.id NOT IN (0)')
+////                    //->andWhere('mu.status = 0')
+////                    ->addOrderBy('mu.nome')
+////            ->getQuery()
+////            ->getResult();
+//            return null;
+//        }
+        
+        $sql = "SELECT m.* 
+                FROM musica m LEFT JOIN
+                     musica_projeto mp ON mp.id_musica = m.id
+                WHERE mp.id_projeto = '".$id_projeto."'
+                AND  mp.status IN (0,1)
+                AND  m.id NOT IN (SELECT m.id FROM musica_evento me INNER JOIN 
+                                                   musica m ON m.id = me.id_musica 
+                                              WHERE me.id_evento = '".$id_evento."' AND me.status = 0)";
+        
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "Rep\SiteBundle\Entity\Musica");
+        
         return $result;
         
     }

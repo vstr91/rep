@@ -14,10 +14,10 @@
                           with {'musicas': musicasEvento} %}
                 </div>
 {#                <a href="#" class="btn btn-brand-accent" id="btn-divisor">Adicionar Divisor de Bloco</a>&nbsp;&nbsp;#}
-                <a href="#" class="btn btn-brand-accent" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>&nbsp;&nbsp;
-                <a href="{{ referer }}" class="btn" id="btn-voltar">Voltar</a>
+                <a href="{{ referer }}" class="btn btn-default" id="btn-voltar">Voltar</a>&nbsp;&nbsp;
+                <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
                 <a href="{{ path('rep_site_gera_pdf_repertorio_evento', {'slug': evento.slug}) }}" 
-                   class="btn btn-brand-accent right" id="btn-pdf" target="_blank">Gerar PDF</a><br /><br /><br /><br />
+                   class="btn btn-success right" id="btn-pdf" target="_blank">Gerar PDF</a><br /><br /><br /><br />
             </div>
         </div>
                    <div class="row">
@@ -35,24 +35,24 @@
                <br /><br />
            </div>
            <div class="col-md-2">
-               <button type="button" class="btn btn-brand-accent" id="btn-enviar-comentario">Enviar</button>
+               <button type="button" class="btn btn-primary" id="btn-enviar-comentario">Enviar</button>
            </div>
        </div>
     </div>
     <div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Adicionar M&uacute;sica</h4>
                 </div>
-                <div class="modal-inner" id="body-edicao">
+                <div class="modal-body" id="body-edicao">
 
                 </div>
                 <div class="modal-footer">
                     <p class="text-right">
-                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
                     </p>
                 </div>
             </div>
@@ -60,14 +60,14 @@
     </div>
 
             <div class="modal fade" id="modal-load">
-        <div class="modal-dialog">
-            <div class="modal-content" id="content-load">
-                <div class="modal-inner text-center">
-                    <img src="{{ asset('imagens/load.gif') }}" />
+                <div class="modal-dialog">
+                    <div class="modal-content" id="content-load">
+                        <div class="modal-inner text-center">
+                            <img src="{{ asset('imagens/load.gif') }}" />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
 {% endblock %}
 {% block js %}

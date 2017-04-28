@@ -16,9 +16,9 @@ class ArtistaType extends AbstractType
     {
         $builder
             ->add('nome')
-            ->add('status', 'choice', array(
-                    'choices' => array('0' => 'Ativo', '2' => 'Inativo')
-                ))
+//            ->add('status', 'choice', array(
+//                    'choices' => array('0' => 'Ativo', '2' => 'Inativo')
+//                ))
         ;
     }
     

@@ -17,14 +17,7 @@ class MusicaProjetoType extends AbstractType
     {
         $builder
             ->add('status', 'choice', array(
-                'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo', 
-                    '3' => 'Sugestão')
-            ))
-            ->add('artista', null, array(
-                'query_builder' => function(EntityRepository $repository) { 
-                    return $repository->createQueryBuilder('a')->orderBy('a.nome', 'ASC');
-                },
-                'empty_value' => false
+                'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo')
             ))
         ;
     }
@@ -35,7 +28,7 @@ class MusicaProjetoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Rep\SiteBundle\Entity\Musica'
+            'data_class' => 'Rep\SiteBundle\Entity\MusicaProjeto'
         ));
     }
 }

@@ -133,3 +133,43 @@ rep_site_projetos_cadastra:
 rep_site_projetos_form:
     pattern: /projetos/form/{id_projeto}
     defaults: {_controller: RepSiteBundle:Projeto:form, id_projeto: -1}
+    
+rep_site_projetos_muda:
+    pattern: /projetos/muda
+    defaults: {_controller: RepSiteBundle:Projeto:muda}
+    
+########################################################################
+
+rep_site_musicas_projetos:
+    path:     /projetos/{projeto}/musicas
+    defaults: { _controller: RepSiteBundle:Page:musicasProjetos, projeto: '' }
+    
+rep_site_musicas_projetos_cadastra:
+    pattern:     /musicas-projetos/cadastra/{id_musica_projeto}
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:cadastrar, id_musica_projeto: -1 }
+    requirements:
+        _method: POST
+        
+rep_site_musicas_projetos_form:
+    pattern: /musicas-projetos/form/{id_musica_projeto}
+    defaults: {_controller: RepSiteBundle:MusicaProjeto:form, id_musica_projeto: -1}
+    
+rep_site_atualiza_musicas_projeto:
+    path:     /musicas-projeto/{id_projeto}/atualiza
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:atualizaMusicasProjeto, id_projeto: -1 }
+    
+rep_site_form_cadastra_musicas_projeto:
+    path:     /musicas-projeto/{id_projeto}/cadastra/form
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:formCadastraMusica, id_projeto: -1 }
+    
+rep_site_cadastra_musicas_projeto:
+    path:     /musicas-projeto/{id_projeto}/cadastra
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:cadastraMusica, id_projeto: -1 }
+    
+rep_site_tabela_musicas_projeto:
+    path:     /musicas-projeto/{id_projeto}/repertorio/{status}
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:carregaRepertorio, id_projeto: -1, status: -1 }
+    
+rep_site_remove_musica_projeto:
+    path:     /musicas-projeto/{id_projeto}/repertorio/remove/{id_musica}
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:removeMusicaProjeto, id_projeto: -1, id_musica: -1 }

@@ -46,17 +46,6 @@ class MusicaProjeto extends EntidadeBase {
      * 
      */
     protected $projeto;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tom", type="string", length=5)
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $tom;
-    
 
     /**
      * Get id

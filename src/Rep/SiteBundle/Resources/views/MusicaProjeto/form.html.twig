@@ -1,0 +1,26 @@
+<div class="input-group">
+    <label for="nome"> Nome</label>
+    <input id="nome" class="form-control" value="{{ musicaProjeto.musica.nome }}" disabled="disabled" />
+</div>
+<form id="form-musica-projeto-edita" 
+      action="{{ path('rep_site_musicas_projetos_cadastra', {'id_musica_projeto': musicaProjeto.id}) }}" 
+      method="POST" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+{#        <input type="submit" class="hide" id="btn-submit" value="Cadastrar" />#}
+    </p>
+</form>
+<script type="text/javascript">
+    {#$('#form-parada').submit(function(){
+        $(this).ajaxSubmit(function(data){
+            console.log(data);
+            $(".caixaForm").dialog('close');
+            return false;
+        });
+        return false;
+    });#}
+    
+    $('#btn-editar-musica').click(function(){
+        $('#form-musica-projeto-edita').submit();
+    });
+</script>

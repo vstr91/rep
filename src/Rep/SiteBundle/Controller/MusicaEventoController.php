@@ -33,7 +33,8 @@ class MusicaEventoController extends Controller {
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
                 ->listarTodasPorEvento($slug);
         
-        $musicas = $em->getRepository('RepSiteBundle:Musica')->findBy(array('status' => 0));
+        $musicas = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                ->listarTodasPorProjeto($evento->getProjeto()->getSlug(), null);
         
         $referer = $request->headers->get('referer');
         $comentarios = $em->getRepository('RepSiteBundle:ComentarioEvento')
@@ -108,12 +109,13 @@ class MusicaEventoController extends Controller {
         $evento = $em->find('RepSiteBundle:Evento', $id_evento);
         
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
-                ->listaMusicasAtivasAusentesNoEvento($id_evento);
+                ->listaMusicasAtivasAusentesNoEvento($id_evento, $evento->getProjeto()->getId());
         
         dump($musicasEvento);
         
         if($musicasEvento === null){
-            $musicasEvento = $em->getRepository('RepSiteBundle:Musica')->listarTodas();
+            $musicasEvento = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                ->listarTodasPorProjetoRetornaMusica($evento->getProjeto()->getSlug(), null);
         }
         
         return $this->render('RepSiteBundle:MusicaEvento:adiciona-musica.html.twig', 

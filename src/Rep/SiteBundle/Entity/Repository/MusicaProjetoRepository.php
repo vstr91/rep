@@ -10,4 +10,144 @@ namespace Rep\SiteBundle\Entity\Repository;
  */
 class MusicaProjetoRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    function listaMusicasAtivasAusentesNoProjeto($id_projeto){
+//        $qb = $this->createQueryBuilder('me');
+//        
+//        $musicasProjeto = $qb->select('IDENTITY(me.musica)')
+//          ->where("me.projeto = '".$id_projeto."'")
+//          ->andWhere('me.status = 0')
+//          ->getQuery()
+//          ->getResult();
+//        
+//        if(sizeof($musicasProjeto) > 0){
+//            $result = $qb->select('m1')
+//            ->distinct()
+//            ->from("RepSiteBundle:Musica", "m1")
+//            ->where('m1.id NOT IN (:musicasProjeto)')
+//                    //->andWhere('m1.status = 0')
+//                    ->setParameter('musicasProjeto', $musicasProjeto)
+//                    ->addOrderBy('m1.nome')
+//            ->getQuery()
+//            ->getResult();
+//        } else{
+////            $qb = $this->createQueryBuilder('me');
+////            
+////            $result = $qb->select('mu')
+////            ->distinct()
+////            ->from("RepSiteBundle:Musica", "mu")
+////                    ->where('mu.id NOT IN (0)')
+////                    //->andWhere('mu.status = 0')
+////                    ->addOrderBy('mu.nome')
+////            ->getQuery()
+////            ->getResult();
+//            return null;
+//        }
+//         
+//        return $result;
+        
+        $sql = "SELECT m.* 
+                FROM musica m WHERE  m.id NOT IN (SELECT mp.id_musica FROM musica_projeto mp 
+                WHERE mp.id_projeto = '".$id_projeto."' AND mp.status IN (0,1))";
+        
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "Rep\SiteBundle\Entity\Musica");
+        
+        return $result;
+        
+    }
+    
+    public function invalidaTodasMusicasProjeto($id_projeto){
+        
+        $qb = $this->createQueryBuilder('me')
+                ->update("RepSiteBundle:MusicaProjeto", 'me')
+                ->set('me.status', 2)
+                ->set('me.ultimaAlteracao', ':now')
+                ->where('me.projeto = :id_projeto')
+                ->andWhere('me.status != 2')
+                ->setParameter('now', new \DateTime())
+                ->setParameter('id_projeto', $id_projeto);
+
+        $qb->getQuery()->getResult();
+        
+        return true;
+        
+    }
+    
+    public function listarTodasPorProjeto($slug, $status){
+        
+        if($status > -1){
+            $qb = $this->createQueryBuilder('me')
+                ->select('me')
+                ->innerJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->innerJoin("RepSiteBundle:Projeto", 'e', 'WITH', 'e.id = me.projeto')
+                ->where('e.slug = :projeto')
+                ->andWhere('me.status = :status')
+                ->setParameter(':projeto', $slug)
+                ->setParameter(':status', $status)
+                ->addOrderBy('m.nome');
+        } else{
+            $qb = $this->createQueryBuilder('me')
+                ->select('me')
+                ->innerJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->innerJoin("RepSiteBundle:Projeto", 'e', 'WITH', 'e.id = me.projeto')
+                ->where('e.slug = :projeto')
+                ->andWhere('me.status <> 2')
+                ->setParameter(':projeto', $slug)
+                ->addOrderBy('m.nome');
+        }
+        
+        
+
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function listarTodasPorProjetoRetornaMusica($slug, $status){
+        
+        if($status > -1){
+            $qb = $this->createQueryBuilder('me')
+                ->select('m')
+                ->innerJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->innerJoin("RepSiteBundle:Projeto", 'e', 'WITH', 'e.id = me.projeto')
+                ->where('e.slug = :projeto')
+                ->andWhere('me.status = :status')
+                ->setParameter(':projeto', $slug)
+                ->setParameter(':status', $status)
+                ->addOrderBy('m.nome');
+        } else{
+            $qb = $this->createQueryBuilder('me')
+                ->select('m')
+                ->innerJoin("RepSiteBundle:Musica", 'm', 'WITH', 'm.id = me.musica')
+                ->innerJoin("RepSiteBundle:Projeto", 'e', 'WITH', 'e.id = me.projeto')
+                ->where('e.slug = :projeto')
+                ->andWhere('me.status <> 2')
+                ->setParameter(':projeto', $slug)
+                ->addOrderBy('m.nome');
+        }
+        
+        
+
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('me')
+                ->select('me.id', 'me.observacao', 'm.id AS musica', 'e.id AS projeto', 'me.status', 
+                        'me.ultimaAlteracao AS ultima_alteracao')
+                ->distinct()
+                ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = me.musica")
+                ->leftJoin("RepSiteBundle:Projeto", "e", "WITH", "e.id = me.projeto")
+                ->where("me.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('me.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }

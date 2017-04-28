@@ -79,6 +79,19 @@ class ProjetoController extends Controller {
         
     }
     
+    public function mudaAction(){
+        $em = $this->getDoctrine()->getManager();
+        
+        $projetos = $em->getRepository('RepSiteBundle:Projeto')
+                ->findBy(array('status' => 0));
+        
+        return $this->render('RepSiteBundle:Projeto:muda-projeto.html.twig', 
+                array(
+                    'projetos' => $projetos
+                ));
+        
+    }
+    
     public function formAction($id_projeto){
         $request = $this->getRequest();
         
