@@ -54,8 +54,7 @@ class Musica extends EntidadeBase {
     /**
      * @var string
      *
-     * @ORM\Column(name="tom", type="string", length=5)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="tom", type="string", length=5, nullable=true)
      * @Gedmo\Versioned
      * 
      */

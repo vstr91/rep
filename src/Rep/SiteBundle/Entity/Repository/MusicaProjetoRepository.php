@@ -48,7 +48,7 @@ class MusicaProjetoRepository extends \Doctrine\ORM\EntityRepository
         
         $sql = "SELECT m.* 
                 FROM musica m WHERE  m.id NOT IN (SELECT mp.id_musica FROM musica_projeto mp 
-                WHERE mp.id_projeto = '".$id_projeto."' AND mp.status IN (0,1))";
+                WHERE mp.id_projeto = '".$id_projeto."' AND mp.status IN (0,1)) ORDER BY m.nome";
         
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();

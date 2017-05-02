@@ -2,7 +2,7 @@
 {% block principal %}
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10">
                 <form name="form-musica" id="form-musica" method="POST" 
                       action="{{ path('rep_site_musicas_cadastra', {'id_musica': -1}) }}">
                     {{ form_widget(formMusica) }}
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-11">
                 <h3 class="text-center">M&uacute;sicas Cadastradas</h3>
                 {% include 'RepSiteBundle:Musica:tabela-cadastrados.html.twig' 
                           with {'musicas': musicas} %}
