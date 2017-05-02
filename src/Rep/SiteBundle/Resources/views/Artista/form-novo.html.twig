@@ -1,0 +1,45 @@
+<form id="form-artista-novo" name="form-artista-novo" 
+      action="{{ path('rep_site_artistas_cadastra_novo', {'id_artista': artista.id}) }}" 
+      method="POST" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <input type="submit" class="hide" id="btn-submit-form" value="Cadastrar" />
+    </p>
+</form>
+<script type="text/javascript">
+    {#$('#form-parada').submit(function(){
+        $(this).ajaxSubmit(function(data){
+            console.log(data);
+            $(".caixaForm").dialog('close');
+            return false;
+        });
+        return false;
+    });#}
+    
+    $(document).ready(function(){
+        $('#btn-cadastrar-novo-artista').click(function(){
+
+    {#        $('#form-artista-novo').submit();#}
+
+            $('#form-artista-novo').submit(function(){
+                
+                $(this).ajaxSubmit({
+                    type: "POST",
+                    success: function(response){
+                        alert("Artista Cadastrado");
+                        $('#modal-novo-artista').modal('hide');
+                        $('#btn-nova-musica').click();
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $('#btn-submit-form').click();
+            
+        });
+    });
+    
+    
+</script>

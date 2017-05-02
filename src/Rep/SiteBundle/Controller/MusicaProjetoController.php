@@ -8,8 +8,10 @@
 
 namespace Rep\SiteBundle\Controller;
 
+use Rep\SiteBundle\Entity\Musica;
 use Rep\SiteBundle\Entity\MusicaProjeto;
 use Rep\SiteBundle\Form\MusicaProjetoType;
+use Rep\SiteBundle\Form\MusicaType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -355,6 +357,76 @@ class MusicaProjetoController extends Controller {
         
         return new Response($pdf->Output(), 200, array(
             'Content-Type' => 'application/pdf'));
+        
+    }
+    
+    public function formCadastraMusicaNovaAction($id_projeto){
+        $projeto = null;
+        $request = $this->getRequest();
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $projeto = $em->find('RepSiteBundle:Projeto', $id_projeto);
+        
+        $musica = new Musica();
+        
+        $form = $this->createForm(new MusicaType(), $musica);
+
+        return $this->render('RepSiteBundle:Musica:form-nova.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'musica' => $musica,
+                    'projeto' => $projeto
+                ));
+        
+    }
+    
+    public function cadastrarNovaAction($id_projeto){
+        $musica = null;
+        $projeto = null;
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $projeto = $em->find('RepSiteBundle:Projeto', $id_projeto);
+        
+        $musica = new Musica();
+        
+        $form = $this->createForm(new MusicaType(), $musica);
+        $form->bind($request);
+        
+        if($form->isValid()){
+            
+            $em->persist($musica);
+            
+            $musicaProjeto = new MusicaProjeto();
+            $musicaProjeto->setMusica($musica);
+            $musicaProjeto->setProjeto($projeto);
+            
+            $em->persist($musicaProjeto);
+            
+            $em->flush();
+            
+            $referer = $request->headers->get('referer');
+            
+//            return $this->redirect($this->generateUrl('rep_site_musicas'));
+            return $this->redirect($referer);
+        }
+        
+        $musicas = $em->getRepository('RepSiteBundle:Musica')
+                ->listarTodas();//findAll();
+        
+        return $this->render('RepSiteBundle:Page:musicas.html.twig', 
+                array(
+                    'usuario' => $user,
+                    'musicas' => $musicas,
+                    'formMusica' => $form->createView()
+                ));
         
     }
     

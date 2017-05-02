@@ -103,4 +103,55 @@ class MusicaController extends Controller {
                 ));
     }
     
+    public function detalhesAction($artista, $slug){
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $artista = $em->getRepository('RepSiteBundle:Artista')->findOneBy(array('slug' => $artista));
+        $musica = $em->getRepository('RepSiteBundle:Musica')->findOneBy(array('slug' => $slug, 'artista' => $artista->getId()));
+        
+        $eventos = $em->getRepository('RepSiteBundle:MusicaEvento')->listarEventosMusica($musica->getId(), null);
+        $shows = $em->getRepository('RepSiteBundle:MusicaEvento')->listarEventosMusica($musica->getId(), 'Show');
+        $ultimoShow = $em->getRepository('RepSiteBundle:MusicaEvento')->listarUltimoEventoMusica($musica->getId(), 'Show');
+        $ultimoEnsaio = $em->getRepository('RepSiteBundle:MusicaEvento')->listarUltimoEventoMusica($musica->getId(), 'Ensaio');
+        
+        $eventosCarregados = array();
+        $showsCarregados = array();
+        
+        foreach($eventos as $ev){
+            $umMusicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->find($ev->getId());
+            $eventosCarregados[] = $umMusicaEvento;
+        }
+        
+        foreach($shows as $sh){
+            $umMusicaEvento = $em->getRepository('RepSiteBundle:MusicaEvento')->find($sh->getId());
+            $showsCarregados[] = $umMusicaEvento;
+        }
+        
+        foreach($ultimoShow as $us){
+            $umEvento = $em->getRepository('RepSiteBundle:Evento')->find($us->getId());
+            $ultimoShow = $umEvento;
+        }
+        
+        foreach($ultimoEnsaio as $ue){
+            $umEvento = $em->getRepository('RepSiteBundle:Evento')->find($ue->getId());
+            $ultimoEnsaio = $umEvento;
+        }
+        
+        return $this->render('RepSiteBundle:Musica:detalhes.html.twig', 
+                array(
+                    'usuario' => $user,
+                    'musica' => $musica,
+                    'eventos' => $eventosCarregados,
+                    'ultimoShow' => $ultimoShow,
+                    'ultimoEnsaio' => $ultimoEnsaio,
+                    'shows' => $showsCarregados
+                ));
+        
+    }
+    
 }

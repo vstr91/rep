@@ -3,6 +3,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h2 class="text-center">Artistas</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <form name="form-artista" id="form-artista" method="POST" 
                       action="{{ path('rep_site_artistas_cadastra', {'id_artista': -1}) }}">
                     {{ form_widget(formArtista) }}

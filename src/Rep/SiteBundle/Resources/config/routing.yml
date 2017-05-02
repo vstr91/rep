@@ -21,6 +21,16 @@ rep_site_artistas_form:
 rep_site_artistas_musicas:
     pattern: /artistas/musicas/{id_artista}
     defaults: {_controller: RepSiteBundle:Artista:musicas, id_artista: -1}
+
+rep_site_artistas_form_novo:
+    pattern: /artistas/form-novo/{id_artista}
+    defaults: {_controller: RepSiteBundle:Artista:formNovo, id_artista: -1}
+    
+rep_site_artistas_cadastra_novo:
+    pattern:     /artistas/cadastra-novo/{id_artista}
+    defaults: { _controller: RepSiteBundle:Artista:cadastrarNovo, id_artista: -1 }
+    requirements:
+        _method: POST
     
 ########################################################################
 
@@ -37,6 +47,10 @@ rep_site_musicas_cadastra:
 rep_site_musicas_form:
     pattern: /musicas/form/{id_musica}
     defaults: {_controller: RepSiteBundle:Musica:form, id_musica: -1}
+    
+rep_site_musicas_detalhes:
+    pattern: /{artista}/musicas/{slug}/detalhes
+    defaults: {_controller: RepSiteBundle:Musica:detalhes, artista: '', slug: '' }
     
 ########################################################################
 
@@ -173,3 +187,13 @@ rep_site_tabela_musicas_projeto:
 rep_site_remove_musica_projeto:
     path:     /musicas-projeto/{id_projeto}/repertorio/remove/{id_musica}
     defaults: { _controller: RepSiteBundle:MusicaProjeto:removeMusicaProjeto, id_projeto: -1, id_musica: -1 }
+    
+rep_site_form_cadastra_novas_musicas_projeto:
+    path:     /musicas-projeto/{id_projeto}/cadastra/nova/form
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:formCadastraMusicaNova, id_projeto: -1 }
+    
+rep_site_musicas_projetos_novas_cadastra:
+    pattern:     /musicas-projeto/cadastra/{id_projeto}
+    defaults: { _controller: RepSiteBundle:MusicaProjeto:cadastrarNova, id_projeto: -1 }
+    requirements:
+        _method: POST

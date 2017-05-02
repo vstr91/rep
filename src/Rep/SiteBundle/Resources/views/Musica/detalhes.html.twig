@@ -1,0 +1,70 @@
+{% extends "::base.html.twig" %}
+{% block principal %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h3 class="text-center">{{ musica.nome }}<br /><small>{{ musica.artista.nome }}</small></h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <h4 class="text-center">Dados Gerais</h4>
+                <p>Tocada em <strong>show</strong> pela &Uacute;ltima Vez em <strong>{{ ultimoShow is empty ? '-' : ultimoShow.data|date('d/m/Y H:i') }}</strong></p>
+                <p>Tocada em <strong>ensaio</strong> pela &Uacute;ltima Vez em <strong>{{ ultimoEnsaio is empty ? '-' : ultimoEnsaio.data|date('d/m/Y H:i') }}</strong></p>
+                <p><strong>Quantidade de Execu&ccedil;&otilde;es (Geral):</strong> {{ eventos|length }}</p>
+                <p>Presente em <strong>{{ shows|length }} Show(s)</strong></p>
+            </div>
+            <div class="col-md-5">
+                <h4 class="text-center">&Uacute;ltimos Eventos</h4>
+                <table class="table table-hover table-striped text-center">
+                    <thead>
+                        <tr>
+                            <td>Nome</td>
+                            <td>Data / Hora</td>
+                            <td>A&ccedil;&otilde;es</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ev in eventos %}
+                            <tr>
+                                <td>{{ ev.evento.nome }}</td>
+                                <td>{{ ev.evento.data|date('d/m/Y H:i') }}</td>
+                                <td><a href="{{ path('rep_site_musicas_evento', {'slug': ev.evento.slug}) }}" 
+                                       target="_blank">Ver Repert&oacute;rio</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <a href="{{ path('rep_site_musicas') }}" class="btn btn-primary">Voltar Para Banco de M&uacute;sicas</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-detalhes">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                    <h4 class="modal-title">Detalhes M&uacute;sica</h4>
+                </div>
+                <div class="modal-inner" id="body-detalhes">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}

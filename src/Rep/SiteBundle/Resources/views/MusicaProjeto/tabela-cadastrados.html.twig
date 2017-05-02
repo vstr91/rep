@@ -15,7 +15,9 @@
                 <td>{{ mus.musica.artista.nome }}</td>
                 <td>
                     <a class="link-editar-musica" href="#{{ mus.id }}">Alterar Status</a> |
-                    <a class="link-remover-musica" href="#{{ mus.musica.id }}">Remover</a>
+                    <a class="link-remover-musica" href="#{{ mus.musica.id }}">Remover</a> |
+                    <a href="{{ path('rep_site_musicas_detalhes', {'artista': mus.musica.artista.slug, 'slug': mus.musica.slug}) }}" 
+                       target="_blank">Ver Detalhes</a>
                 </td>
             </tr>
         {% endfor %}

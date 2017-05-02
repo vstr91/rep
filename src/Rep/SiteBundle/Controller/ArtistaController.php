@@ -113,4 +113,58 @@ class ArtistaController extends Controller {
                 ));
     }
     
+    public function formNovoAction($id_artista){
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getManager();
+        $artista = $em->find('RepSiteBundle:Artista', $id_artista);
+        
+        if(is_null($artista)){
+            $artista = new Artista();
+        }
+        
+        $form = $this->createForm(new ArtistaType(), $artista);
+        
+//        $form->bind($request);
+        
+        return $this->render('RepSiteBundle:Artista:form-novo.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'artista' => $artista
+                ));
+    }
+    
+    public function cadastrarNovoAction($id_artista){
+        $artista = null;
+        $request = $this->getRequest();
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //verifica se ja existe registro
+        $artista = $em->find('RepSiteBundle:Artista', $id_artista);
+        
+        //se nao existir, cria novo objeto
+        if(is_null($artista)){
+            $artista = new Artista();
+        }
+        
+        $form = $this->createForm(new ArtistaType(), $artista);
+        $form->bind($request);
+        
+        if($form->isValid()){
+            
+            //cadastra ou edita objeto
+            
+            $em->persist($artista);
+            $em->flush();
+            
+            return new \Symfony\Component\HttpFoundation\Response('ok');
+        }
+        
+        return new \Symfony\Component\HttpFoundation\Response('nok');
+        
+    }
+    
 }

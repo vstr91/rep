@@ -2,6 +2,11 @@
 {% block principal %}
     <div class="container">
         <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Banco de M&uacute;sicas</h2>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-10">
                 <form name="form-musica" id="form-musica" method="POST" 
                       action="{{ path('rep_site_musicas_cadastra', {'id_musica': -1}) }}">

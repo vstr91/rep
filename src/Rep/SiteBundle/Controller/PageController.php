@@ -162,9 +162,6 @@ class PageController extends Controller
         $musicasProjetoFila = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjeto($projeto->getSlug(), 1);
         
-        dump($musicasProjeto);
-        dump($musicasProjetoFila);
-        
         return $this->render('RepSiteBundle:Page:musicas-projetos.html.twig', array(
             'usuario' => $user,
             'projeto' => $projeto,

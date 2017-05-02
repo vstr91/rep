@@ -131,4 +131,56 @@ class MusicaEventoRepository extends EntityRepository
         
     }
     
+    function listarEventosMusica($musica, $tipoEvento = null){
+        
+        if($tipoEvento){
+            $sql = "SELECT me.* 
+                FROM musica_evento me INNER JOIN
+                          musica m ON m.id = me.id_musica INNER JOIN
+                          evento e ON e.id = me.id_evento INNER JOIN
+                          tipo_evento te ON te.id = e.id_tipo_evento
+                WHERE te.nome = '".$tipoEvento."'
+                AND   m.id = '".$musica."'
+                ORDER BY e.`data` DESC";
+        } else{
+            $sql = "SELECT me.* 
+                FROM musica_evento me INNER JOIN
+                          musica m ON m.id = me.id_musica INNER JOIN
+                          evento e ON e.id = me.id_evento INNER JOIN
+                          tipo_evento te ON te.id = e.id_tipo_evento
+                WHERE m.id = '".$musica."'
+                ORDER BY e.`data` DESC";
+        }
+        
+        
+        
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "Rep\SiteBundle\Entity\MusicaEvento");
+        
+        return $result;
+        
+    }
+    
+    function listarUltimoEventoMusica($musica, $tipoEvento = null){
+
+        $sql = "SELECT e.* 
+            FROM musica_evento me INNER JOIN
+                      musica m ON m.id = me.id_musica INNER JOIN
+                      evento e ON e.id = me.id_evento INNER JOIN
+                      tipo_evento te ON te.id = e.id_tipo_evento
+            WHERE te.nome = '".$tipoEvento."'
+            AND   m.id = '".$musica."'
+            ORDER BY e.`data` DESC LIMIT 1";
+        
+        
+        
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_CLASS, "Rep\SiteBundle\Entity\Evento");
+        
+        return $result;
+        
+    }
+    
 }

@@ -2,6 +2,11 @@
 {% block principal %}
     <div class="container">
         <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Projetos</h2>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-10">
                 <form name="form-projeto" id="form-projeto" method="POST" 
                       action="{{ path('rep_site_projetos_cadastra', {'id_projeto': -1}) }}">

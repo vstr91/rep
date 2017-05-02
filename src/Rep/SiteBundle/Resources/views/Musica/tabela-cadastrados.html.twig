@@ -14,7 +14,9 @@
                 <td>{{ musica.nome }}</td>
                 <td>{{ musica.artista.nome }}</td>
                 <td>
-                    <a class="link-editar" href="#{{ musica.id }}">Editar</a>
+                    <a class="link-editar" href="#{{ musica.id }}">Editar</a> |
+                    <a href="{{ path('rep_site_musicas_detalhes', {'artista': musica.artista.slug, 'slug': musica.slug}) }}" 
+                       target="_blank">Ver Detalhes</a>
                 </td>
             </tr>
         {% endfor %}
