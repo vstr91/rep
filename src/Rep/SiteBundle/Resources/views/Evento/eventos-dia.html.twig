@@ -1,0 +1,24 @@
+<table class="table table-hover table-striped text-center">
+    <thead>
+        <tr>
+            <td>Nome</td>
+            <td>Data</td>
+            <td>Tipo</td>
+            <td>A&ccedil;&otilde;es</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evento in eventos %}
+            <tr>
+                <td>{{ evento.nome }}</td>
+                <td>{{ evento.data|date('d/m/Y') }} - {{ evento.data|date('H:i') }}h</td>
+                <td>{{ evento.tipoEvento.nome }}</td>
+                <td>
+                    <a class="link-editar-evento" href="#{{ evento.id }}">Editar</a><br/>
+                    <a class="link-ver-evento" href="{{ path('rep_site_musicas_evento', {'slug': evento.slug}) }}">Gerenciar Repert&oacute;rio</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="#" class="btn btn-primary" id="btn-cadastrar-evento" data-dia="{{ data|date('Y-m-d') }}">Cadastrar Novo Evento</a>

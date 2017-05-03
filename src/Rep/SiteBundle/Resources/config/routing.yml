@@ -68,6 +68,10 @@ rep_site_eventos_form:
     pattern: /eventos/form/{id_evento}
     defaults: {_controller: RepSiteBundle:Evento:form, id_evento: -1}
     
+rep_site_eventos_data:
+    path:     /eventos/{data}
+    defaults: { _controller: RepSiteBundle:Evento:eventosData, data: '' }
+    
 ########################################################################
 
 rep_site_tipos_evento:

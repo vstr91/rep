@@ -102,4 +102,20 @@ class EventoController extends Controller {
                 ));
     }
     
+    public function eventosDataAction($data){
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $eventos = $em->getRepository('RepSiteBundle:Evento')->listarTodosPorDia($data);
+                //->findBy(array('data' => '2017-02-28 00:00:00'), array('data' => 'DESC'));
+        
+        return $this->render('RepSiteBundle:Evento:eventos-dia.html.twig',
+                array(
+                    'eventos' => $eventos,
+                    'data' => $data
+                ));
+        
+    }
+    
 }

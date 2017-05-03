@@ -9,7 +9,8 @@
     <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bootstrap-year-calendar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/calendar-pt.js') }}"></script>
-    <script type="text/javascript">     
+    <script type="text/javascript"> 
+        
         function editEvent(event) {
             $idEvento = event.id;
 
@@ -41,6 +42,16 @@
             
             $('#event-modal').modal('hide');
         }
+        
+        function formataData($data) {
+            var mm = $data.getMonth() + 1; // getMonth() is zero-based
+            var dd = $data.getDate();
+
+            return [$data.getFullYear(),
+                    (mm>9 ? '' : '0') + mm,
+                    (dd>9 ? '' : '0') + dd
+                   ].join('-');
+          };
 
         $(document).ready(function() {
             
@@ -107,8 +118,26 @@
                     }
                 },
                 clickDay: function(e){
-                    $('.datetimepicker').datetimepicker({value: new Date(e.date)});
-                    $('#modal-cadastro').modal('show');
+                    
+                    if(e.events.length > 0) {
+                        var data = new Date(e.date);
+
+                        $url = '{{ path('rep_site_eventos_data') }}' + "/" + formataData(data);
+
+                        $.ajax({
+                            type: 'GET',
+                            url: $url,
+                            success: function (response) {
+                                $('#body-eventos').html(response);
+                                $('#modal-eventos').modal('show');
+                            }
+                        });
+                    } else{
+                        $('#form-evento')[0].reset();
+                        $('.datetimepicker').datetimepicker({value: new Date(e.date)});
+                        $('#modal-cadastro').modal('show');
+                    }
+                    
                 },
                 mouseOutDay: function(e) {
                     if(e.events.length > 0) {
@@ -143,8 +172,8 @@
             $('#btn-cadastrar').click(function(){
                 $('#form-evento').submit();
             });
-           
-           $('.link-editar-evento').click(function(){
+            
+            $(document).on('click', '.link-editar-evento', function(){
                $idEvento = $(this).attr('href').replace('#', '');
 
                 $url = '{{ path('rep_site_eventos_form') }}' + "/" + $idEvento;
@@ -153,6 +182,9 @@
                         type: 'GET',
                         url: $url,
                         success: function (response) {
+                            
+                            $('#modal-eventos').modal('hide');
+                            
                             $('#body-edicao').html(response);
                             $('#btn-editar').show();
                             $('#modal-edicao').modal('show');
@@ -160,6 +192,29 @@
                     });
 
                     return false;
+           });
+           
+           $(document).on('click', '#btn-cadastrar-evento', function(){
+               
+               $('#form-evento')[0].reset();
+               
+               console.log($(this).data('dia'));
+               
+               $dados = $(this).data('dia').split('-');
+               
+               var date = new Date();
+               date.setDate($dados[2]);
+               date.setMonth($dados[1]-1);
+               date.setYear($dados[0]);
+               date.setHours(0);
+               date.setMinutes(0);
+               
+               console.log(date);
+               
+               $('#modal-eventos').modal('hide');
+               
+               $('.datetimepicker').datetimepicker({value: date});
+               $('#modal-cadastro').modal('show');
            });
 
         });

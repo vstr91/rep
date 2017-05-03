@@ -38,7 +38,7 @@ class EventoRepository extends EntityRepository
                 ->select('e')
                 ->distinct()
                 ->where('e.status != 2')
-                ->addOrderBy('e.data', 'DESC');
+                ->addOrderBy('e.data');
         
         return $qb->getQuery()->getResult();
     }
@@ -58,6 +58,19 @@ class EventoRepository extends EntityRepository
         
         return $qb->getQuery()->getResult();
         
+    }
+    
+    function listarTodosPorDia($data){
+        
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->distinct()
+                ->where('e.data BETWEEN :dataInicio AND :dataFim')
+                ->addOrderBy('e.data')
+                ->setParameter('dataInicio', $data.' 00:00:00')
+                ->setParameter('dataFim', $data.' 23:59:59');
+        
+        return $qb->getQuery()->getResult();
     }
     
 }
