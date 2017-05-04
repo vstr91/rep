@@ -103,16 +103,19 @@ class MusicaController extends Controller {
                 ));
     }
     
-    public function detalhesAction($artista, $slug){
+    public function detalhesAction($artista, $slug, $id){
         $request = $this->getRequest();
         
         $user = $this->getUser();
         
         $em = $this->getDoctrine()->getManager();
         
-        //verifica se ja existe registro
-        $artista = $em->getRepository('RepSiteBundle:Artista')->findOneBy(array('slug' => $artista));
-        $musica = $em->getRepository('RepSiteBundle:Musica')->findOneBy(array('slug' => $slug, 'artista' => $artista->getId()));
+        if($id > -1){
+            $musica = $em->getRepository('RepSiteBundle:Musica')->find($id);
+        } else{
+            $artista = $em->getRepository('RepSiteBundle:Artista')->findOneBy(array('slug' => $artista));
+            $musica = $em->getRepository('RepSiteBundle:Musica')->findOneBy(array('slug' => $slug, 'artista' => $artista->getId()));
+        }
         
         $eventos = $em->getRepository('RepSiteBundle:MusicaEvento')->listarEventosMusica($musica->getId(), null);
         $shows = $em->getRepository('RepSiteBundle:MusicaEvento')->listarEventosMusica($musica->getId(), 'Show');

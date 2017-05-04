@@ -9,6 +9,7 @@
     <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bootstrap-year-calendar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/calendar-pt.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script type="text/javascript"> 
         
         function editEvent(event) {
@@ -80,7 +81,7 @@
             var currentYear = new Date().getFullYear();
 
             $('#calendar').calendar({
-                enableContextMenu: true,
+                enableContextMenu: false,
                 enableRangeSelection: false,
                 language: 'pt',
                 contextMenuItems:[
@@ -198,8 +199,6 @@
                
                $('#form-evento')[0].reset();
                
-               console.log($(this).data('dia'));
-               
                $dados = $(this).data('dia').split('-');
                
                var date = new Date();
@@ -215,6 +214,12 @@
                
                $('.datetimepicker').datetimepicker({value: date});
                $('#modal-cadastro').modal('show');
+           });
+
+           $('#form-evento').validate({
+               messages:{
+                   'evento[nome]': 'Por favor informe o nome do evento'
+               }
            });
 
         });

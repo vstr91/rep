@@ -26,17 +26,17 @@
     <div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                    <h4 class="modal-title">Editar M&uacute;sica</h4>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titulo-modal">Editar M&uacute;sica</h4>
                 </div>
-                <div class="modal-inner" id="body-edicao">
+                <div class="modal-body" id="body-edicao">
 
                 </div>
                 <div class="modal-footer">
                     <p class="text-right">
-                        <button type="button" class="btn btn-brand" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-brand-accent" id="btn-editar">Salvar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
                     </p>
                 </div>
             </div>
@@ -56,14 +56,36 @@
                 type: 'GET',
                 url: $url,
                 success: function (response) {
-                    $('#body-modal').html(response);
+                    $('#body-edicao').html(response);
                     $('#titulo-modal').html("Editar Música");
-                    $('#modal').modal('show');
+                    $('#modal-edicao').modal('show');
                 }
             });
 
             return false;
 
         });
+        
+        $('.link-detalhes-musica').click(function () {
+
+            $id = $(this).attr('href').replace('#', '');
+
+            $url = '{{ path('rep_site_musicas_detalhes_por_id') }}' + "/" + $id;
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#body-edicao').html(response);
+                    $('#titulo-modal').html("Detalhes da Música");
+                    $('#modal-edicao').modal('show');
+                    $('#btn-editar').hide();
+                }
+            });
+
+            return false;
+
+        });
+        
     </script>
 {% endblock %}

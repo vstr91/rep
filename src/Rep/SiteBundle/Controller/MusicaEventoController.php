@@ -305,6 +305,9 @@ class MusicaEventoController extends Controller {
         $evento = null;
         $request = $this->getRequest();
         
+        $A4_HEIGHT = 297;
+        $A4_WIDTH = 210;
+        
         $user = $this->getUser();
         
         $em = $this->getDoctrine()->getManager();
@@ -315,18 +318,20 @@ class MusicaEventoController extends Controller {
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
                 ->listarTodasPorEvento($evento->getSlug());
         
+        $logo = $this->get('kernel')->getRootDir() . '/../web/imagens/logo.png';
+        
         $pdf = new \FPDF();
 
-        $pdf->AddFont('pfennigb','','pfennigb.php');
+//        $pdf->AddFont('pfennigb','','pfennigb.php');
         
         $pdf->AddPage();
-        $pdf->SetFont('pfennigb','',16);
+        $pdf->SetFont('arial','',16);
         
-        $pdf->Cell(0,25,"LOGO",0,1, 'C');
+        $pdf->Cell(0,15,$pdf->Image($logo, 225 / 2 - 105 / 3, 3, 55),0,1, 'C');
         $pdf->Cell(0,15,$evento->getNome(),0,1, 'C');
         $pdf->Cell(0,15,$evento->getData()->format('d/m/Y H:i:s'),0,1, 'C');
         
-        $pdf->SetFont('pfennigb','',20);
+        $pdf->SetFont('arial','',20);
         
         $pdf->SetY(70);
         
@@ -366,7 +371,13 @@ class MusicaEventoController extends Controller {
 //                $pdf->SetX(100);
 //            }
             
-            $pdf->MultiCell(98,7,($cont+1)." - ".mb_strtoupper($musica->getNome(), 'utf-8')." (".$musica->getTom().")",0,1);
+            if($musica->getTom()){
+                $pdf->MultiCell(98,7,($cont+1)." - ".mb_strtoupper($musica->getNome(), 'utf-8')." (".$musica->getTom().")",0,1);
+            } else{
+                $pdf->MultiCell(98,7,($cont+1)." - ".mb_strtoupper($musica->getNome(), 'utf-8'),0,1);
+            }
+            
+            
             $cont++;
         }
         

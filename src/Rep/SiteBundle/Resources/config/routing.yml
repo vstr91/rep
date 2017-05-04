@@ -50,7 +50,11 @@ rep_site_musicas_form:
     
 rep_site_musicas_detalhes:
     pattern: /{artista}/musicas/{slug}/detalhes
-    defaults: {_controller: RepSiteBundle:Musica:detalhes, artista: '', slug: '' }
+    defaults: {_controller: RepSiteBundle:Musica:detalhes, artista: '', slug: '', id: -1 }
+    
+rep_site_musicas_detalhes_por_id:
+    pattern: /musicas/detalhes/{id}
+    defaults: {_controller: RepSiteBundle:Musica:detalhes, artista: '', slug: '', id: -1 }    
     
 ########################################################################
 

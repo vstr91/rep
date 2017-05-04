@@ -316,6 +316,27 @@
 
             });
             
+            $('.link-detalhes-musica').click(function () {
+
+                $id = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_musicas_detalhes_por_id') }}' + "/" + $id;
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-edicao').html(response);
+                        $('#titulo-modal').html("Detalhes da Música");
+                        $('#modal-edicao').modal('show');
+                        $('#btn-editar').hide();
+                    }
+                });
+
+                return false;
+
+            });
+            
         });
     </script>
 {% endblock %}

@@ -47,4 +47,17 @@ html, body {
   height: 95%;
   max-height: 95%; }
 
+#modal-load .modal-content {
+  background-color: transparent;
+  -webkit-box-shadow: 0 5px 15px transparent;
+  -moz-box-shadow: 0 5px 15px transparent;
+  -o-box-shadow: 0 5px 15px transparent;
+  box-shadow: 0 5px 15px transparent;
+  border: 0; }
+
+/*#caixa-tabela-eventos{
+    max-height: 200px;
+    overflow-x: auto;
+}*/
+
 /*# sourceMappingURL=estilos.css.map */

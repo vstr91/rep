@@ -69,6 +69,9 @@ class EventoController extends Controller {
             return $this->redirect($referer);
         }
         
+        $tiposEvento = $em->getRepository('RepSiteBundle:TipoEvento')
+                ->findAll();
+        
         $eventos = $em->getRepository('RepSiteBundle:Evento')
                 ->findAll();
         
@@ -76,6 +79,7 @@ class EventoController extends Controller {
                 array(
                     'usuario' => $user,
                     'eventos' => $eventos,
+                    'tiposEvento' => $tiposEvento,
                     'formEvento' => $form->createView()
                 ));
         
