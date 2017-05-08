@@ -171,8 +171,6 @@ class MusicaProjetoController extends Controller {
         $musicasProjeto = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listaMusicasAtivasAusentesNoProjeto($id_projeto);
         
-        dump($musicasProjeto);
-        
         if($musicasProjeto === null){
             $musicasProjeto = $em->getRepository('RepSiteBundle:Musica')->listarTodas();
         }

@@ -111,8 +111,6 @@ class MusicaEventoController extends Controller {
         $musicasEvento = $em->getRepository('RepSiteBundle:MusicaEvento')
                 ->listaMusicasAtivasAusentesNoEvento($id_evento, $evento->getProjeto()->getId());
         
-        dump($musicasEvento);
-        
         if($musicasEvento === null){
             $musicasEvento = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjetoRetornaMusica($evento->getProjeto()->getSlug(), null);
