@@ -17,7 +17,7 @@ class MusicaProjetoType extends AbstractType
     {
         $builder
             ->add('status', 'choice', array(
-                'choices' => array('0' => 'Ativo', '1' => 'Em Espera', '2' => 'Inativo')
+                'choices' => array('0' => 'Ativa', '1' => 'Sugerida', '2' => 'Inativa')
             ))
         ;
     }

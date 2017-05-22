@@ -56,7 +56,7 @@ class MusicaEvento extends EntidadeBase {
     protected $musica;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Evento")
+     * @ORM\ManyToOne(targetEntity="Evento", inversedBy="musicasEvento")
      * @ORM\JoinColumn(name="id_evento", referencedColumnName="id")
      * @Gedmo\Versioned
      * 

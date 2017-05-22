@@ -71,6 +71,16 @@ html, body{
     border: 0;
 }
 
+.fundo-grave{
+    background-color: $vermelho;
+    color: $branco;
+}
+
+.fundo-medio{
+    background-color: $laranja;
+    color: $branco;
+}
+
 /*#caixa-tabela-eventos{
     max-height: 200px;
     overflow-x: auto;

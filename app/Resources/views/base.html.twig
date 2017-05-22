@@ -50,13 +50,14 @@
                         <div class="col-md-2 height-100" id="coluna-menu">
                             {% block lateral %}
                                 <div id="menu-lateral" class="list-group">
-                                    <a href="{{ path('rep_site_homepage') }}" class="list-group-item">Eventos</a>
-                                    <a href="{{ path('rep_site_musicas_projetos', {'projeto': 'oficial'}) }}" class="list-group-item">Repert&oacute;rio</a>
+                                    <a href="{{ path('rep_site_homepage') }}" class="list-group-item">Calend&aacute;rio de Eventos</a>
+                                    <a href="{{ path('rep_site_musicas_projetos', {'projeto': 'oficial'}) }}" 
+                                       class="list-group-item">Informa&ccedil;&otilde;es Por Projeto</a>
                                     <div class="list-group-item-info text-center">Outras Configura&ccedil;&otilde;es</div>
-                                    <a href="{{ path('rep_site_projetos') }}" class="list-group-item">Projetos</a>
+                                    <a href="{{ path('rep_site_projetos') }}" class="list-group-item">Cadastro de Projetos</a>
                                     <a href="{{ path('rep_site_musicas') }}" class="list-group-item">Banco de M&uacute;sicas</a>
-                                    <a href="{{ path('rep_site_artistas') }}" class="list-group-item">Artistas</a>
-                                    <a href="{{ path('rep_site_tipos_evento') }}" class="list-group-item">Tipos de Eventos</a>
+                                    <a href="{{ path('rep_site_artistas') }}" class="list-group-item">Cadastro de Artistas</a>
+                                    <a href="{{ path('rep_site_tipos_evento') }}" class="list-group-item">Cadastro de Tipos de Eventos</a>
                                 </div>
                             {% endblock lateral %}
                         </div>
@@ -104,7 +105,11 @@
             <script type="text/javascript" src="{{ asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
             <script type="text/javascript">
                 $(document).ready(function(){
-                    $('#conteudo-principal').mCustomScrollbar();
+                    $('#conteudo-principal').mCustomScrollbar({
+                        mouseWheel:{ 
+                            disableOver: ['label', 'form']
+                        }
+                    });
                 });
             </script>
         {% endblock %}

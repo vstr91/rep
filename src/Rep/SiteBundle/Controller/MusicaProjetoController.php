@@ -405,6 +405,7 @@ class MusicaProjetoController extends Controller {
             $musicaProjeto = new MusicaProjeto();
             $musicaProjeto->setMusica($musica);
             $musicaProjeto->setProjeto($projeto);
+            $musicaProjeto->setStatus(1);
             
             $em->persist($musicaProjeto);
             

@@ -156,8 +156,14 @@ class PageController extends Controller
         
         $projeto = $em->getRepository('RepSiteBundle:Projeto')->findOneBy(array('slug' => $projeto));
         
+        $ensaios = $em->getRepository('RepSiteBundle:Evento')
+                ->findBy(array('tipoEvento' => '3f2a14cb-d10e-11e6-9893-02010202060f', 'projeto' => $projeto->getId()), null, 2);
+        
         $musicasProjeto = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjeto($projeto->getSlug(), 0);
+        
+        $musicas = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                ->listarTodasPorDataExecucaoPorProjeto($projeto->getId());
         
         $musicasProjetoFila = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjeto($projeto->getSlug(), 1);
@@ -167,6 +173,8 @@ class PageController extends Controller
             'projeto' => $projeto,
             'musicasProjeto' => $musicasProjeto,
             'musicasProjetoFila' => $musicasProjetoFila,
+            'ensaios' => $ensaios,
+            'musicas' => $musicas,
             'formMusicaProjeto' => $formMusicaProjeto->createView()
         ));
     }

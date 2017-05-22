@@ -12,7 +12,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">Repert&oacute;rio Projeto</h2>
+                <h2 class="text-center">Informa&ccedil;&otilde;es Por Projeto</h2>
             </div>
         </div>
         <div class="row">
@@ -25,17 +25,91 @@
                 <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
                 <h3 class="text-center">M&uacute;sicas Ativas</h3>
                 <div id="caixa-repertorio">
-                {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
+                    {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
                           with {'musicas': musicasProjeto} %}
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-11">
-                <h3 class="text-center">M&uacute;sicas Na Fila</h3>
+                <h3 class="text-center">M&uacute;sicas Sugeridas</h3>
                 <div id="caixa-repertorio-fila">
-                {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
+                    {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
                           with {'musicas': musicasProjetoFila} %}
+                </div>
+            </div>
+        </div>
+        <hr class="divider" />
+        <div class="row">
+            <div class="col-md-11">
+                <h3 class="text-center">Informa&ccedil;&otilde;es Relevantes</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="text-center">&Uacute;ltimos Ensaios</h4>
+                        {% for ensaio in ensaios %}
+                            <table class="table table-hover table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <td colspan="2">
+                                            <strong>
+                                                <a href="{{ path('rep_site_musicas_evento', {'slug': ensaio.slug}) }}" 
+                                                   target="_blank">{{ ensaio.nome }}</a>
+                                                <br />
+                                                <small>{{ ensaio.data|date('d/m/Y H:i') }}</small></strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cont.</td>
+                                        <td>M&uacute;sica</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mus in ensaio.musicas %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ mus.musica.nome }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <br />
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="text-center">Hist&oacute;rico de M&uacute;sicas</h4>
+                        
+                        <table class="table table-hover text-center">
+                            <thead>
+                                <tr>
+                                    <td>Cont.</td>
+                                    <td>M&uacute;sica</td>
+                                    <td>&uacute;ltima Execu&ccedil;&atilde;o</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for musica in musicas %}
+                                    
+                                    {% if musica.execucao|date('U') < "-30 days"|date("U") or musica.execucao is null  %}
+                                        <tr class="fundo-grave">
+                                    {% elseif musica.execucao|date('U') < "-15 days"|date("U") %}
+                                        <tr class="fundo-medio">
+                                    {% else %}
+                                        <tr>
+                                    {% endif %}
+                                    
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ musica.nome }}</td>
+                                        <td>{{ musica.execucao is not null ? musica.execucao|date('d/m/Y H:i') : '-' }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,7 +136,7 @@
             </div>
         </div>
     </div>
-                
+
     <div class="modal fade" id="modal-edicao">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -82,7 +156,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -100,7 +174,7 @@
             </div>
         </div>
     </div>
-            
+
     <div class="modal fade" id="modal-load">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -112,7 +186,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="modal-muda-projeto">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -126,7 +200,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="modal-nova-musica">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -149,7 +223,7 @@
             </div>
         </div>
     </div>
-                        
+
     <div class="modal fade" id="modal-novo-artista">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -172,7 +246,7 @@
     {{ parent() }}
     <script src="{{ asset('js/jquery.form.min.js') }}"></script>
     <script type="text/javascript">
-        
+
         function carregarTabela() {
             $url = '{{ path('rep_site_tabela_musicas_projeto', {'id_projeto': projeto.id, 'status': 0}) }}';
             $urlFila = '{{ path('rep_site_tabela_musicas_projeto', {'id_projeto': projeto.id, 'status': 1}) }}';
@@ -184,7 +258,7 @@
                     $('#caixa-repertorio').html(response);
                 }
             });
-            
+
             $.ajax({
                 type: 'GET',
                 url: $urlFila,
@@ -192,10 +266,10 @@
                     $('#caixa-repertorio-fila').html(response);
                 }
             });
-            
+
         }
-        
-        $(document).ready(function(){
+
+        $(document).ready(function () {
             $('#btn-adiciona-musica').click(function () {
 
                 $url = '{{ path('rep_site_form_cadastra_musicas_projeto', {'id_projeto': projeto.id}) }}';
@@ -213,8 +287,8 @@
                 return false;
 
             });
-            
-            $(document).on('click', '.link-remover-musica', function(){
+
+            $(document).on('click', '.link-remover-musica', function () {
 
                 $id = $(this).attr('href').replace('#', '');
 
@@ -234,8 +308,8 @@
                 return false;
 
             });
-            
-            $(document).on('click', '.link-editar-musica', function(){
+
+            $(document).on('click', '.link-editar-musica', function () {
 
                 $id = $(this).attr('href').replace('#', '');
 
@@ -253,16 +327,16 @@
                 return false;
 
             });
-            
-            $('#btn-editar').click(function(){
+
+            $('#btn-editar').click(function () {
                 $('#form-adiciona-musica-projeto').submit();
                 $('#modal-adicao').modal('hide');
             });
-            
-            $('#link-muda-projeto').click(function(){
-                
+
+            $('#link-muda-projeto').click(function () {
+
                 $url = '{{ path('rep_site_projetos_muda') }}';
-                
+
                 $.ajax({
                     type: 'GET',
                     url: $url,
@@ -274,13 +348,13 @@
 
                 return false;
             });
-            
-            $('#btn-editar-musica').click(function(){
+
+            $('#btn-editar-musica').click(function () {
                 $('#form-musica-projeto-edita').submit();
                 $('#modal-edicao').modal('hide');
             });
-            
-            $(document).on('click', '#btn-nova-musica', function(){
+
+            $(document).on('click', '#btn-nova-musica', function () {
 
                 $id = -1;
 
@@ -298,8 +372,8 @@
                 return false;
 
             });
-            
-            $(document).on('click', '#btn-novo-artista', function(){
+
+            $(document).on('click', '#btn-novo-artista', function () {
 
                 $url = '{{ path('rep_site_artistas_form_novo') }}';
 
@@ -315,7 +389,7 @@
                 return false;
 
             });
-            
+
             $('.link-detalhes-musica').click(function () {
 
                 $id = $(this).attr('href').replace('#', '');
@@ -336,7 +410,7 @@
                 return false;
 
             });
-            
+
         });
     </script>
 {% endblock %}

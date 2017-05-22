@@ -69,6 +69,15 @@ class Evento extends EntidadeBase {
      * 
      */
     protected $projeto;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="MusicaEvento", mappedBy="evento")
+     */
+    private $musicas;
+    
+    public function __construct() {
+        $this->musicas = new \Doctrine\Common\Collections\ArrayCollection;
+    }
 
     /**
      * Set nome
@@ -324,5 +333,39 @@ class Evento extends EntidadeBase {
     public function getProjeto()
     {
         return $this->projeto;
+    }
+
+    /**
+     * Add musica
+     *
+     * @param \Rep\SiteBundle\Entity\MusicaEvento $musica
+     *
+     * @return Evento
+     */
+    public function addMusica(\Rep\SiteBundle\Entity\MusicaEvento $musica)
+    {
+        $this->musicas[] = $musica;
+
+        return $this;
+    }
+
+    /**
+     * Remove musica
+     *
+     * @param \Rep\SiteBundle\Entity\MusicaEvento $musica
+     */
+    public function removeMusica(\Rep\SiteBundle\Entity\MusicaEvento $musica)
+    {
+        $this->musicas->removeElement($musica);
+    }
+
+    /**
+     * Get musicas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMusicas()
+    {
+        return $this->musicas;
     }
 }

@@ -150,4 +150,30 @@ class MusicaProjetoRepository extends \Doctrine\ORM\EntityRepository
         
     }
     
+    public function listarTodasPorDataExecucaoPorProjeto($id_projeto){
+        
+        $sql = "SELECT m.nome, a.nome AS artista,
+        (
+                SELECT MAX(e.data)
+                FROM musica_evento me INNER JOIN
+                          evento e ON e.id = me.id_evento
+                WHERE e.id = me.id_evento
+                AND   me.id_musica = m.id 
+                AND   me.`status` <> 2
+                AND   e.data <= NOW()
+        ) AS 'execucao'
+        FROM musica m INNER JOIN
+             artista a ON a.id = m.id_artista INNER JOIN
+             musica_projeto mp ON mp.id_musica = m.id
+        WHERE mp.id_projeto = '".$id_projeto."'
+        GROUP BY m.nome
+        ORDER BY execucao, m.nome";
+        
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+    
 }
