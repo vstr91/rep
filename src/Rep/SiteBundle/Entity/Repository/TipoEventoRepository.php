@@ -29,4 +29,13 @@ class TipoEventoRepository extends EntityRepository
         
     }
     
+    public function listarTodosExcetoPadrao(){
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->where("e.nome <> 'Ensaio' AND e.nome <> 'Show'")
+                ->addOrderBy('e.nome');
+
+        return $qb->getQuery()->getResult();
+    }
+    
 }

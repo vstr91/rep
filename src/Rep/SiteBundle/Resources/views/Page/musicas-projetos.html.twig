@@ -21,36 +21,55 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-11">
-                <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
-                <h3 class="text-center">M&uacute;sicas Ativas</h3>
-                <div id="caixa-repertorio">
-                    {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
-                          with {'musicas': musicasProjeto} %}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-11">
-                <h3 class="text-center">M&uacute;sicas Sugeridas</h3>
-                <div id="caixa-repertorio-fila">
-                    {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
-                          with {'musicas': musicasProjetoFila} %}
-                </div>
-            </div>
-        </div>
-        <hr class="divider" />
-        <div class="row">
-            <div class="col-md-11">
-                <h3 class="text-center">Informa&ccedil;&otilde;es Relevantes</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 class="text-center">&Uacute;ltimos Ensaios</h4>
+            <div class="col-md-12">
+                <ul class="nav nav-tabs nav-justified" role="tablist">
+                    <li class="active">
+                        <a href="#repertorio" data-toggle="tab">Repert&oacute;rio</a>
+                    </li>
+                    <li>
+                        <a href="#ensaios-futuros" data-toggle="tab">Pr&oacute;ximos Ensaios</a>
+                    </li>
+                    <li>
+                        <a href="#shows-futuros" data-toggle="tab">Pr&oacute;ximos Shows</a>
+                    </li>
+                    <li>
+                        <a href="#ensaios" data-toggle="tab">&Uacute;ltimos Ensaios</a>
+                    </li>
+                    <li>
+                        <a href="#shows" data-toggle="tab">&Uacute;ltimos Shows</a>
+                    </li>
+                    <li>
+                        <a href="#informacoes" data-toggle="tab">Informa&ccedil;&otilde;es</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+
+                    <div class="tab-pane fade in active" id="repertorio">
+                        <br />
+                        <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
+                        <h3 class="text-center">M&uacute;sicas Ativas</h3>
+                        <div id="caixa-repertorio">
+                            {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
+                                  with {'musicas': musicasProjeto} %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="text-center">M&uacute;sicas Sugeridas</h3>
+                                <div id="caixa-repertorio-fila">
+                                    {% include 'RepSiteBundle:MusicaProjeto:tabela-cadastrados.html.twig' 
+                                          with {'musicas': musicasProjetoFila} %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                
+                    <div class="tab-pane fade" id="ensaios">
                         {% for ensaio in ensaios %}
-                            <table class="table table-hover table-striped text-center">
+                            <table class="table table-striped text-center">
                                 <thead>
                                     <tr>
-                                        <td colspan="2">
+                                        <td colspan="3">
                                             <strong>
                                                 <a href="{{ path('rep_site_musicas_evento', {'slug': ensaio.slug}) }}" 
                                                    target="_blank">{{ ensaio.nome }}</a>
@@ -61,6 +80,7 @@
                                     <tr>
                                         <td>Cont.</td>
                                         <td>M&uacute;sica</td>
+                                        <td>Artista</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,9 +88,11 @@
                                         <tr>
                                             <td>{{ loop.index }}</td>
                                             <td>{{ mus.musica.nome }}</td>
+                                            <td>{{ mus.musica.artista.nome }}</td>
                                         </tr>
                                     {% else %}
                                         <tr>
+                                            <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
                                         </tr>
@@ -78,41 +100,174 @@
                                 </tbody>
                             </table>
                             <br />
+                        {% else %}
+                            <p>Nenhum ensaio cadastrado.</p>
                         {% endfor %}
                     </div>
-                    <div class="col-md-6">
-                        <h4 class="text-center">Hist&oacute;rico de M&uacute;sicas</h4>
-                        
-                        <table class="table table-hover text-center">
-                            <thead>
-                                <tr>
-                                    <td>Cont.</td>
-                                    <td>M&uacute;sica</td>
-                                    <td>&uacute;ltima Execu&ccedil;&atilde;o</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for musica in musicas %}
-                                    
-                                    {% if musica.execucao|date('U') < "-30 days"|date("U") or musica.execucao is null  %}
-                                        <tr class="fundo-grave">
-                                    {% elseif musica.execucao|date('U') < "-15 days"|date("U") %}
-                                        <tr class="fundo-medio">
+                    
+                    <div class="tab-pane fade" id="shows">
+                        {% for show in shows %}
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <td colspan="3">
+                                            <strong>
+                                                <a href="{{ path('rep_site_musicas_evento', {'slug': show.slug}) }}" 
+                                                   target="_blank">{{ show.nome }}</a>
+                                                <br />
+                                                <small>{{ show.data|date('d/m/Y H:i') }}</small></strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cont.</td>
+                                        <td>M&uacute;sica</td>
+                                        <td>Artista</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mus in show.musicas %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ mus.musica.nome }}</td>
+                                            <td>{{ mus.musica.artista.nome }}</td>
+                                        </tr>
                                     {% else %}
                                         <tr>
-                                    {% endif %}
-                                    
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ musica.nome }}</td>
-                                        <td>{{ musica.execucao is not null ? musica.execucao|date('d/m/Y H:i') : '-' }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <br />
+                        {% else %}
+                            <p>Nenhum show cadastrado.</p>
+                        {% endfor %}
                     </div>
+                    
+                    <div class="tab-pane fade" id="ensaios-futuros">
+                        {% for ensaio in ensaiosFuturos %}
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <td colspan="3">
+                                            <strong>
+                                                <a href="{{ path('rep_site_musicas_evento', {'slug': ensaio.slug}) }}" 
+                                                   target="_blank">{{ ensaio.nome }}</a>
+                                                <br />
+                                                <small>{{ ensaio.data|date('d/m/Y H:i') }}</small></strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cont.</td>
+                                        <td>M&uacute;sica</td>
+                                        <td>Artista</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mus in ensaio.musicas %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ mus.musica.nome }}</td>
+                                            <td>{{ mus.musica.artista.nome }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <br />
+                        {% else %}
+                            <p>Nenhum ensaio cadastrado.</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="tab-pane fade" id="shows-futuros">
+                        {% for show in showsFuturos %}
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <td colspan="3">
+                                            <strong>
+                                                <a href="{{ path('rep_site_musicas_evento', {'slug': show.slug}) }}" 
+                                                   target="_blank">{{ show.nome }}</a>
+                                                <br />
+                                                <small>{{ show.data|date('d/m/Y H:i') }}</small></strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cont.</td>
+                                        <td>M&uacute;sica</td>
+                                        <td>Artista</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mus in show.musicas %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ mus.musica.nome }}</td>
+                                            <td>{{ mus.musica.artista.nome }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <br />
+                        {% else %}
+                            <p>Nenhum show cadastrado.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade" id="informacoes">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="text-center">Hist&oacute;rico de M&uacute;sicas</h4>
+
+                                <table class="table text-center">
+                                    <thead>
+                                        <tr>
+                                            <td>Cont.</td>
+                                            <td>M&uacute;sica</td>
+                                            <td>&Uacute;ltima Execu&ccedil;&atilde;o</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for musica in musicas %}
+
+                                            {% if musica.execucao|date('U') < "-30 days"|date("U") or musica.execucao is null  %}
+                                                <tr class="fundo-grave">
+                                                {% elseif musica.execucao|date('U') < "-15 days"|date("U") %}
+                                                <tr class="fundo-medio">
+                                                {% else %}
+                                                <tr>
+                                                {% endif %}
+
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ musica.nome }}</td>
+                                                <td>{{ musica.execucao is not null ? musica.execucao|date('d/m/Y H:i') : '-' }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
         </div>
+        
     </div>
     <div class="modal fade" id="modal-adicao">
         <div class="modal-dialog">
@@ -320,6 +475,7 @@
                     url: $url,
                     success: function (response) {
                         $('#body-edicao').html(response);
+                        $('#btn-editar-musica').show();
                         $('#modal-edicao').modal('show');
                     }
                 });
@@ -403,7 +559,7 @@
                         $('#body-edicao').html(response);
                         $('#titulo-modal').html("Detalhes da Música");
                         $('#modal-edicao').modal('show');
-                        $('#btn-editar').hide();
+                        $('#btn-editar-musica').hide();
                     }
                 });
 

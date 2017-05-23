@@ -73,4 +73,48 @@ class EventoRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    function listarTodosPassadosPorProjeto($tipo, $id_projeto, $limite){
+        
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->distinct()
+                ->innerJoin("RepSiteBundle:TipoEvento", 'te', 'WITH', 'te.id = e.tipoEvento')
+                ->where("te.nome = :tipo")
+                ->andWhere("e.projeto = :projeto")
+                ->andWhere('e.data <= :data')
+                ->addOrderBy('e.data', 'DESC')
+                ->setParameter('projeto', $id_projeto)
+                ->setParameter('tipo', $tipo)
+                ->setParameter('data', new \DateTime())
+                ;
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    function listarTodosFuturosPorProjeto($tipo, $id_projeto, $limite){
+        
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->distinct()
+                ->innerJoin("RepSiteBundle:TipoEvento", 'te', 'WITH', 'te.id = e.tipoEvento')
+                ->where("te.nome = :tipo")
+                ->andWhere("e.projeto = :projeto")
+                ->andWhere('e.data > :data')
+                ->addOrderBy('e.data')
+                ->setParameter('projeto', $id_projeto)
+                ->setParameter('tipo', $tipo)
+                ->setParameter('data', new \DateTime())
+                ;
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+    }
+    
 }

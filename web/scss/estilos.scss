@@ -85,3 +85,13 @@ html, body{
     max-height: 200px;
     overflow-x: auto;
 }*/
+
+// mobile
+
+@media (max-width: 768px) {
+    
+    #coluna-menu{
+        height: auto !important;
+    }
+
+}

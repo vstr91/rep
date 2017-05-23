@@ -16,6 +16,23 @@
         return false;
     });#}
     
+    $('#form-tipo-evento-edita #tipo_evento_cor').ColorPicker({
+        color: '#000000',
+        onSubmit: function(hsb, hex, rgb, el) {
+            $('#tipo_evento_cor').val('#'+hex);
+            $(el).ColorPickerHide();
+        },
+        onChange: function(hsb, hex, rgb, el) {
+            $('#tipo_evento_cor').val('#'+hex);
+        },
+        onBeforeShow: function () {
+            $(this).ColorPickerSetColor(this.value);
+        }
+    })
+    .bind('keyup', function(){
+        $(this).ColorPickerSetColor(this.value);
+    });
+    
     $('#btn-editar').click(function(){
         $('#form-tipo-evento-edita').submit();
     });

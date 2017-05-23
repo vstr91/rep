@@ -115,7 +115,8 @@ class PageController extends Controller
         $formTipoEvento = $this->createForm($tipoEventoType);
         
         $tiposEvento = $em->getRepository('RepSiteBundle:TipoEvento')
-                ->findAll();
+                ->listarTodosExcetoPadrao();
+//                ->findAll();
         
         return $this->render('RepSiteBundle:Page:tipos-evento.html.twig', array(
             'usuario' => $user,
@@ -157,7 +158,18 @@ class PageController extends Controller
         $projeto = $em->getRepository('RepSiteBundle:Projeto')->findOneBy(array('slug' => $projeto));
         
         $ensaios = $em->getRepository('RepSiteBundle:Evento')
-                ->findBy(array('tipoEvento' => '3f2a14cb-d10e-11e6-9893-02010202060f', 'projeto' => $projeto->getId()), null, 2);
+                ->listarTodosPassadosPorProjeto('Ensaio', $projeto->getId(), 10);
+        
+        $shows = $em->getRepository('RepSiteBundle:Evento')
+                ->listarTodosPassadosPorProjeto('Show', $projeto->getId(), 10);
+        
+        $ensaiosFuturos = $em->getRepository('RepSiteBundle:Evento')
+                ->listarTodosFuturosPorProjeto('Ensaio', $projeto->getId(), 10);
+        
+        $showsFuturos = $em->getRepository('RepSiteBundle:Evento')
+                ->listarTodosFuturosPorProjeto('Show', $projeto->getId(), 10);
+//                ->findBy(array('tipoEvento' => '3f2a14cb-d10e-11e6-9893-02010202060f', 
+//                    'projeto' => $projeto->getId()), null, 10);
         
         $musicasProjeto = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjeto($projeto->getSlug(), 0);
@@ -174,6 +186,9 @@ class PageController extends Controller
             'musicasProjeto' => $musicasProjeto,
             'musicasProjetoFila' => $musicasProjetoFila,
             'ensaios' => $ensaios,
+            'shows' => $shows,
+            'ensaiosFuturos' => $ensaiosFuturos,
+            'showsFuturos' => $showsFuturos,
             'musicas' => $musicas,
             'formMusicaProjeto' => $formMusicaProjeto->createView()
         ));

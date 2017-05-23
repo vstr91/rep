@@ -166,6 +166,7 @@ class MusicaProjetoRepository extends \Doctrine\ORM\EntityRepository
              artista a ON a.id = m.id_artista INNER JOIN
              musica_projeto mp ON mp.id_musica = m.id
         WHERE mp.id_projeto = '".$id_projeto."'
+        AND   mp.status = 0
         GROUP BY m.nome
         ORDER BY execucao, m.nome";
         

@@ -107,7 +107,8 @@
                 $(document).ready(function(){
                     $('#conteudo-principal').mCustomScrollbar({
                         mouseWheel:{ 
-                            disableOver: ['label', 'form']
+                            disableOver: ['label', 'form', 'modal'],
+                            preventDefault: true
                         }
                     });
                 });
