@@ -66,6 +66,7 @@ class EventoRepository extends EntityRepository
                 ->select('e')
                 ->distinct()
                 ->where('e.data BETWEEN :dataInicio AND :dataFim')
+                ->andWhere('e.status = 0')
                 ->addOrderBy('e.data')
                 ->setParameter('dataInicio', $data.' 00:00:00')
                 ->setParameter('dataFim', $data.' 23:59:59');

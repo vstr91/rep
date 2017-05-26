@@ -28,7 +28,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new SC\DatetimepickerBundle\SCDatetimepickerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
-            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+//            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         );
 
