@@ -28,6 +28,12 @@ class MusicaType extends AbstractType
                 },
                 'empty_value' => false
             ))
+            ->add('estilo', null, array(
+                'query_builder' => function(EntityRepository $repository) { 
+                    return $repository->createQueryBuilder('e')->orderBy('e.nome', 'ASC');
+                },
+                'empty_value' => false
+            ))
         ;
     }
     

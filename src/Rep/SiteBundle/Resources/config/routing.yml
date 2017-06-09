@@ -205,3 +205,35 @@ rep_site_musicas_projetos_novas_cadastra:
     defaults: { _controller: RepSiteBundle:MusicaProjeto:cadastrarNova, id_projeto: -1 }
     requirements:
         _method: POST
+        
+########################################################################
+
+rep_site_estilos:
+    path:     /estilos
+    defaults: { _controller: RepSiteBundle:Page:estilos }
+    
+rep_site_estilos_cadastra:
+    pattern:     /estilos/cadastra/{id_estilo}
+    defaults: { _controller: RepSiteBundle:Estilo:cadastrar, id_estilo: -1 }
+    requirements:
+        _method: POST
+
+rep_site_estilos_form:
+    pattern: /estilos/form/{id_estilo}
+    defaults: {_controller: RepSiteBundle:Estilo:form, id_estilo: -1}
+    
+rep_site_estilos_musicas:
+    pattern: /estilos/musicas/{id_estilo}
+    defaults: {_controller: RepSiteBundle:Estilo:musicas, id_estilo: -1}
+
+rep_site_estilos_form_novo:
+    pattern: /estilos/form-novo/{id_estilo}
+    defaults: {_controller: RepSiteBundle:Estilo:formNovo, id_estilo: -1}
+    
+rep_site_estilos_cadastra_novo:
+    pattern:     /estilos/cadastra-novo/{id_estilo}
+    defaults: { _controller: RepSiteBundle:Estilo:cadastrarNovo, id_estilo: -1 }
+    requirements:
+        _method: POST
+    
+########################################################################

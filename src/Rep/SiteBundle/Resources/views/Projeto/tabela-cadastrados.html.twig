@@ -1,18 +1,22 @@
-<table class="table table-hover table-striped text-center">
-    <thead>
-        <tr>
-            <td>Nome</td>
-            <td>A&ccedil;&otilde;es</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for projeto in projetos %}
+<div class="table-responsive">
+    <table class="table table-hover table-striped text-center">
+        <thead>
             <tr>
-                <td>{{ projeto.nome }}</td>
-                <td>
-                    <a class="link-editar" href="#{{ projeto.id }}">Editar</a>
-                </td>
+                <td>Nome</td>
+                <td>Status</td>
+                <td>A&ccedil;&otilde;es</td>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for projeto in projetos %}
+                <tr>
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.status == 0 ? 'Ativo' : 'Inativo' }}</td>
+                    <td>
+                        <a class="link-editar" href="#{{ projeto.id }}">Editar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

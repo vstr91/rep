@@ -67,8 +67,12 @@ html, body {
     max-height: 200px;
     overflow-x: auto;
 }*/
+.icon-bar {
+  background-color: #337ab7; }
+
 @media (max-width: 768px) {
   #coluna-menu {
-    height: auto !important; } }
+    height: auto !important;
+    max-width: 100%; } }
 
 /*# sourceMappingURL=estilos.css.map */

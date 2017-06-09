@@ -12,6 +12,7 @@ $vermelho: #DD0000;
 $branco: #FFFFFF;
 $laranja: #FF8C00;
 $cinza: #333333;
+$azul: #337ab7;
 
 html, body{
     position: absolute;
@@ -86,12 +87,17 @@ html, body{
     overflow-x: auto;
 }*/
 
+.icon-bar{
+    background-color: $azul;
+}
+
 // mobile
 
 @media (max-width: 768px) {
     
     #coluna-menu{
         height: auto !important;
+        max-width: 100%;
     }
 
 }

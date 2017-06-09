@@ -27,19 +27,31 @@
                 <div class="navbar" id="menu-principal">
                     <div class="container-fluid">
                         <div class="navbar-header">
+                            {% if usuario is defined %}
                             <button class="navbar-toggle v-botao-collapse" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span class="sr-only">Navega&ccedil;&atilde;o</span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
+                            {% endif %}
                             <a href="{{ path('rep_site_homepage') }}" class="navbar-brand">Gerenciador de Projetos</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             {% if usuario is defined %}
                                 <a href="{{ path('fos_user_security_logout') }}" class="navbar-text navbar-right">Sair</a>
+                                <div class="hidden-md hidden-lg">
+                                    <a href="{{ path('rep_site_homepage') }}" class="list-group-item">Calend&aacute;rio de Eventos</a>
+                                    <a href="{{ path('rep_site_musicas_projetos', {'projeto': 'oficial'}) }}" 
+                                       class="list-group-item">Informa&ccedil;&otilde;es Por Projeto</a>
+                                    <div class="list-group-item-info text-center">Outras Configura&ccedil;&otilde;es</div>
+                                    <a href="{{ path('rep_site_projetos') }}" class="list-group-item">Cadastro de Projetos</a>
+                                    <a href="{{ path('rep_site_musicas') }}" class="list-group-item">Banco de M&uacute;sicas</a>
+                                    <a href="{{ path('rep_site_artistas') }}" class="list-group-item">Cadastro de Artistas</a>
+                                    <a href="{{ path('rep_site_estilos') }}" class="list-group-item">Cadastro de Estilos Musicais</a>
+                                    <a href="{{ path('rep_site_tipos_evento') }}" class="list-group-item">Cadastro de Tipos de Eventos</a>
+                                </div>
                             {% endif %}
-                            
                         </div>
                     </div>
                 </div>
@@ -49,7 +61,7 @@
                     <div class="row height-100">
                         <div class="col-md-2 height-100" id="coluna-menu">
                             {% block lateral %}
-                                <div id="menu-lateral" class="list-group">
+                                <div id="menu-lateral" class="list-group hidden-sm hidden-xs">
                                     <a href="{{ path('rep_site_homepage') }}" class="list-group-item">Calend&aacute;rio de Eventos</a>
                                     <a href="{{ path('rep_site_musicas_projetos', {'projeto': 'oficial'}) }}" 
                                        class="list-group-item">Informa&ccedil;&otilde;es Por Projeto</a>
@@ -57,6 +69,7 @@
                                     <a href="{{ path('rep_site_projetos') }}" class="list-group-item">Cadastro de Projetos</a>
                                     <a href="{{ path('rep_site_musicas') }}" class="list-group-item">Banco de M&uacute;sicas</a>
                                     <a href="{{ path('rep_site_artistas') }}" class="list-group-item">Cadastro de Artistas</a>
+                                    <a href="{{ path('rep_site_estilos') }}" class="list-group-item">Cadastro de Estilos Musicais</a>
                                     <a href="{{ path('rep_site_tipos_evento') }}" class="list-group-item">Cadastro de Tipos de Eventos</a>
                                 </div>
                             {% endblock lateral %}
@@ -81,7 +94,7 @@
                                 <h4 class="modal-title" id="titulo-modal"></h4>
                             </div>
                             <div class="modal-body" id="body-modal">
-                                
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -102,15 +115,13 @@
             {#            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>#}
             <script src="{{ asset('js/jquery.js') }}"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/jquery.slimscroll.min.js') }}"></script>
             <script type="text/javascript">
                 $(document).ready(function(){
-                    $('#conteudo-principal').mCustomScrollbar({
-                        mouseWheel:{ 
-                            disableOver: ['label', 'form', 'modal'],
-                            preventDefault: true
-                        }
-                    });
+                    {#$('#conteudo-principal').slimScroll({
+                        height: '100%',
+                        allowPageScroll: true
+                    });#}
                 });
             </script>
         {% endblock %}

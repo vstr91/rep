@@ -8,14 +8,15 @@
 
 namespace Rep\SiteBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\OrderBy;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Description of Musica
+ * Description of EstiloMusica
  *
  * @author Almir
  */
@@ -23,84 +24,60 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Musica
  *
- * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\MusicaRepository")
- * @ORM\Table(name="musica")
+ * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\EstiloMusicaRepository")
+ * @ORM\Table(name="estilo_musica")
  * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity({"nome", "artista"}, message="Já existe uma música com esse título vinculada a esse artista")
  * 
  */
-class Musica extends EntidadeBase {
+class EstiloMusica extends EntidadeBase {
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nome", type="string", length=100)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="observacao", type="string", length=100, nullable=true)
+     * 
+     */
+    protected $observacao;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Musica")
+     * @ORM\JoinColumn(name="id_musica", referencedColumnName="id")
      * @Gedmo\Versioned
      * 
      */
-    protected $nome;
+    protected $musica;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Artista", inversedBy="musicas")
-     * @ORM\JoinColumn(name="id_artista", referencedColumnName="id")
-     * @OrderBy({"artista" = "DESC"})
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $artista;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tom", type="string", length=5, nullable=true)
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $tom;
-    
-    /**
-     * @Gedmo\Slug(fields={"nome"})
-     * @ORM\Column(unique=false)
-     */
-    private $slug;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Estilo", inversedBy="musicas")
+     * @ORM\ManyToOne(targetEntity="Estilo")
      * @ORM\JoinColumn(name="id_estilo", referencedColumnName="id")
-     * @OrderBy({"estilo" = "ASC"})
      * @Gedmo\Versioned
      * 
      */
     protected $estilo;
     
-    public function __toString() {
-        return $this->getNome();
-    }
-    
 
     /**
-     * Set nome
+     * Set observacao
      *
-     * @param string $nome
-     * @return Musica
+     * @param string $observacao
+     * @return MusicaEvento
      */
-    public function setNome($nome)
+    public function setObservacao($observacao)
     {
-        $this->nome = $nome;
+        $this->observacao = $observacao;
 
         return $this;
     }
 
     /**
-     * Get nome
+     * Get observacao
      *
      * @return string 
      */
-    public function getNome()
+    public function getObservacao()
     {
-        return $this->nome;
+        return $this->observacao;
     }
 
     /**
@@ -114,7 +91,7 @@ class Musica extends EntidadeBase {
     }
     
     /**
-     * Get id
+     * Set id
      *
      * @return integer
      */
@@ -129,7 +106,7 @@ class Musica extends EntidadeBase {
      * Set status
      *
      * @param integer $status
-     * @return Musica
+     * @return MusicaEvento
      */
     public function setStatus($status)
     {
@@ -152,7 +129,7 @@ class Musica extends EntidadeBase {
      * Set dataCadastro
      *
      * @param \DateTime $dataCadastro
-     * @return Musica
+     * @return MusicaEvento
      */
     public function setDataCadastro($dataCadastro)
     {
@@ -175,7 +152,7 @@ class Musica extends EntidadeBase {
      * Set ultimaAlteracao
      *
      * @param \DateTime $ultimaAlteracao
-     * @return Musica
+     * @return MusicaEvento
      */
     public function setUltimaAlteracao($ultimaAlteracao)
     {
@@ -195,50 +172,49 @@ class Musica extends EntidadeBase {
     }
 
     /**
-     * Set artista
+     * Set musica
      *
-     * @param Artista $artista
-     * @return Musica
+     * @param \Rep\SiteBundle\Entity\Musica $musica
+     * @return MusicaEvento
      */
-    public function setArtista(Artista $artista = null)
+    public function setMusica(\Rep\SiteBundle\Entity\Musica $musica = null)
     {
-        $this->artista = $artista;
+        $this->musica = $musica;
 
         return $this;
     }
 
     /**
-     * Get artista
+     * Get musica
      *
-     * @return Artista 
+     * @return \Rep\SiteBundle\Entity\Musica 
      */
-    public function getArtista()
+    public function getMusica()
     {
-        return $this->artista;
+        return $this->musica;
     }
 
     /**
-     * Set slug
+     * Set evento
      *
-     * @param string $slug
-     *
-     * @return Musica
+     * @param \Rep\SiteBundle\Entity\Evento $estilo
+     * @return MusicaEvento
      */
-    public function setSlug($slug)
+    public function setEstilo(\Rep\SiteBundle\Entity\Estilo $estilo = null)
     {
-        $this->slug = $slug;
+        $this->estilo = $estilo;
 
         return $this;
     }
 
     /**
-     * Get slug
+     * Get estilo
      *
-     * @return string
+     * @return \Rep\SiteBundle\Entity\Estilo 
      */
-    public function getSlug()
+    public function getEstilo()
     {
-        return $this->slug;
+        return $this->estilo;
     }
 
     /**
@@ -246,7 +222,7 @@ class Musica extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioCadastro
      *
-     * @return Musica
+     * @return MusicaEvento
      */
     public function setUsuarioCadastro(\Rep\SiteBundle\Entity\Usuario $usuarioCadastro = null)
     {
@@ -270,7 +246,7 @@ class Musica extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao
      *
-     * @return Musica
+     * @return MusicaEvento
      */
     public function setUsuarioUltimaAlteracao(\Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao = null)
     {
@@ -287,53 +263,5 @@ class Musica extends EntidadeBase {
     public function getUsuarioUltimaAlteracao()
     {
         return $this->usuarioUltimaAlteracao;
-    }
-
-    /**
-     * Set tom
-     *
-     * @param string $tom
-     *
-     * @return Musica
-     */
-    public function setTom($tom)
-    {
-        $this->tom = $tom;
-
-        return $this;
-    }
-
-    /**
-     * Get tom
-     *
-     * @return string
-     */
-    public function getTom()
-    {
-        return $this->tom;
-    }
-
-    /**
-     * Set estilo
-     *
-     * @param \Rep\SiteBundle\Entity\Estilo $estilo
-     *
-     * @return Musica
-     */
-    public function setEstilo(\Rep\SiteBundle\Entity\Estilo $estilo = null)
-    {
-        $this->estilo = $estilo;
-
-        return $this;
-    }
-
-    /**
-     * Get estilo
-     *
-     * @return \Rep\SiteBundle\Entity\Estilo
-     */
-    public function getEstilo()
-    {
-        return $this->estilo;
     }
 }

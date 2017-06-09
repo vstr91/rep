@@ -3,7 +3,9 @@
 namespace Rep\SiteBundle\Controller;
 
 use Rep\SiteBundle\Form\ArtistaType;
+use Rep\SiteBundle\Form\EstiloType;
 use Rep\SiteBundle\Form\EventoType;
+use Rep\SiteBundle\Form\MusicaProjetoType;
 use Rep\SiteBundle\Form\MusicaType;
 use Rep\SiteBundle\Form\ProjetoType;
 use Rep\SiteBundle\Form\TipoEventoType;
@@ -152,7 +154,7 @@ class PageController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $musicaProjetoType = new \Rep\SiteBundle\Form\MusicaProjetoType();
+        $musicaProjetoType = new MusicaProjetoType();
         $formMusicaProjeto = $this->createForm($musicaProjetoType);
         
         $projeto = $em->getRepository('RepSiteBundle:Projeto')->findOneBy(array('slug' => $projeto));
@@ -174,11 +176,17 @@ class PageController extends Controller
         $musicasProjeto = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjeto($projeto->getSlug(), 0);
         
+        $musicasAtivas = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                ->listarTodasPorProjetoRetornaMusica($projeto->getSlug(), 0);
+        
         $musicas = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorDataExecucaoPorProjeto($projeto->getId());
         
         $musicasProjetoFila = $em->getRepository('RepSiteBundle:MusicaProjeto')
                 ->listarTodasPorProjeto($projeto->getSlug(), 1);
+        
+        $estilos = $em->getRepository('RepSiteBundle:Estilo')
+                ->listarTodosPorProjeto($projeto->getSlug(), 0);
         
         return $this->render('RepSiteBundle:Page:musicas-projetos.html.twig', array(
             'usuario' => $user,
@@ -190,7 +198,29 @@ class PageController extends Controller
             'ensaiosFuturos' => $ensaiosFuturos,
             'showsFuturos' => $showsFuturos,
             'musicas' => $musicas,
+            'musicasAtivas' => $musicasAtivas,
+            'estilos' => $estilos,
             'formMusicaProjeto' => $formMusicaProjeto->createView()
+        ));
+    }
+    
+    public function estilosAction()
+    {
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $estiloType = new EstiloType();
+        $formEstilo = $this->createForm($estiloType);
+        
+        $estilos = $em->getRepository('RepSiteBundle:Estilo')
+                ->listarTodos();
+        
+        return $this->render('RepSiteBundle:Page:estilos.html.twig', array(
+            'usuario' => $user,
+            'estilos' => $estilos,
+            'formEstilo' => $formEstilo->createView()
         ));
     }
     

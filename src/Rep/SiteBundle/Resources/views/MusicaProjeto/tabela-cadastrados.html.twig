@@ -1,24 +1,26 @@
-<table class="table table-hover table-striped text-center">
-    <thead>
-        <tr>
-            <td>Cont.</td>
-            <td>Nome</td>
-            <td>Artista</td>
-            <td>A&ccedil;&otilde;es</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for mus in musicas %}
+<div class="table-responsive">
+    <table class="table table-hover table-striped text-center">
+        <thead>
             <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ mus.musica.nome }}</td>
-                <td>{{ mus.musica.artista.nome }}</td>
-                <td>
-                    <a class="link-editar-musica" href="#{{ mus.id }}">Alterar Status</a> |
-                    <a class="link-remover-musica" href="#{{ mus.musica.id }}">Remover</a> |
-                    <a href="#{{ mus.musica.id }}" class="link-detalhes-musica">Ver Detalhes</a>
-                </td>
+                <td>Cont.</td>
+                <td>Nome</td>
+                <td>Artista</td>
+                <td>A&ccedil;&otilde;es</td>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for mus in musicas %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ mus.musica.nome }}</td>
+                    <td>{{ mus.musica.artista.nome }}</td>
+                    <td>
+                        <a class="link-editar-musica" href="#{{ mus.id }}">Alterar Status</a> |
+                        <a class="link-remover-musica" href="#{{ mus.musica.id }}">Remover</a> |
+                        <a href="#{{ mus.musica.id }}" class="link-detalhes-musica">Ver Detalhes</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

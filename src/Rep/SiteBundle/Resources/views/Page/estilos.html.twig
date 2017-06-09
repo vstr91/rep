@@ -3,23 +3,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">Banco de M&uacute;sicas</h2>
+                <h2 class="text-center">Estilos Musicais</h2>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10">
-                <form name="form-musica" id="form-musica" method="POST" 
-                      action="{{ path('rep_site_musicas_cadastra', {'id_musica': -1}) }}">
-                    {{ form_widget(formMusica) }}
+            <div class="col-md-12">
+                <form name="form-artista" id="form-estilo" method="POST" 
+                      action="{{ path('rep_site_estilos_cadastra', {'id_estilo': -1}) }}">
+                    {{ form_widget(formEstilo) }}
                     <input type="submit" value="Cadastrar" class="btn btn-primary" />
                 </form>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-11">
-                <h3 class="text-center">M&uacute;sicas Cadastradas</h3>
-                {% include 'RepSiteBundle:Musica:tabela-cadastrados.html.twig' 
-                          with {'musicas': musicas} %}
+            <div class="col-md-12">
+                <h3 class="text-center">Estilos Cadastrados</h3>
+                {% include 'RepSiteBundle:Estilo:tabela-cadastrados.html.twig' 
+                          with {'estilos': estilos} %}
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="titulo-modal">Editar M&uacute;sica</h4>
+                    <h4 class="modal-title" id="titulo-modal">Editar Estilo Musical</h4>
                 </div>
                 <div class="modal-body" id="body-edicao">
 
@@ -48,45 +48,21 @@
     <script type="text/javascript">
         $('.link-editar').click(function () {
 
-            $idMusica = $(this).attr('href').replace('#', '');
-
-            $url = '{{ path('rep_site_musicas_form') }}' + "/" + $idMusica;
-
-            $.ajax({
-                type: 'GET',
-                url: $url,
-                success: function (response) {
-                    $('#body-edicao').html(response);
-                    $('#titulo-modal').html("Editar Música");
-                    $('#modal-edicao').modal('show');
-                    $('#btn-editar').show();
-                }
-            });
-
-            return false;
-
-        });
-        
-        $('.link-detalhes-musica').click(function () {
-
             $id = $(this).attr('href').replace('#', '');
 
-            $url = '{{ path('rep_site_musicas_detalhes_por_id') }}' + "/" + $id;
+            $url = '{{ path('rep_site_estilos_form') }}' + "/" + $id;
 
             $.ajax({
                 type: 'GET',
                 url: $url,
                 success: function (response) {
                     $('#body-edicao').html(response);
-                    $('#titulo-modal').html("Detalhes da Música");
                     $('#modal-edicao').modal('show');
-                    $('#btn-editar').hide();
                 }
             });
 
             return false;
 
         });
-        
     </script>
 {% endblock %}

@@ -8,57 +8,39 @@
 
 namespace Rep\SiteBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\OrderBy;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Description of Musica
+ * Description of Estilo
  *
  * @author Almir
  */
 
 /**
- * Musica
+ * Estilo
  *
- * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\MusicaRepository")
- * @ORM\Table(name="musica")
+ * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\EstiloRepository")
+ * @ORM\Table(name="estilo")
  * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity({"nome", "artista"}, message="Já existe uma música com esse título vinculada a esse artista")
  * 
  */
-class Musica extends EntidadeBase {
+class Estilo extends EntidadeBase {
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nome", type="string", length=100)
+     * @ORM\Column(name="nome", type="string", length=100, unique=true)
      * @Assert\NotBlank()
      * @Gedmo\Versioned
      * 
      */
     protected $nome;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Artista", inversedBy="musicas")
-     * @ORM\JoinColumn(name="id_artista", referencedColumnName="id")
-     * @OrderBy({"artista" = "DESC"})
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $artista;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tom", type="string", length=5, nullable=true)
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $tom;
     
     /**
      * @Gedmo\Slug(fields={"nome"})
@@ -67,24 +49,19 @@ class Musica extends EntidadeBase {
     private $slug;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Estilo", inversedBy="musicas")
-     * @ORM\JoinColumn(name="id_estilo", referencedColumnName="id")
-     * @OrderBy({"estilo" = "ASC"})
-     * @Gedmo\Versioned
-     * 
+     * @ORM\OneToMany(targetEntity="Musica", mappedBy="estilo")
      */
-    protected $estilo;
+    private $musicas;
     
     public function __toString() {
         return $this->getNome();
     }
-    
 
     /**
      * Set nome
      *
      * @param string $nome
-     * @return Musica
+     * @return TipoEvento
      */
     public function setNome($nome)
     {
@@ -112,24 +89,12 @@ class Musica extends EntidadeBase {
     {
         return $this->id;
     }
-    
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        
-        return $this;
-    }
 
     /**
      * Set status
      *
      * @param integer $status
-     * @return Musica
+     * @return TipoEvento
      */
     public function setStatus($status)
     {
@@ -152,7 +117,7 @@ class Musica extends EntidadeBase {
      * Set dataCadastro
      *
      * @param \DateTime $dataCadastro
-     * @return Musica
+     * @return TipoEvento
      */
     public function setDataCadastro($dataCadastro)
     {
@@ -175,7 +140,7 @@ class Musica extends EntidadeBase {
      * Set ultimaAlteracao
      *
      * @param \DateTime $ultimaAlteracao
-     * @return Musica
+     * @return TipoEvento
      */
     public function setUltimaAlteracao($ultimaAlteracao)
     {
@@ -195,34 +160,11 @@ class Musica extends EntidadeBase {
     }
 
     /**
-     * Set artista
-     *
-     * @param Artista $artista
-     * @return Musica
-     */
-    public function setArtista(Artista $artista = null)
-    {
-        $this->artista = $artista;
-
-        return $this;
-    }
-
-    /**
-     * Get artista
-     *
-     * @return Artista 
-     */
-    public function getArtista()
-    {
-        return $this->artista;
-    }
-
-    /**
      * Set slug
      *
      * @param string $slug
      *
-     * @return Musica
+     * @return TipoEvento
      */
     public function setSlug($slug)
     {
@@ -246,7 +188,7 @@ class Musica extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioCadastro
      *
-     * @return Musica
+     * @return TipoEvento
      */
     public function setUsuarioCadastro(\Rep\SiteBundle\Entity\Usuario $usuarioCadastro = null)
     {
@@ -270,7 +212,7 @@ class Musica extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao
      *
-     * @return Musica
+     * @return TipoEvento
      */
     public function setUsuarioUltimaAlteracao(\Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao = null)
     {
@@ -288,52 +230,45 @@ class Musica extends EntidadeBase {
     {
         return $this->usuarioUltimaAlteracao;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->musicas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * Set tom
+     * Add musica
      *
-     * @param string $tom
+     * @param \Rep\SiteBundle\Entity\Musica $musica
      *
-     * @return Musica
+     * @return Estilo
      */
-    public function setTom($tom)
+    public function addMusica(\Rep\SiteBundle\Entity\Musica $musica)
     {
-        $this->tom = $tom;
+        $this->musicas[] = $musica;
 
         return $this;
     }
 
     /**
-     * Get tom
+     * Remove musica
      *
-     * @return string
+     * @param \Rep\SiteBundle\Entity\Musica $musica
      */
-    public function getTom()
+    public function removeMusica(\Rep\SiteBundle\Entity\Musica $musica)
     {
-        return $this->tom;
+        $this->musicas->removeElement($musica);
     }
 
     /**
-     * Set estilo
+     * Get musicas
      *
-     * @param \Rep\SiteBundle\Entity\Estilo $estilo
-     *
-     * @return Musica
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setEstilo(\Rep\SiteBundle\Entity\Estilo $estilo = null)
+    public function getMusicas()
     {
-        $this->estilo = $estilo;
-
-        return $this;
-    }
-
-    /**
-     * Get estilo
-     *
-     * @return \Rep\SiteBundle\Entity\Estilo
-     */
-    public function getEstilo()
-    {
-        return $this->estilo;
+        return $this->musicas;
     }
 }

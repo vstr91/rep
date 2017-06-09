@@ -7,11 +7,11 @@
             </tr>
         </thead>
         <tbody>
-            {% for tipoEvento in tiposEvento %}
+            {% for estilo in estilos %}
                 <tr>
-                    <td>{{ tipoEvento.nome }}</td>
+                    <td>{{ estilo.nome }}</td>
                     <td>
-                        <a class="link-editar" href="#{{ tipoEvento.id }}">Editar</a>
+                        <a class="link-editar" href="#{{ estilo.id }}">Editar</a>
                     </td>
                 </tr>
             {% endfor %}
