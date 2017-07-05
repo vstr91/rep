@@ -133,7 +133,7 @@ class MusicaProjetoRepository extends \Doctrine\ORM\EntityRepository
     
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('me')
-                ->select('me.id', 'me.observacao', 'm.id AS musica', 'e.id AS projeto', 'me.status', 
+                ->select('me.id', 'm.id AS musica', 'e.id AS projeto', 'me.status', 
                         'me.ultimaAlteracao AS ultima_alteracao')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = me.musica")
@@ -159,6 +159,7 @@ class MusicaProjetoRepository extends \Doctrine\ORM\EntityRepository
                           evento e ON e.id = me.id_evento
                 WHERE e.id = me.id_evento
                 AND   me.id_musica = m.id 
+                AND   e.id_projeto = '".$id_projeto."'
                 AND   me.`status` <> 2
                 AND   e.data <= NOW()
         ) AS 'execucao'

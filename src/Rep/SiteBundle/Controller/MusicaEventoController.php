@@ -166,6 +166,14 @@ class MusicaEventoController extends Controller {
                 $em->persist($umaMusica);
             }
             
+            $musicaProjeto = $em->getRepository('RepSiteBundle:MusicaProjeto')
+                    ->findOneBy(array('musica' => $umaMusica, 'projeto' => $evento->getProjeto()));
+            
+            if($musicaProjeto->getStatus() != 0){
+                $musicaProjeto->setStatus(0);
+                $em->persist($musicaProjeto);
+            }
+            
             $total++;
             
         }

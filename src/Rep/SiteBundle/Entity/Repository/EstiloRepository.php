@@ -19,6 +19,24 @@ class EstiloRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('e')
+//                ->select('b.id, b.nome, b.status, l.id AS local')
+                ->select('e.id, e.nome, e.status, e.ultimaAlteracao AS ultima_alteracao, e.slug')
+                ->distinct()
+//                ->leftJoin("CircularSiteBundle:Local", "l", "WITH", "l.id = b.local")
+                ->where("e.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('e.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
     public function listarTodosPorProjeto($slug, $status){
         
         if($status > -1){

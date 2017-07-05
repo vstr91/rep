@@ -1,0 +1,4 @@
+CREATE TABLE tempo_musica_evento (id VARCHAR(255) NOT NULL, id_musica_evento VARCHAR(255) DEFAULT NULL, id_usuario_cadastro INT DEFAULT NULL, id_usuario_ultima_alteracao INT DEFAULT NULL, tempo TIME NOT NULL, status INT NOT NULL, data_cadastro DATETIME NOT NULL, ultima_alteracao DATETIME NOT NULL, INDEX IDX_74F90B2C542EEED7 (id_musica_evento), INDEX IDX_74F90B2CC08D23DA (id_usuario_cadastro), INDEX IDX_74F90B2C56D91935 (id_usuario_ultima_alteracao), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE tempo_musica_evento ADD CONSTRAINT FK_74F90B2C542EEED7 FOREIGN KEY (id_musica_evento) REFERENCES musica_evento (id);
+ALTER TABLE tempo_musica_evento ADD CONSTRAINT FK_74F90B2CC08D23DA FOREIGN KEY (id_usuario_cadastro) REFERENCES usuario (id);
+ALTER TABLE tempo_musica_evento ADD CONSTRAINT FK_74F90B2C56D91935 FOREIGN KEY (id_usuario_ultima_alteracao) REFERENCES usuario (id);

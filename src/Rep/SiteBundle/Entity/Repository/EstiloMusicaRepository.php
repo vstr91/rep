@@ -10,4 +10,24 @@ namespace Rep\SiteBundle\Entity\Repository;
  */
 class EstiloMusicaRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    public function listarTodosREST($limite = null, $dataUltimoAcesso){
+        $qb = $this->createQueryBuilder('em')
+//                ->select('b.id, b.nome, b.status, l.id AS local')
+                ->select('em.id, em.observacao, em.status, em.ultimaAlteracao AS ultima_alteracao, e.id AS estilo, m.id AS musica')
+                ->distinct()
+                ->leftJoin("RepSiteBundle:Estilo", "e", "WITH", "e.id = em.estilo")
+                ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = em.musica")
+                ->where("em.ultimaAlteracao > :ultimaAlteracao")
+                ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
+                ->addOrderBy('em.id');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }

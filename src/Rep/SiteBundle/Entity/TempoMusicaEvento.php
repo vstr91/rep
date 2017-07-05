@@ -16,75 +16,68 @@ use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Description of TipoEvento
+ * Description of TempoMusicaEvento
  *
  * @author Almir
  */
 
 /**
- * TipoEvento
+ * Musica
  *
- * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\TipoEventoRepository")
- * @ORM\Table(name="tipo_evento")
+ * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\TempoMusicaEventoRepository")
+ * @ORM\Table(name="tempo_musica_evento")
  * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * 
  */
-class TipoEvento extends EntidadeBase {
+class TempoMusicaEvento extends EntidadeBase {
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nome", type="string", length=100, unique=true)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="tempo", type="time")
+     * 
+     */
+    protected $tempo;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="MusicaEvento")
+     * @ORM\JoinColumn(name="id_musica_evento", referencedColumnName="id")
      * @Gedmo\Versioned
      * 
      */
-    protected $nome;
+    protected $musicaEvento;
     
-    /**
-     * @Gedmo\Slug(fields={"nome"})
-     * @ORM\Column(unique=false)
-     */
-    private $slug;
-    
-    /**
-     * @ORM\Column(name="cor", type="string", length=100, unique=true)
-     * @Assert\NotBlank()
-     */
-    private $cor;
-    
-    public function __toString() {
-        return $this->getNome();
-    }
+
 
     /**
-     * Set nome
+     * Set tempo
      *
-     * @param string $nome
-     * @return TipoEvento
+     * @param \DateTime $tempo
+     *
+     * @return TempoMusicaEvento
      */
-    public function setNome($nome)
+    public function setTempo($tempo)
     {
-        $this->nome = $nome;
+        $this->tempo = $tempo;
 
         return $this;
     }
 
     /**
-     * Get nome
+     * Get tempo
      *
-     * @return string 
+     * @return \DateTime
      */
-    public function getNome()
+    public function getTempo()
     {
-        return $this->nome;
+        return $this->tempo;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return string
      */
     public function getId()
     {
@@ -107,7 +100,8 @@ class TipoEvento extends EntidadeBase {
      * Set status
      *
      * @param integer $status
-     * @return TipoEvento
+     *
+     * @return TempoMusicaEvento
      */
     public function setStatus($status)
     {
@@ -119,7 +113,7 @@ class TipoEvento extends EntidadeBase {
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -130,7 +124,8 @@ class TipoEvento extends EntidadeBase {
      * Set dataCadastro
      *
      * @param \DateTime $dataCadastro
-     * @return TipoEvento
+     *
+     * @return TempoMusicaEvento
      */
     public function setDataCadastro($dataCadastro)
     {
@@ -142,7 +137,7 @@ class TipoEvento extends EntidadeBase {
     /**
      * Get dataCadastro
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDataCadastro()
     {
@@ -153,7 +148,8 @@ class TipoEvento extends EntidadeBase {
      * Set ultimaAlteracao
      *
      * @param \DateTime $ultimaAlteracao
-     * @return TipoEvento
+     *
+     * @return TempoMusicaEvento
      */
     public function setUltimaAlteracao($ultimaAlteracao)
     {
@@ -165,7 +161,7 @@ class TipoEvento extends EntidadeBase {
     /**
      * Get ultimaAlteracao
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUltimaAlteracao()
     {
@@ -173,51 +169,27 @@ class TipoEvento extends EntidadeBase {
     }
 
     /**
-     * Set slug
+     * Set musicaEvento
      *
-     * @param string $slug
+     * @param \Rep\SiteBundle\Entity\MusicaEvento $musicaEvento
      *
-     * @return TipoEvento
+     * @return TempoMusicaEvento
      */
-    public function setSlug($slug)
+    public function setMusicaEvento(\Rep\SiteBundle\Entity\MusicaEvento $musicaEvento = null)
     {
-        $this->slug = $slug;
+        $this->musicaEvento = $musicaEvento;
 
         return $this;
     }
 
     /**
-     * Get slug
+     * Get musicaEvento
      *
-     * @return string
+     * @return \Rep\SiteBundle\Entity\MusicaEvento
      */
-    public function getSlug()
+    public function getMusicaEvento()
     {
-        return $this->slug;
-    }
-
-    /**
-     * Set cor
-     *
-     * @param string $cor
-     *
-     * @return TipoEvento
-     */
-    public function setCor($cor)
-    {
-        $this->cor = $cor;
-
-        return $this;
-    }
-
-    /**
-     * Get cor
-     *
-     * @return string
-     */
-    public function getCor()
-    {
-        return $this->cor;
+        return $this->musicaEvento;
     }
 
     /**
@@ -225,7 +197,7 @@ class TipoEvento extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioCadastro
      *
-     * @return TipoEvento
+     * @return TempoMusicaEvento
      */
     public function setUsuarioCadastro(\Rep\SiteBundle\Entity\Usuario $usuarioCadastro = null)
     {
@@ -249,7 +221,7 @@ class TipoEvento extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao
      *
-     * @return TipoEvento
+     * @return TempoMusicaEvento
      */
     public function setUsuarioUltimaAlteracao(\Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao = null)
     {

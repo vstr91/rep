@@ -59,7 +59,7 @@ class MusicaEventoRepository extends EntityRepository
                 AND  mp.status IN (0,1)
                 AND  m.id NOT IN (SELECT m.id FROM musica_evento me INNER JOIN 
                                                    musica m ON m.id = me.id_musica 
-                                              WHERE me.id_evento = '".$id_evento."' AND me.status = 0)";
+                                              WHERE me.id_evento = '".$id_evento."' AND me.status = 0) ORDER BY m.nome";
         
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();
