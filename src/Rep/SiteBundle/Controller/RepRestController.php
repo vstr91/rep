@@ -496,7 +496,7 @@ class RepRestController extends FOSRestController {
             }
             
             // TEMPOS MUSICAS EVENTOS
-            /*
+            ///*
             $temposMusicasEventos = $dados['tempos_musicas_eventos'];
             $total = count($temposMusicasEventos);
             //$processadas = array();
@@ -535,7 +535,7 @@ class RepRestController extends FOSRestController {
                 }
                 
             }
-            */
+            //*/
             $em->flush();
             
             $view = View::create(
