@@ -34,6 +34,11 @@ class MusicaType extends AbstractType
                 },
                 'empty_value' => false
             ))
+            ->add('letra', null, array(
+                'attr' => array(
+                    'rows' => 15
+                )
+            ))
         ;
     }
     

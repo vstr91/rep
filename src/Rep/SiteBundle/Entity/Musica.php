@@ -75,6 +75,14 @@ class Musica extends EntidadeBase {
      */
     protected $estilo;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="letra", type="text")
+     * 
+     */
+    protected $letra;
+    
     public function __toString() {
         return $this->getNome();
     }
@@ -335,5 +343,29 @@ class Musica extends EntidadeBase {
     public function getEstilo()
     {
         return $this->estilo;
+    }
+
+    /**
+     * Set letra
+     *
+     * @param string $letra
+     *
+     * @return Musica
+     */
+    public function setLetra($letra)
+    {
+        $this->letra = $letra;
+
+        return $this;
+    }
+
+    /**
+     * Get letra
+     *
+     * @return string
+     */
+    public function getLetra()
+    {
+        return $this->letra;
     }
 }

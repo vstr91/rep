@@ -338,6 +338,8 @@ class RepRestController extends FOSRestController {
                 $umMusica->setStatus($musicas[$i]['status']);
                 $umMusica->setSlug(NULL);
 
+                $umMusica->setLetra($musicas[$i]['letra']);
+                
                 $em->persist($umMusica);
                 
                 if(!$existe){
