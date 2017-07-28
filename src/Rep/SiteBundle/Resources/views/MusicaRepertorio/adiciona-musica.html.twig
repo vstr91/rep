@@ -1,0 +1,32 @@
+<div id="caixa-lista-musicas">
+    <form id="form-adiciona-musica-repertorio" method="POST" 
+          action="{{ path('rep_site_cadastra_musicas_repertorio', {'id_repertorio': repertorio.id}) }}">
+        {% for musica in musicas %}
+            <label for="{{ musica.id }}" class="btn btn-block btn-brand" style="text-align: left">
+                <input type="checkbox" value="{{ musica.id }}" name="musica[]" id="{{ musica.id }}" /> 
+                {{ musica.nome }}
+            </label>
+        {% endfor %}
+        {#<input type="submit" value="Cadastrar" />#}
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#form-adiciona-musica-repertorio').submit(function () {
+
+            $('#modal-load').modal('show');
+
+            $(this).ajaxSubmit({
+                success: function (response) {
+                    carregarTabela();
+                    $('#modal-load').modal('hide');
+                }
+            });
+
+            return false;
+
+        });
+
+    });
+</script>

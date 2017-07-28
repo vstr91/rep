@@ -24,7 +24,10 @@
             <div class="col-md-12">
                 <ul class="nav nav-tabs nav-justified" role="tablist">
                     <li class="active">
-                        <a href="#repertorio" data-toggle="tab">Repert&oacute;rio</a>
+                        <a href="#lista-musicas" data-toggle="tab">M&uacute;sicas Cadastradas</a>
+                    </li>
+                    <li>
+                        <a href="#repertorios" data-toggle="tab">Repert&oacute;rios</a>
                     </li>
                     <li>
                         <a href="#ensaios-futuros" data-toggle="tab">Pr&oacute;ximos Ensaios</a>
@@ -45,7 +48,7 @@
 
                 <div class="tab-content">
 
-                    <div class="tab-pane fade in active" id="repertorio">
+                    <div class="tab-pane fade in active" id="lista-musicas">
                         <br />
                         <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
                         <h3 class="text-center">M&uacute;sicas Ativas</h3>
@@ -62,6 +65,35 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                                
+                    <div class="tab-pane fade" id="repertorios">
+                        <br />
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <td>Nome</td>
+                                        <td>A&ccedil;&otilde;es</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for repertorio in repertorios %}
+                                        <tr>
+                                            <td>{{ repertorio.nome }}</td>
+                                            <td>
+                                                <a href="#{{ repertorio.id }}" 
+                                                   class="link-editar-repertorio">Editar</a> |
+                                                <a href="{{ path('rep_site_musicas_repertorio', {'slug': repertorio.slug}) }}" id="link-gerencia-repertorio">Gerenciar Repert&oacute;rio</a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                    <td colspan="2">Nenhum repert&oacute;rio cadastrado.</td>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <br />
+                        <a href="#" class="btn btn-primary" id="btn-adiciona-repertorio">Adicionar Repert&oacute;rio</a>
+                        
                     </div>
 
                     <div class="tab-pane fade" id="ensaios">
@@ -433,6 +465,24 @@
             </div>
         </div>
     </div>
+                        
+    <div class="modal fade" id="modal-repertorio">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="titulo-modal-repertorio">Adicionar Repert&oacute;rio</h4>
+                </div>
+                <div class="modal-body" id="body-repertorio">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="btn-cadastrar-repertorio">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
     {{ parent() }}
@@ -479,6 +529,24 @@
                 return false;
 
             });
+            
+            $('#btn-adiciona-repertorio').click(function () {
+
+                $url = '{{ path('rep_site_repertorios_form', {'id_projeto': projeto.id, 'id_repertorio': -1}) }}';
+                
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-repertorio').html(response);
+                        $('#btn-cadastrar-repertorio').show();
+                        $('#modal-repertorio').modal('show');
+                    }
+                });
+
+                return false;
+
+            });
 
             $(document).on('click', '.link-remover-musica', function () {
 
@@ -514,6 +582,26 @@
                         $('#body-edicao').html(response);
                         $('#btn-editar-musica').show();
                         $('#modal-edicao').modal('show');
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $(document).on('click', '.link-editar-repertorio', function () {
+
+                $id = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_repertorios_form') }}' + "/{{ projeto.id }}/" + $id;
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-repertorio').html(response);
+                        $('#titulo-modal-repertorio').html("Editar Repert&oacute;rio");
+                        $('#modal-repertorio').modal('show');
                     }
                 });
 

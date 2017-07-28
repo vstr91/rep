@@ -237,3 +237,53 @@ rep_site_estilos_cadastra_novo:
         _method: POST
     
 ########################################################################
+
+rep_site_repertorios:
+    path:     /repertorios
+    defaults: { _controller: RepSiteBundle:Page:repertorios }
+    
+rep_site_repertorios_cadastra:
+    pattern:     /repertorios/cadastra/{id_projeto}/{id_repertorio}
+    defaults: { _controller: RepSiteBundle:Repertorio:cadastrar, id_projeto: -1, id_repertorio: -1 }
+    requirements:
+        _method: POST
+
+rep_site_repertorios_form:
+    pattern: /repertorios-teste/form/{id_projeto}/{id_repertorio}
+    defaults: {_controller: RepSiteBundle:Repertorio:form, id_projeto: -1, id_repertorio: -1}
+    
+########################################################################
+
+rep_site_musicas_repertorio:
+    path:     /musicas-repertorio/{slug}
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:musicasRepertorio, slug: -1 }
+
+rep_site_atualiza_musicas_repertorio:
+    path:     /musicas-repertorio/{id_repertorio}/atualiza
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:atualizaMusicasRepertorio, id_repertorio: -1 }
+    
+rep_site_form_cadastra_musicas_repertorio:
+    path:     /musicas-repertorio/{id_repertorio}/cadastra/form
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:formCadastraMusica, id_repertorio: -1 }
+    
+rep_site_cadastra_musicas_repertorio:
+    path:     /musicas-repertorio/{id_repertorio}/cadastra
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:cadastraMusica, id_repertorio: -1 }
+    
+rep_site_tabela_musicas_repertorio:
+    path:     /musicas-repertorio/{id_repertorio}/repertorio
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:carregaRepertorio, id_repertorio: -1 }
+    
+rep_site_remove_musica_repertorio:
+    path:     /musicas-repertorio/{id_repertorio}/repertorio/remove/{id_musica}
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:removeMusicaRepertorio, id_repertorio: -1, id_musica: -1 }
+    
+rep_site_form_cadastra_ordem_musicas_repertorio:
+    path:     /musicas-repertorio/{id_repertorio}/repertorio/ordem
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:ordemMusicaRepertorio, id_repertorio: -1 }
+    
+rep_site_gera_pdf_repertorio:
+    path:     /musicas-repertorio/{slug}/repertorio/pdf
+    defaults: { _controller: RepSiteBundle:MusicaRepertorio:geraPdf, slug: '' }
+
+########################################################################

@@ -94,12 +94,16 @@ class RepRestController extends FOSRestController {
             $temposMusicasEventos = $em->getRepository('RepSiteBundle:TempoMusicaEvento')
                     ->listarTodosREST(null, $data);
             
+            $repertorios = $em->getRepository('RepSiteBundle:Repertorio')
+                    ->listarTodosREST(null, $data);
+            
 //            $log = $em->getRepository('RepSiteBundle:LogEntry')
 //                    ->listarTodosREST(null, $data);
 
             $totalRegistros = count($artistas) + count($tiposEvento) + count($musicas) 
                     + count($eventos) + count($musicasEventos) + count($comentariosEventos)
-                    + count($estilos) + count($estilosMusicas) + count($projetos) + count($musicasProjetos) + count($temposMusicasEventos);
+                    + count($estilos) + count($estilosMusicas) + count($projetos) + count($musicasProjetos) + count($temposMusicasEventos) 
+                    + count($repertorios);
             
             $view = View::create(
                     array(
@@ -114,7 +118,8 @@ class RepRestController extends FOSRestController {
                         "estilosMusicas" => $estilosMusicas,
                         "projetos" => $projetos,
                         "musicas_projetos" => $musicasProjetos,
-                        "tempos_musicas_eventos" => $temposMusicasEventos//,
+                        "tempos_musicas_eventos" => $temposMusicasEventos,
+                        "repertorios" => $repertorios
                         //"log" => $log
                     ), 200, array('totalRegistros' => $totalRegistros))->setTemplateVar("u");
             
@@ -538,6 +543,54 @@ class RepRestController extends FOSRestController {
                 
             }
             //*/
+            
+            // REPERTORIOS
+            
+            $repertorios = $dados['repertorios'];
+            $total = count($repertorios);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umRepertorio = null;
+                
+                $umRepertorio = $em->getRepository('RepSiteBundle:Repertorio')
+                        ->findOneBy(array('id' => $repertorios[$i]['id']));
+                
+                if($umRepertorio == null){
+                    $umRepertorio = new \Rep\SiteBundle\Entity\Repertorio();
+                    $umRepertorio->setId($repertorios[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umRepertorio->setNome($repertorios[$i]['nome']);
+                $umRepertorio->setStatus($repertorios[$i]['status']);
+                $umRepertorio->setSlug(NULL);
+                
+                $umProjeto = new Projeto();
+                $umProjeto = $em->getRepository('RepSiteBundle:Projeto')
+                        ->findOneBy(array('id' => $repertorios[$i]['projeto']));
+                
+                $umRepertorio->setProjeto($umProjeto);
+                
+                //$umArtista->setDataCadastro($artistas[$i]['data_cadastro']);
+
+                //die(var_dump($umArtista));
+                
+                $em->persist($umRepertorio);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umRepertorio));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umRepertorio->setId($repertorios[$i]['id']);
+                    $em->flush();
+                }
+                
+            }
+            
             $em->flush();
             
             $view = View::create(

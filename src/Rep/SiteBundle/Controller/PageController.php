@@ -188,6 +188,9 @@ class PageController extends Controller
         $estilos = $em->getRepository('RepSiteBundle:Estilo')
                 ->listarTodosPorProjeto($projeto->getSlug(), 0);
         
+        $repertorios = $em->getRepository('RepSiteBundle:Repertorio')
+                ->listarTodosPorProjeto($projeto->getId());
+        
         return $this->render('RepSiteBundle:Page:musicas-projetos.html.twig', array(
             'usuario' => $user,
             'projeto' => $projeto,
@@ -200,6 +203,7 @@ class PageController extends Controller
             'musicas' => $musicas,
             'musicasAtivas' => $musicasAtivas,
             'estilos' => $estilos,
+            'repertorios' => $repertorios,
             'formMusicaProjeto' => $formMusicaProjeto->createView()
         ));
     }

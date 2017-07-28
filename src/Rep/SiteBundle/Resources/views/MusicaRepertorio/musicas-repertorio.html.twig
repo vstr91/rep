@@ -1,0 +1,161 @@
+{% extends "::base.html.twig" %}
+{% block principal %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">{{ repertorio.nome }}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="coluna-repertorio">
+                <h3 class="text-center">M&uacute;sicas<br /><small>Arraste para reordenar</small></h3>
+                <div id="caixa-repertorio">
+                    {% include 'RepSiteBundle:Musica:lista-cadastrados.html.twig' 
+                          with {'musicas': musicasRepertorio} %}
+                </div>
+{#                <a href="#" class="btn btn-brand-accent" id="btn-divisor">Adicionar Divisor de Bloco</a>&nbsp;&nbsp;#}
+                <a href="{{ referer }}" class="btn btn-default" id="btn-voltar">Voltar</a>&nbsp;&nbsp;
+                <a href="#" class="btn btn-primary" id="btn-adiciona-musica">Adicionar M&uacute;sica</a>
+                <a href="{{ path('rep_site_gera_pdf_repertorio', {'slug': repertorio.slug}) }}" 
+                   class="btn btn-success right" id="btn-pdf" target="_blank">Gerar PDF</a><br /><br /><br /><br />
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-edicao">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Adicionar M&uacute;sica</h4>
+                </div>
+                <div class="modal-body" id="body-edicao">
+
+                </div>
+                <div class="modal-footer">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="btn-editar">Salvar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <div class="modal fade" id="modal-load">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="content-load">
+                        <div class="modal-inner text-center">
+                            <img src="{{ asset('imagens/load.gif') }}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script src="{{ asset('js/Sortable.min.js') }}"></script>
+    <script type="text/javascript">
+
+        function carregarTabela() {
+            $url = '{{ path('rep_site_tabela_musicas_repertorio', {'id_repertorio': repertorio.id}) }}';
+
+            $.ajax({
+                type: 'GET',
+                url: $url,
+                success: function (response) {
+                    $('#caixa-repertorio').html(response);
+                    criarSort();
+                }
+            });
+        }
+        
+        function criarSort(){
+            var el = document.getElementById('body-musicas-evento');
+            var sortable = Sortable.create(el, {
+                draggable: 'tr',
+                onEnd: function (evt) {
+                    
+                    $('.index-musica').each(function(i, obj) {
+                        $(obj).html(i+1);
+                        
+                        $umaOrdem  = {
+                            'id': $(obj).data('id'),
+                            'ordem': i+1
+                        };
+                        
+                        $ordem.push($umaOrdem);
+                        
+                    });
+                    
+                    $url = '{{ path('rep_site_form_cadastra_ordem_musicas_repertorio', {'id_repertorio': repertorio.id}) }}';
+
+                    $.ajax({
+                        type: 'POST',
+                        data: {
+                            'ordem': $ordem
+                        },
+                        url: $url,
+                        success: function (response) {
+
+                        }
+                    });
+                    
+                }
+            });
+        }
+
+        $ordem = [];
+
+        $(document).ready(function () {
+            
+            criarSort();
+            
+            $('#btn-adiciona-musica').click(function () {
+
+                $url = '{{ path('rep_site_form_cadastra_musicas_repertorio', {'id_repertorio': repertorio.id}) }}';
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#body-edicao').html(response);
+                        $('#btn-editar').show();
+                        $('#modal-edicao').modal('show');
+                    }
+                });
+
+                return false;
+
+            });
+
+            $(document).on('click', '.link-remover-musica', function(){
+
+                $id = $(this).attr('href').replace('#', '');
+
+                $url = '{{ path('rep_site_remove_musica_repertorio', {'id_repertorio': repertorio.id}) }}/' + $id;
+
+                $('#modal-load').modal('show');
+
+                $.ajax({
+                    type: 'GET',
+                    url: $url,
+                    success: function (response) {
+                        $('#modal-load').modal('hide');
+                        carregarTabela();
+                    }
+                });
+
+                return false;
+
+            });
+            
+            $('#btn-editar').click(function(){
+                $('#form-adiciona-musica-repertorio').submit();
+                $('#modal-edicao').modal('hide');
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,18 @@
+<div class="text-center conectadas tile-wrap" id="lista-cadastradas-repertorio">
+
+    {% for musicaEv in musicas %}
+        <div class="tile tile-collapse musicas-evento">
+            <div data-toggle="tile" data-target="#{{ musicaEv.musica.id }}">
+                <div class="tile-inner">
+                    <span class="id-musica">{{ musicaEv.musica.id }}</span>{{ musicaEv.musica.nome }} 
+                    ({{ musicaEv.musica.artista.nome }})
+                </div>
+            </div>
+            <div id="{{ musicaEv.musica.id }}" class="tile-active-show collapse">
+                <p><b>Observa&ccedil;&otilde;es</b></p>
+                <textarea type="text" name="obs[]" id="obs[]" class="observacao-musica" rows="5">{{ musicaEv.observacao }}</textarea>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>

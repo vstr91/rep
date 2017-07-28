@@ -1,0 +1,27 @@
+<table class="table table-hover table-striped text-center">
+    <thead>
+        <tr>
+            <td>Nome</td>
+            <td>Status</td>
+            <td>A&ccedil;&otilde;es</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for repertorio in repertorios %}
+            <tr>
+                <td>{{ repertorio.nome }}</td>
+                <td>
+                    {% if repertorio.status == 0 %}
+                        Ativo
+                    {% else %}
+                        Inativo
+                    {% endif %}
+                </td>
+                <td>
+                    <a class="link-editar-repertorio" href="#{{ repertorio.id }}">Editar</a><br/>
+                    <a class="link-ver-repertorio" href="{{ path('rep_site_musicas_repertorio', {'slug': repertorio.slug}) }}">Gerenciar Repert&oacute;rio</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
