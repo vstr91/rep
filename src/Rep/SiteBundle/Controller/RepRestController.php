@@ -21,7 +21,10 @@ use Rep\SiteBundle\Entity\MCrypt;
 use Rep\SiteBundle\Entity\Musica;
 use Rep\SiteBundle\Entity\MusicaEvento;
 use Rep\SiteBundle\Entity\MusicaProjeto;
+use Rep\SiteBundle\Entity\MusicaRepertorio;
 use Rep\SiteBundle\Entity\Projeto;
+use Rep\SiteBundle\Entity\Repertorio;
+use Rep\SiteBundle\Entity\TempoMusicaEvento;
 use Rep\SiteBundle\Entity\TipoEvento;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -97,13 +100,16 @@ class RepRestController extends FOSRestController {
             $repertorios = $em->getRepository('RepSiteBundle:Repertorio')
                     ->listarTodosREST(null, $data);
             
+            $musicasRepertorios = $em->getRepository('RepSiteBundle:MusicaRepertorio')
+                    ->listarTodosREST(null, $data);
+            
 //            $log = $em->getRepository('RepSiteBundle:LogEntry')
 //                    ->listarTodosREST(null, $data);
 
             $totalRegistros = count($artistas) + count($tiposEvento) + count($musicas) 
                     + count($eventos) + count($musicasEventos) + count($comentariosEventos)
                     + count($estilos) + count($estilosMusicas) + count($projetos) + count($musicasProjetos) + count($temposMusicasEventos) 
-                    + count($repertorios);
+                    + count($repertorios) + count($musicasRepertorios);
             
             $view = View::create(
                     array(
@@ -119,7 +125,8 @@ class RepRestController extends FOSRestController {
                         "projetos" => $projetos,
                         "musicas_projetos" => $musicasProjetos,
                         "tempos_musicas_eventos" => $temposMusicasEventos,
-                        "repertorios" => $repertorios
+                        "repertorios" => $repertorios,
+                        "musicas_repertorios" => $musicasRepertorios
                         //"log" => $log
                     ), 200, array('totalRegistros' => $totalRegistros))->setTemplateVar("u");
             
@@ -517,7 +524,7 @@ class RepRestController extends FOSRestController {
                         ->findOneBy(array('id' => $temposMusicasEventos[$i]['id']));
                 
                 if($umTempoMusicaEvento == null){
-                    $umTempoMusicaEvento = new \Rep\SiteBundle\Entity\TempoMusicaEvento();
+                    $umTempoMusicaEvento = new TempoMusicaEvento();
                     $umTempoMusicaEvento->setId($temposMusicasEventos[$i]['id']);
                 } else{
                     $existe = true;
@@ -559,7 +566,7 @@ class RepRestController extends FOSRestController {
                         ->findOneBy(array('id' => $repertorios[$i]['id']));
                 
                 if($umRepertorio == null){
-                    $umRepertorio = new \Rep\SiteBundle\Entity\Repertorio();
+                    $umRepertorio = new Repertorio();
                     $umRepertorio->setId($repertorios[$i]['id']);
                 } else{
                     $existe = true;
@@ -586,6 +593,54 @@ class RepRestController extends FOSRestController {
                     $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
                     $metadata->setIdGenerator(new AssignedGenerator());
                     $umRepertorio->setId($repertorios[$i]['id']);
+                    $em->flush();
+                }
+                
+            }
+            
+            // MUSICAS REPERTORIOS
+            
+            $musicasRepertorios = $dados['musicas_repertorios'];
+            $total = count($musicasRepertorios);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umMusicaRepertorio = null;
+                
+                $umMusicaRepertorio = $em->getRepository('RepSiteBundle:MusicaRepertorio')
+                        ->findOneBy(array('id' => $musicasRepertorios[$i]['id']));
+                
+                if($umMusicaRepertorio == null){
+                    $umMusicaRepertorio = new MusicaRepertorio();
+                    $umMusicaRepertorio->setId($musicasRepertorios[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umMusicaRepertorio->setOrdem($musicasRepertorios[$i]['ordem']);
+                $umMusicaRepertorio->setStatus($musicasRepertorios[$i]['status']);
+                
+                $umMusica = new Musica();
+                $umMusica = $em->getRepository('RepSiteBundle:Musica')
+                        ->findOneBy(array('id' => $musicasRepertorios[$i]['musica']));
+                
+                $umMusicaRepertorio->setMusica($umMusica);
+                
+                $umRepertorio = new Repertorio();
+                $umRepertorio = $em->getRepository('RepSiteBundle:Repertorio')
+                        ->findOneBy(array('id' => $musicasRepertorios[$i]['repertorio']));
+                
+                $umMusicaRepertorio->setRepertorio($umRepertorio);
+                
+                $em->persist($umMusicaRepertorio);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umMusicaRepertorio));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umMusicaRepertorio->setId($musicasRepertorios[$i]['id']);
                     $em->flush();
                 }
                 

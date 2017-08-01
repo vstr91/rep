@@ -118,7 +118,7 @@ class MusicaRepertorioRepository extends EntityRepository
                         'mr.ultimaAlteracao AS ultima_alteracao', 'mr.ordem')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = mr.musica")
-                ->leftJoin("RepSiteBundle:Repertorio", "r", "WITH", "e.id = mr.repertorio")
+                ->leftJoin("RepSiteBundle:Repertorio", "r", "WITH", "r.id = mr.repertorio")
                 ->where("mr.ultimaAlteracao > :ultimaAlteracao")
                 ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
                 ->addOrderBy('mr.id');
