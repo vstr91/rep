@@ -39,6 +39,11 @@ class MusicaType extends AbstractType
                     'rows' => 15
                 )
             ))
+            ->add('observacoes', null, array(
+                'attr' => array(
+                    'rows' => 5
+                )
+            ))
         ;
     }
     

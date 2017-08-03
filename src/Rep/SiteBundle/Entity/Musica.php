@@ -78,10 +78,18 @@ class Musica extends EntidadeBase {
     /**
      * @var string
      *
-     * @ORM\Column(name="letra", type="text")
+     * @ORM\Column(name="letra", type="text", nullable=true)
      * 
      */
     protected $letra;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacoes", type="text", nullable=true)
+     * 
+     */
+    protected $observacoes;
     
     public function __toString() {
         return $this->getNome();
@@ -368,4 +376,13 @@ class Musica extends EntidadeBase {
     {
         return $this->letra;
     }
+    
+    function getObservacoes() {
+        return $this->observacoes;
+    }
+
+    function setObservacoes($observacoes) {
+        $this->observacoes = $observacoes;
+    }
+
 }
