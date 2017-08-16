@@ -86,6 +86,14 @@ class Musica extends EntidadeBase {
     /**
      * @var string
      *
+     * @ORM\Column(name="cifra", type="text", nullable=true)
+     * 
+     */
+    protected $cifra;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="observacoes", type="text", nullable=true)
      * 
      */
@@ -385,4 +393,28 @@ class Musica extends EntidadeBase {
         $this->observacoes = $observacoes;
     }
 
+
+    /**
+     * Set cifra
+     *
+     * @param string $cifra
+     *
+     * @return Musica
+     */
+    public function setCifra($cifra)
+    {
+        $this->cifra = $cifra;
+
+        return $this;
+    }
+
+    /**
+     * Get cifra
+     *
+     * @return string
+     */
+    public function getCifra()
+    {
+        return $this->cifra;
+    }
 }

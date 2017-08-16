@@ -352,6 +352,7 @@ class RepRestController extends FOSRestController {
 
                 $umMusica->setLetra($musicas[$i]['letra']);
                 $umMusica->setObservacoes($musicas[$i]['observacoes']);
+                $umMusica->setCifra($musicas[$i]['cifra']);
                 
                 $em->persist($umMusica);
                 
