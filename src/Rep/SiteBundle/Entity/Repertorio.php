@@ -123,6 +123,18 @@ class Repertorio extends EntidadeBase {
     {
         return $this->id;
     }
+    
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
 
     /**
      * Set status
