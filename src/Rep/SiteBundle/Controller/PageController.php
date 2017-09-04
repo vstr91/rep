@@ -266,7 +266,20 @@ class PageController extends Controller
     static function buscaTomMusica(Musica $musica, \Doctrine\ORM\EntityManager $em){
         
         $html = new simple_html_dom();
-        $html->load_file("http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/");
+//        $html->load_file("http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/");
+//        $html->load_file("http://www.google.com/");
+        
+        $curl = curl_init(); 
+        curl_setopt($curl, CURLOPT_URL, "http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/");  
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);  
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        $str = curl_exec($curl);  
+        curl_close($curl);  
+        
+        $html = $html->load($str);
+        
+//        var_dump($html->find('span#cifra_tom a'));
         
 //        $html = file_get_html("http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/", $use_include_path = false, 
 //                $context=null, $offset = -1, $maxLen=-1, $lowercase = true, $forceTagsClosed=true, 
