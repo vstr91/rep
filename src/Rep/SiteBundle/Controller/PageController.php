@@ -2,6 +2,7 @@
 
 namespace Rep\SiteBundle\Controller;
 
+use Rep\SiteBundle\Entity\Musica;
 use Rep\SiteBundle\Form\ArtistaType;
 use Rep\SiteBundle\Form\EstiloType;
 use Rep\SiteBundle\Form\EventoType;
@@ -10,6 +11,8 @@ use Rep\SiteBundle\Form\MusicaType;
 use Rep\SiteBundle\Form\ProjetoType;
 use Rep\SiteBundle\Form\TipoEventoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Rep\SiteBundle\Controller\simple_html_dom;
 
 class PageController extends Controller
 {
@@ -226,6 +229,61 @@ class PageController extends Controller
             'estilos' => $estilos,
             'formEstilo' => $formEstilo->createView()
         ));
+    }
+    
+    public function populaTomAction()
+    {
+        
+        set_time_limit(0);
+        
+        $user = $this->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $estiloType = new EstiloType();
+        $formEstilo = $this->createForm($estiloType);
+        
+        $musicas = $em->getRepository('RepSiteBundle:Musica')
+                ->listarTodas();
+        
+        //$cont = 1;
+        
+        foreach($musicas as $musica){
+            
+            //if($cont <= 10){
+                $this->buscaTomMusica($musica, $em);
+            //}
+            
+            //$cont++;
+            
+        }
+        
+        $em->flush();
+        
+        return new \Symfony\Component\HttpFoundation\Response();
+    }
+    
+    static function buscaTomMusica(Musica $musica, \Doctrine\ORM\EntityManager $em){
+        
+        $html = new simple_html_dom();
+        $html->load_file("http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/");
+        
+//        $html = file_get_html("http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/", $use_include_path = false, 
+//                $context=null, $offset = -1, $maxLen=-1, $lowercase = true, $forceTagsClosed=true, 
+//                $target_charset = DEFAULT_TARGET_CHARSET, $stripRN=false, $defaultBRText=DEFAULT_BR_TEXT);
+        
+        $tom = $html->find('span#cifra_tom a');
+        //$cifra = $html->find('div.cifra-mono pre');
+        
+//        dump($tom);
+//        dump($cifra);
+        
+        if($tom){
+            $musica->setTom($tom[0]->text());
+            //$musica->setCifra($cifra);
+            $em->persist($musica);
+        }
+        
     }
     
 }

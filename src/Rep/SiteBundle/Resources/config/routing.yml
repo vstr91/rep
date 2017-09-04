@@ -1,6 +1,10 @@
 rep_site_homepage:
     pattern:  /
     defaults: { _controller: RepSiteBundle:Page:index }
+    
+rep_site_popula_tom:
+    pattern:  /popula-tom
+    defaults: { _controller: RepSiteBundle:Page:populaTom }
 
 ########################################################################
 
