@@ -100,6 +100,9 @@ fos_user:
     registration:
         form:
             type: Rep\SiteBundle\Form\UsuarioType
+    from_email:
+        address: you@example.com
+        sender_name: You
             
 sc_datetimepicker:
     picker: ~

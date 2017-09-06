@@ -5,6 +5,10 @@ rep_site_homepage:
 rep_site_popula_tom:
     pattern:  /popula-tom
     defaults: { _controller: RepSiteBundle:Page:populaTom }
+    
+rep_site_backup:
+    pattern:  /backup
+    defaults: { _controller: RepSiteBundle:Page:backup }
 
 ########################################################################
 

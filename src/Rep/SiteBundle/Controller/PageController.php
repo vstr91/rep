@@ -13,6 +13,8 @@ use Rep\SiteBundle\Form\TipoEventoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Rep\SiteBundle\Controller\simple_html_dom;
+use Rep\SiteBundle\Controller\Shuttle_Dumper;
+use Rep\SiteBundle\Controller\Shuttle_DBConn_Mysqli;
 
 class PageController extends Controller
 {
@@ -260,6 +262,33 @@ class PageController extends Controller
         
         $em->flush();
         
+        return new \Symfony\Component\HttpFoundation\Response();
+    }
+    
+    public function backupAction()
+    {
+        $world_dumper = \Rep\SiteBundle\Controller\Shuttle_Dumper::create(array(
+            'host' => $this->getParameter('database_host'),
+            'username' => $this->getParameter('database_user'),
+            'password' => $this->getParameter('database_password'),
+            'db_name' => $this->getParameter('database_name')
+        ));
+        // dump the database to plain text file
+        $nome = "rep-".date('d-m-Y')."_".date('H-i-s').".sql";
+        $world_dumper->dump($nome);
+        
+        $email = \Swift_Message::newInstance()
+                        ->setSubject("Backup Banco de Dados Gerenciador Doutor Affonso")
+                        ->setFrom("almir.amjunior@gmail.com")
+                        ->setTo("almir.amjunior@gmail.com")
+                        ->attach(\Swift_Attachment::fromPath("rep-".date('d-m-Y')."_".date('H-i-s').".sql"))
+                        ->setBody("Backup anexo")
+                        ->setContentType("text/html");
+        
+        $this->get('mailer')->send($email);
+
+        // send the output to gziped file:
+        //$world_dumper->dump('world.sql.gz');
         return new \Symfony\Component\HttpFoundation\Response();
     }
     
