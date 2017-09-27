@@ -13,7 +13,7 @@ class TempoMusicaEventoRepository extends \Doctrine\ORM\EntityRepository
     
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('tme')
-                ->select('tme.id', 'tme.tempo', 'me.id AS musica_evento', 'tme.status', 
+                ->select('tme.id', 'tme.tempo', 'me.id AS musica_evento', 'tme.status', 'tme.audio',
                         'tme.ultimaAlteracao AS ultima_alteracao')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:MusicaEvento", "me", "WITH", "me.id = tme.musicaEvento")

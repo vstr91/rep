@@ -517,6 +517,8 @@ class RepRestController extends FOSRestController {
             $total = count($temposMusicasEventos);
             //$processadas = array();
             
+            die(var_dump($temposMusicasEventos));
+            
             for($i = 0; $i < $total; $i++){
                 
                 $existe = false;
@@ -540,6 +542,7 @@ class RepRestController extends FOSRestController {
                         ->findOneBy(array('id' => $temposMusicasEventos[$i]['musica_evento']));
                 
                 $umTempoMusicaEvento->setMusicaEvento($umMusicaEvento);
+                $umTempoMusicaEvento->setAudio($temposMusicasEventos[$i]['audio']);
                 
                 $em->persist($umTempoMusicaEvento);
                 
@@ -657,6 +660,29 @@ class RepRestController extends FOSRestController {
                 200, array('totalRegistros' => 0))->setTemplateVar("u");
             
             return $this->handleView($view);           
+        } else {
+            $view = View::create(
+                    array(
+                        "meta" => array(array("registros" => 0, "status" => 403, "mensagem" => "Acesso negado."))
+                    ),
+                403, array('totalRegistros' => 0))->setTemplateVar("u");
+            
+            return $this->handleView($view);
+        }
+        
+    }
+    
+    public function getDadosAudioAction($hash, $arquivo) {
+        $em = $this->getDoctrine()->getManager();
+        
+        $crypto = new MCrypt();
+        
+        $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
+        
+        if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
+
+            
+                       
         } else {
             $view = View::create(
                     array(

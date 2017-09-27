@@ -15,6 +15,14 @@ rep_api_set_dados:
     pattern: /envia-dados/{hash}/{data}
     defaults: {_controller: RepSiteBundle:RepRest:setDados}
     
+rep_api_get_dados_audio:
+    pattern: /recebe-dados/audios/{hash}/{data}
+    defaults: {_controller: RepSiteBundle:RepRest:getDadosAudio}
+    
+rep_api_set_dados_audio:
+    pattern: /envia-dados/audios/{hash}/{data}
+    defaults: {_controller: RepSiteBundle:RepRest:setDadosAudio}
+    
 rep_api_valida_token:
     pattern: /valida-token
     defaults: {_controller: RepSiteBundle:RepRest:validaToken}

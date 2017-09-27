@@ -48,7 +48,13 @@ class TempoMusicaEvento extends EntidadeBase {
      */
     protected $musicaEvento;
     
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="audio", type="string", length=100, nullable=true)
+     * 
+     */
+    protected $audio;
 
     /**
      * Set tempo
@@ -238,5 +244,29 @@ class TempoMusicaEvento extends EntidadeBase {
     public function getUsuarioUltimaAlteracao()
     {
         return $this->usuarioUltimaAlteracao;
+    }
+
+    /**
+     * Set audio
+     *
+     * @param string $audio
+     *
+     * @return TempoMusicaEvento
+     */
+    public function setAudio($audio)
+    {
+        $this->audio = $audio;
+
+        return $this;
+    }
+
+    /**
+     * Get audio
+     *
+     * @return string
+     */
+    public function getAudio()
+    {
+        return $this->audio;
     }
 }
