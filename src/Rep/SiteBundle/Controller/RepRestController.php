@@ -517,7 +517,7 @@ class RepRestController extends FOSRestController {
             $total = count($temposMusicasEventos);
             //$processadas = array();
             
-            die(var_dump($temposMusicasEventos));
+            //die(var_dump($temposMusicasEventos));
             
             for($i = 0; $i < $total; $i++){
                 
@@ -683,6 +683,46 @@ class RepRestController extends FOSRestController {
 
             
                        
+        } else {
+            $view = View::create(
+                    array(
+                        "meta" => array(array("registros" => 0, "status" => 403, "mensagem" => "Acesso negado."))
+                    ),
+                403, array('totalRegistros' => 0))->setTemplateVar("u");
+            
+            return $this->handleView($view);
+        }
+        
+    }
+    
+    public function setDadosAudioAction($hash, $arquivo) {
+        $em = $this->getDoctrine()->getManager();
+        
+        $crypto = new MCrypt();
+        
+        $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
+        
+        if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
+            
+//            $dados = new \Symfony\Component\HttpFoundation\File\UploadedFile("", "");
+            
+            $dados = $this->getRequest()->files->get("arquivo");
+            
+            $dados->move($this->get('kernel')->getRootDir() . '/../web/uploads/audios', $dados->getClientOriginalName());
+            
+            //dump($this->get('kernel')->getRootDir() . '/../web/uploads/audios');
+            //die(var_dump($dados));
+            
+            $view = View::create(
+                    array(
+                        "meta" => array(
+                            array("registros" => 1, "status" => 200, "mensagem" => "ok")
+                            ),
+                        "audio" => $dados->getClientOriginalName()
+                    ),
+                200, array('totalRegistros' => 0))->setTemplateVar("u");
+            
+            return $this->handleView($view);           
         } else {
             $view = View::create(
                     array(

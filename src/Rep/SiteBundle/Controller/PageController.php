@@ -2,6 +2,9 @@
 
 namespace Rep\SiteBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Rep\SiteBundle\Controller\simple_html_dom;
+use Rep\SiteBundle\Entity\MCrypt;
 use Rep\SiteBundle\Entity\Musica;
 use Rep\SiteBundle\Form\ArtistaType;
 use Rep\SiteBundle\Form\EstiloType;
@@ -11,10 +14,10 @@ use Rep\SiteBundle\Form\MusicaType;
 use Rep\SiteBundle\Form\ProjetoType;
 use Rep\SiteBundle\Form\TipoEventoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Rep\SiteBundle\Controller\simple_html_dom;
-use Rep\SiteBundle\Controller\Shuttle_Dumper;
-use Rep\SiteBundle\Controller\Shuttle_DBConn_Mysqli;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class PageController extends Controller
 {
@@ -262,12 +265,12 @@ class PageController extends Controller
         
         $em->flush();
         
-        return new \Symfony\Component\HttpFoundation\Response();
+        return new Response();
     }
     
     public function backupAction()
     {
-        $world_dumper = \Rep\SiteBundle\Controller\Shuttle_Dumper::create(array(
+        $world_dumper = Shuttle_Dumper::create(array(
             'host' => $this->getParameter('database_host'),
             'username' => $this->getParameter('database_user'),
             'password' => $this->getParameter('database_password'),
@@ -289,10 +292,10 @@ class PageController extends Controller
 
         // send the output to gziped file:
         //$world_dumper->dump('world.sql.gz');
-        return new \Symfony\Component\HttpFoundation\Response();
+        return new Response();
     }
     
-    static function buscaTomMusica(Musica $musica, \Doctrine\ORM\EntityManager $em){
+    static function buscaTomMusica(Musica $musica, EntityManager $em){
         
         $html = new simple_html_dom();
 //        $html->load_file("http://www.cifraclub.com.br/".$musica->getArtista()->getSlug()."/".$musica->getSlug()."/");
@@ -324,6 +327,55 @@ class PageController extends Controller
             $musica->setTom($tom[0]->text());
             //$musica->setCifra($cifra);
             $em->persist($musica);
+        }
+        
+    }
+    
+    public function publicaAudioAction($hash, $nome)
+    {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $crypto = new MCrypt();
+        
+        $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
+        
+        if(null == $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
+
+            $arquivo = $this->get('kernel')->getRootDir().'/../web/uploads/audios/'.$nome;
+            
+//            $file = readfile("uploads/audios/".$nome);
+//            dump($file);
+//            $headers = array(
+//                'Content-Type'     => 'audio/3gp',
+//                'Content-Disposition' => 'inline; filename="'.$nome.'"');
+//            return new \Symfony\Component\HttpFoundation\BinaryFileResponse($arquivo, 200, $headers);
+
+        // This should return the file to the browser as response
+        $response = new BinaryFileResponse($arquivo);
+
+        // To generate a file download, you need the mimetype of the file
+        $mimeTypeGuesser = new FileinfoMimeTypeGuesser();
+
+        // Set the mimetype with the guesser or manually
+        if($mimeTypeGuesser->isSupported()){
+            // Guess the mimetype of the file according to the extension of the file
+            $response->headers->set('Content-Type', $mimeTypeGuesser->guess($arquivo));
+        }else{
+            // Set the mimetype of the file manually, in this case for a text file is text/plain
+            $response->headers->set('Content-Type', 'text/plain');
+        }
+
+        // Set content disposition inline of the file
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $nome
+        );
+        
+        return $response;
+           
+        } else {
+            return new Response("Acesso negado", 403);
         }
         
     }

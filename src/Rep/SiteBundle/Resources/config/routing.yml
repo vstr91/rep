@@ -9,6 +9,10 @@ rep_site_popula_tom:
 rep_site_backup:
     pattern:  /backup
     defaults: { _controller: RepSiteBundle:Page:backup }
+    
+rep_site_publica_audio:
+    path:     /audios/{hash}/{nome}
+    defaults: { _controller: RepSiteBundle:Page:publicaAudio, nome: '' }
 
 ########################################################################
 

@@ -47,6 +47,7 @@ security:
 #        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/backup$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/audios, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
