@@ -340,17 +340,20 @@ class PageController extends Controller
         
         $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
         
-        if(null == $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
+        if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
 
-            $arquivo = $this->get('kernel')->getRootDir().'/../web/uploads/audios/'.$nome;
+            $caminhoPadrao = $this->get('kernel')->getRootDir()."/../web/uploads/audios/";
+            $arquivo = $caminhoPadrao.$nome;
             
-//            $file = readfile("uploads/audios/".$nome);
-//            dump($file);
-//            $headers = array(
-//                'Content-Type'     => 'audio/3gp',
-//                'Content-Disposition' => 'inline; filename="'.$nome.'"');
-//            return new \Symfony\Component\HttpFoundation\BinaryFileResponse($arquivo, 200, $headers);
+            $file = readfile("uploads/audios/".$nome);
+            dump($file);
+            $headers = array(
+                'Content-Type'     => 'audio/3gpp',
+                'Content-Disposition' => 'inline; filename="'.$nome.'"');
+            return new \Symfony\Component\HttpFoundation\BinaryFileResponse($arquivo, 200, $headers);
 
+            //dump($nome);
+         /*   
         // This should return the file to the browser as response
         $response = new BinaryFileResponse($arquivo);
 
@@ -363,7 +366,7 @@ class PageController extends Controller
             $response->headers->set('Content-Type', $mimeTypeGuesser->guess($arquivo));
         }else{
             // Set the mimetype of the file manually, in this case for a text file is text/plain
-            $response->headers->set('Content-Type', 'text/plain');
+            $response->headers->set('Content-Type', 'video/3gpp');
         }
 
         // Set content disposition inline of the file
@@ -373,7 +376,7 @@ class PageController extends Controller
         );
         
         return $response;
-           
+           */
         } else {
             return new Response("Acesso negado", 403);
         }
