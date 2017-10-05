@@ -672,29 +672,6 @@ class RepRestController extends FOSRestController {
         
     }
     
-    public function getDadosAudioAction($hash, $arquivo) {
-        $em = $this->getDoctrine()->getManager();
-        
-        $crypto = new MCrypt();
-        
-        $hashDescriptografado = $crypto->decrypt($crypto->decrypt($hash));
-        
-        if(null != $em->getRepository('RepSiteBundle:APIToken')->validaToken($hashDescriptografado)){
-
-            
-                       
-        } else {
-            $view = View::create(
-                    array(
-                        "meta" => array(array("registros" => 0, "status" => 403, "mensagem" => "Acesso negado."))
-                    ),
-                403, array('totalRegistros' => 0))->setTemplateVar("u");
-            
-            return $this->handleView($view);
-        }
-        
-    }
-    
     public function setDadosAudioAction($hash, $arquivo) {
         $em = $this->getDoctrine()->getManager();
         

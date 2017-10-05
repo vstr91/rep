@@ -346,7 +346,6 @@ class PageController extends Controller
             $arquivo = $caminhoPadrao.$nome;
             
             $file = readfile("uploads/audios/".$nome);
-            dump($file);
             $headers = array(
                 'Content-Type'     => 'audio/3gpp',
                 'Content-Disposition' => 'inline; filename="'.$nome.'"');
