@@ -55,6 +55,12 @@ class BlocoRepertorio extends EntidadeBase {
      */
     protected $repertorio;
     
+    /**
+     * @Gedmo\Slug(fields={"nome"})
+     * @ORM\Column(unique=false)
+     */
+    private $slug;
+    
 
     /**
      * Set nome
@@ -112,6 +118,18 @@ class BlocoRepertorio extends EntidadeBase {
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set id
+     *
+     * @return string
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**
@@ -256,5 +274,29 @@ class BlocoRepertorio extends EntidadeBase {
     public function getUsuarioUltimaAlteracao()
     {
         return $this->usuarioUltimaAlteracao;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return BlocoRepertorio
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

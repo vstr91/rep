@@ -17,7 +17,7 @@ class MusicaBlocoRepository extends \Doctrine\ORM\EntityRepository
                         'mb.ultimaAlteracao AS ultima_alteracao', 'mb.ordem')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:Musica", "m", "WITH", "m.id = mb.musica")
-                ->leftJoin("RepSiteBundle:BlocoRepertorio", "b", "WITH", "b.id = mb.bloco_repertorio")
+                ->leftJoin("RepSiteBundle:BlocoRepertorio", "b", "WITH", "b.id = mb.blocoRepertorio")
                 ->where("mb.ultimaAlteracao > :ultimaAlteracao")
                 ->setParameter('ultimaAlteracao', $dataUltimoAcesso)
                 ->addOrderBy('mb.id');

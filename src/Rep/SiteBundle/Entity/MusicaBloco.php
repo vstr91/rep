@@ -56,7 +56,7 @@ class MusicaBloco extends EntidadeBase {
     protected $musica;
     
     /**
-     * @ORM\ManyToOne(targetEntity="BlocoRepertorio", inversedBy="musicasBloco")
+     * @ORM\ManyToOne(targetEntity="BlocoRepertorio")
      * @ORM\JoinColumn(name="id_bloco_repertorio", referencedColumnName="id")
      * @Gedmo\Versioned
      * 
@@ -120,6 +120,18 @@ class MusicaBloco extends EntidadeBase {
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set id
+     *
+     * @return string
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**

@@ -14,7 +14,7 @@ class BlocoRepertorioRepository extends \Doctrine\ORM\EntityRepository
     public function listarTodosREST($limite = null, $dataUltimoAcesso){
         $qb = $this->createQueryBuilder('br')
                 ->select('br.id', 'br.nome', 'r.id AS repertorio', 'br.status', 
-                        'br.ultimaAlteracao AS ultima_alteracao', 'br.ordem')
+                        'br.ultimaAlteracao AS ultima_alteracao', 'br.ordem', 'br.slug')
                 ->distinct()
                 ->leftJoin("RepSiteBundle:Repertorio", "r", "WITH", "r.id = br.repertorio")
                 ->where("br.ultimaAlteracao > :ultimaAlteracao")

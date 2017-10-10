@@ -687,6 +687,7 @@ class RepRestController extends FOSRestController {
                 $umBlocoRepertorio->setNome($blocosRepertorios[$i]['nome']);
                 $umBlocoRepertorio->setOrdem($blocosRepertorios[$i]['ordem']);
                 $umBlocoRepertorio->setStatus($blocosRepertorios[$i]['status']);
+                $umBlocoRepertorio->setSlug(NULL);
                 
                 $umRepertorio = new Repertorio();
                 $umRepertorio = $em->getRepository('RepSiteBundle:Repertorio')
@@ -727,7 +728,7 @@ class RepRestController extends FOSRestController {
                     $existe = true;
                 }
                 
-                $umMusicaBlocoRepertorio->setObservacao($musicasBlocosRepertorios[$i]['observacao']);
+                //$umMusicaBlocoRepertorio->setObservacao($musicasBlocosRepertorios[$i]['observacao']);
                 $umMusicaBlocoRepertorio->setOrdem($musicasBlocosRepertorios[$i]['ordem']);
                 $umMusicaBlocoRepertorio->setStatus($musicasBlocosRepertorios[$i]['status']);
                 
@@ -735,13 +736,13 @@ class RepRestController extends FOSRestController {
                 $umBlocoRepertorio = $em->getRepository('RepSiteBundle:BlocoRepertorio')
                         ->findOneBy(array('id' => $musicasBlocosRepertorios[$i]['bloco_repertorio']));
                 
-                $umMusicaBlocoRepertorio->setRepertorio($umBlocoRepertorio);
+                $umMusicaBlocoRepertorio->setBlocoRepertorio($umBlocoRepertorio);
                 
                 $umMusica = new Musica();
                 $umMusica = $em->getRepository('RepSiteBundle:Musica')
                         ->findOneBy(array('id' => $musicasBlocosRepertorios[$i]['musica']));
                 
-                $umMusicaBlocoRepertorio->setRepertorio($umMusica);
+                $umMusicaBlocoRepertorio->setMusica($umMusica);
                 
                 $em->persist($umMusicaBlocoRepertorio);
                 

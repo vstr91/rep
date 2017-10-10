@@ -11,3 +11,4 @@ ALTER TABLE musica_bloco ADD CONSTRAINT FK_63CAA25156D91935 FOREIGN KEY (id_usua
 ALTER TABLE tempo_bloco_repertorio ADD CONSTRAINT FK_6AE8AF69E8C773A6 FOREIGN KEY (id_bloco_repertorio) REFERENCES bloco_repertorio (id);
 ALTER TABLE tempo_bloco_repertorio ADD CONSTRAINT FK_6AE8AF69C08D23DA FOREIGN KEY (id_usuario_cadastro) REFERENCES usuario (id);
 ALTER TABLE tempo_bloco_repertorio ADD CONSTRAINT FK_6AE8AF6956D91935 FOREIGN KEY (id_usuario_ultima_alteracao) REFERENCES usuario (id);
+ALTER TABLE bloco_repertorio ADD slug VARCHAR(255) NOT NULL;

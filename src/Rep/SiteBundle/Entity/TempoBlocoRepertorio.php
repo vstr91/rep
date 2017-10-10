@@ -116,6 +116,18 @@ class TempoBlocoRepertorio extends EntidadeBase {
     }
 
     /**
+     * Set id
+     *
+     * @return string
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+    
+    /**
      * Set status
      *
      * @param integer $status
