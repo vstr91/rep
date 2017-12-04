@@ -111,6 +111,13 @@ class RepRestController extends FOSRestController {
             $temposBlocosRepertorios = $em->getRepository('RepSiteBundle:TempoBlocoRepertorio')
                     ->listarTodosREST(null, $data);
             
+            $casas = $em->getRepository('RepSiteBundle:Casa')
+                    ->listarTodosREST(null, $data);
+            $contatos = $em->getRepository('RepSiteBundle:Contato')
+                    ->listarTodosREST(null, $data);
+            $contatosCasas = $em->getRepository('RepSiteBundle:ContatoCasa')
+                    ->listarTodosREST(null, $data);
+            
 //            $log = $em->getRepository('RepSiteBundle:LogEntry')
 //                    ->listarTodosREST(null, $data);
 
@@ -118,7 +125,7 @@ class RepRestController extends FOSRestController {
                     + count($eventos) + count($musicasEventos) + count($comentariosEventos)
                     + count($estilos) + count($estilosMusicas) + count($projetos) + count($musicasProjetos) + count($temposMusicasEventos) 
                     + count($repertorios) + count($musicasRepertorios) + count($blocosRepertorios) + count($musicasBlocos) 
-                    + count($temposBlocosRepertorios);
+                    + count($temposBlocosRepertorios) + count($casas) + count($contatos) + count($contatosCasas);
             
             $view = View::create(
                     array(
@@ -130,7 +137,7 @@ class RepRestController extends FOSRestController {
                         "musicas_eventos" => $musicasEventos,
                         "comentarios_eventos" => $comentariosEventos,
                         "estilos" => $estilos,
-                        "estilosMusicas" => $estilosMusicas,
+//                        "estilosMusicas" => $estilosMusicas,
                         "projetos" => $projetos,
                         "musicas_projetos" => $musicasProjetos,
                         "tempos_musicas_eventos" => $temposMusicasEventos,
@@ -138,7 +145,10 @@ class RepRestController extends FOSRestController {
                         "musicas_repertorios" => $musicasRepertorios,
                         "blocos_repertorios" => $blocosRepertorios,
                         "musicas_blocos_repertorios" => $musicasBlocos,
-                        "tempos_blocos_repertorios" => $temposBlocosRepertorios
+                        "tempos_blocos_repertorios" => $temposBlocosRepertorios,
+                        "casas" => $casas,
+                        "contatos" => $contatos,
+                        "contatos_casas" => $contatosCasas
                         //"log" => $log
                     ), 200, array('totalRegistros' => $totalRegistros))->setTemplateVar("u");
             
@@ -170,37 +180,7 @@ class RepRestController extends FOSRestController {
             $dados = $this->getRequest()->request->all();
             $dados = json_decode($dados['dados'], TRUE);
             
-            //die(var_dump($dados['musicas']));
-            
-            $comentarios = $dados['comentarios'];
-            $total = count($comentarios);
-            
-            //$processadas = array();
-            
-            for($i = 0; $i < $total; $i++){
-                
-                $umComentario = new ComentarioEvento();
-                $umComentario->setId($comentarios[$i]['id']);
-                $umComentario->setTexto($comentarios[$i]['texto']);
-                
-                $umEvento = new Evento();
-                $umEvento = $em->getRepository('RepSiteBundle:Evento')
-                        ->findOneBy(array('id' => $comentarios[$i]['evento']));
-                
-                $umComentario->setEvento($umEvento);
-                $umComentario->setStatus(0);
-//                $umaMensagem->setDataCriacao($mensagem[0]['descricao'])
-
-                $em->persist($umComentario);
-                
-                $metadata = $em->getClassMetaData(get_class($umComentario));
-                $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-                $metadata->setIdGenerator(new AssignedGenerator());
-                $umComentario->setId($comentarios[$i]['id']);
-                
-                //$processadas[] = $comentarios[$i]['id'];
-            }
-            
+            //die(var_dump($dados['musicas']));          
             // ESTILOS
             
             $estilos = $dados['estilos'];
@@ -378,6 +358,46 @@ class RepRestController extends FOSRestController {
                 }
             }
             
+            // CASAS
+            
+            $casas = $dados['casas'];
+            $total = count($casas);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umCasa = null;
+                
+                $umCasa = $em->getRepository('RepSiteBundle:Casa')
+                        ->findOneBy(array('id' => $casas[$i]['id']));
+                
+                if($umCasa == null){
+                    $umCasa = new \Rep\SiteBundle\Entity\Casa();
+                    $umCasa->setId($casas[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umCasa->setNome($casas[$i]['nome']);
+                $umCasa->setStatus($casas[$i]['status']);
+                $umCasa->setSlug(NULL);
+                //$umArtista->setDataCadastro($artistas[$i]['data_cadastro']);
+
+                //die(var_dump($umArtista));
+                
+                $em->persist($umCasa);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umCasa));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umCasa->setId($casas[$i]['id']);
+                    $em->flush();
+                }
+                
+            }
+            
             // EVENTOS
             
             $eventos = $dados['eventos'];
@@ -410,11 +430,19 @@ class RepRestController extends FOSRestController {
                 
                 $umEvento->setTipoEvento($umTipoEvento);
                 
+                $umCasa = new \Rep\SiteBundle\Entity\Casa();
+                $umCasa = $em->getRepository('RepSiteBundle:Casa')
+                        ->findOneBy(array('id' => $eventos[$i]['casa']));
+                
+                $umEvento->setCasa($umCasa);
+                
                 $umProjeto = new Projeto();
                 $umProjeto = $em->getRepository('RepSiteBundle:Projeto')
                         ->findOneBy(array('id' => $eventos[$i]['projeto']));
                 
                 $umEvento->setProjeto($umProjeto);
+                
+                $umEvento->setCache($eventos[$i]['cache']);
                 
                 $em->persist($umEvento);
                 
@@ -426,6 +454,37 @@ class RepRestController extends FOSRestController {
                     $em->flush();
                 }
                 
+            }
+            
+            // COMENTARIOS
+            
+            $comentarios = $dados['comentarios'];
+            $total = count($comentarios);
+            
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $umComentario = new ComentarioEvento();
+                $umComentario->setId($comentarios[$i]['id']);
+                $umComentario->setTexto($comentarios[$i]['texto']);
+                
+                $umEvento = new Evento();
+                $umEvento = $em->getRepository('RepSiteBundle:Evento')
+                        ->findOneBy(array('id' => $comentarios[$i]['evento']));
+                
+                $umComentario->setEvento($umEvento);
+                $umComentario->setStatus(0);
+//                $umaMensagem->setDataCriacao($mensagem[0]['descricao'])
+
+                $em->persist($umComentario);
+                
+                $metadata = $em->getClassMetaData(get_class($umComentario));
+                $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                $metadata->setIdGenerator(new AssignedGenerator());
+                $umComentario->setId($comentarios[$i]['id']);
+                
+                //$processadas[] = $comentarios[$i]['id'];
             }
             
             // MUSICAS EVENTOS
@@ -800,6 +859,97 @@ class RepRestController extends FOSRestController {
                 
             }
             
+            // CONTATOS
+            
+            $contatos = $dados['contatos'];
+            $total = count($contatos);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umContato = null;
+                
+                $umContato = $em->getRepository('RepSiteBundle:Contato')
+                        ->findOneBy(array('id' => $contatos[$i]['id']));
+                
+                if($umContato == null){
+                    $umContato = new \Rep\SiteBundle\Entity\Contato();
+                    $umContato->setId($contatos[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umContato->setNome($contatos[$i]['nome']);
+                $umContato->setTelefone($contatos[$i]['telefone']);
+                $umContato->setEmail($contatos[$i]['email']);
+                $umContato->setObservacao($contatos[$i]['observacao']);
+                $umContato->setStatus($contatos[$i]['status']);
+                //$umArtista->setDataCadastro($artistas[$i]['data_cadastro']);
+
+                //die(var_dump($umArtista));
+                
+                $em->persist($umContato);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umContato));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umContato->setId($contatos[$i]['id']);
+                    $em->flush();
+                }
+                
+            }
+            ///*
+            // CONTATOS CASAS
+            
+            $contatosCasas = $dados['contatos_casas'];
+            $total = count($contatosCasas);
+            //$processadas = array();
+            
+            for($i = 0; $i < $total; $i++){
+                
+                $existe = false;
+                $umContatoCasa = null;
+                
+                $umContatoCasa = $em->getRepository('RepSiteBundle:ContatoCasa')
+                        ->findOneBy(array('id' => $contatosCasas[$i]['id']));
+                
+                if($umContatoCasa == null){
+                    $umContatoCasa = new \Rep\SiteBundle\Entity\ContatoCasa();
+                    $umContatoCasa->setId($contatosCasas[$i]['id']);
+                } else{
+                    $existe = true;
+                }
+                
+                $umContatoCasa->setObservacao($contatosCasas[$i]['observacao']);
+                $umContatoCasa->setCargo($contatosCasas[$i]['cargo']);
+                $umContatoCasa->setStatus($contatosCasas[$i]['status']);
+                
+                $umContato = new \Rep\SiteBundle\Entity\Contato();
+                $umContato = $em->getRepository('RepSiteBundle:Contato')
+                        ->findOneBy(array('id' => $contatosCasas[$i]['contato']));
+                
+                $umContatoCasa->setContato($umContato);
+                
+                $umCasa = new \Rep\SiteBundle\Entity\Casa();
+                $umCasa = $em->getRepository('RepSiteBundle:Casa')
+                        ->findOneBy(array('id' => $contatosCasas[$i]['casa']));
+                
+                $umContatoCasa->setCasa($umCasa);
+                
+                $em->persist($umContatoCasa);
+                
+                if(!$existe){
+                    $metadata = $em->getClassMetaData(get_class($umContatoCasa));
+                    $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+                    $metadata->setIdGenerator(new AssignedGenerator());
+                    $umContatoCasa->setId($contatosCasas[$i]['id']);
+                    $em->flush();
+                }
+                
+            }
+            //*/
             $em->flush();
             
             $view = View::create(

@@ -16,7 +16,7 @@ use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Description of Evento
+ * Description of ContatoCasa
  *
  * @author Almir
  */
@@ -24,118 +24,67 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Musica
  *
- * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\EventoRepository")
- * @ORM\Table(name="evento")
+ * @ORM\Entity(repositoryClass="Rep\SiteBundle\Entity\Repository\ContatoCasaRepository")
+ * @ORM\Table(name="contato_casa")
  * @Gedmo\Loggable
  * @ORM\HasLifecycleCallbacks()
  * 
  */
-class Evento extends EntidadeBase {
+class ContatoCasa extends EntidadeBase {
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nome", type="string", length=100)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="observacao", type="string", length=100, nullable=true)
+     * 
+     */
+    protected $observacao;
+    
+    /**
+     * @ORM\Column(name="cargo", type="string", length=100, nullable=true)
      * @Gedmo\Versioned
      * 
      */
-    protected $nome;
+    protected $cargo;
     
     /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Versioned
-     */
-    protected $data;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TipoEvento")
-     * @ORM\JoinColumn(name="id_tipo_evento", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Contato")
+     * @ORM\JoinColumn(name="id_contato", referencedColumnName="id")
      * @Gedmo\Versioned
      * 
      */
-    protected $tipoEvento;
+    protected $contato;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Casa")
+     * @ORM\ManyToOne(targetEntity="Casa", inversedBy="contatosCasa")
      * @ORM\JoinColumn(name="id_casa", referencedColumnName="id")
      * @Gedmo\Versioned
      * 
      */
     protected $casa;
     
-    /**
-     * @Gedmo\Slug(fields={"nome", "data"})
-     * @ORM\Column(unique=false)
-     */
-    private $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Projeto")
-     * @ORM\JoinColumn(name="id_projeto", referencedColumnName="id")
-     * @Gedmo\Versioned
-     * 
-     */
-    protected $projeto;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="MusicaEvento", mappedBy="evento")
-     */
-    private $musicas;
-    
-    /**
-     * @ORM\Column(name="cache", type="decimal", precision=10, scale=2)
-     */
-    private $cache;
-    
-    public function __construct() {
-        $this->musicas = new \Doctrine\Common\Collections\ArrayCollection;
-    }
-
-    /**
-     * Set nome
+     * Set observacao
      *
-     * @param string $nome
-     * @return Evento
+     * @param string $observacao
+     * @return MusicaEvento
      */
-    public function setNome($nome)
+    public function setObservacao($observacao)
     {
-        $this->nome = $nome;
+        $this->observacao = $observacao;
 
         return $this;
     }
 
     /**
-     * Get nome
+     * Get observacao
      *
      * @return string 
      */
-    public function getNome()
+    public function getObservacao()
     {
-        return $this->nome;
-    }
-
-    /**
-     * Set data
-     *
-     * @param \DateTime $data
-     * @return Evento
-     */
-    public function setData($data)
-    {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * Get data
-     *
-     * @return \DateTime 
-     */
-    public function getData()
-    {
-        return $this->data;
+        return $this->observacao;
     }
 
     /**
@@ -151,7 +100,7 @@ class Evento extends EntidadeBase {
     /**
      * Set id
      *
-     * @return integer 
+     * @return integer
      */
     public function setId($id)
     {
@@ -164,7 +113,7 @@ class Evento extends EntidadeBase {
      * Set status
      *
      * @param integer $status
-     * @return Evento
+     * @return MusicaEvento
      */
     public function setStatus($status)
     {
@@ -187,7 +136,7 @@ class Evento extends EntidadeBase {
      * Set dataCadastro
      *
      * @param \DateTime $dataCadastro
-     * @return Evento
+     * @return MusicaEvento
      */
     public function setDataCadastro($dataCadastro)
     {
@@ -210,7 +159,7 @@ class Evento extends EntidadeBase {
      * Set ultimaAlteracao
      *
      * @param \DateTime $ultimaAlteracao
-     * @return Evento
+     * @return MusicaEvento
      */
     public function setUltimaAlteracao($ultimaAlteracao)
     {
@@ -230,50 +179,73 @@ class Evento extends EntidadeBase {
     }
 
     /**
-     * Set tipoEvento
+     * Set musica
      *
-     * @param \Rep\SiteBundle\Entity\TipoEvento $tipoEvento
-     * @return Evento
+     * @param \Rep\SiteBundle\Entity\Musica $musica
+     * @return MusicaEvento
      */
-    public function setTipoEvento(\Rep\SiteBundle\Entity\TipoEvento $tipoEvento = null)
+    public function setMusica(\Rep\SiteBundle\Entity\Musica $musica = null)
     {
-        $this->tipoEvento = $tipoEvento;
+        $this->musica = $musica;
 
         return $this;
     }
 
     /**
-     * Get tipoEvento
+     * Get musica
      *
-     * @return \Rep\SiteBundle\Entity\TipoEvento 
+     * @return \Rep\SiteBundle\Entity\Musica 
      */
-    public function getTipoEvento()
+    public function getMusica()
     {
-        return $this->tipoEvento;
+        return $this->musica;
     }
 
     /**
-     * Set slug
+     * Set evento
      *
-     * @param string $slug
-     *
-     * @return Evento
+     * @param \Rep\SiteBundle\Entity\Evento $evento
+     * @return MusicaEvento
      */
-    public function setSlug($slug)
+    public function setEvento(\Rep\SiteBundle\Entity\Evento $evento = null)
     {
-        $this->slug = $slug;
+        $this->evento = $evento;
 
         return $this;
     }
 
     /**
-     * Get slug
+     * Get evento
      *
-     * @return string
+     * @return \Rep\SiteBundle\Entity\Evento 
      */
-    public function getSlug()
+    public function getEvento()
     {
-        return $this->slug;
+        return $this->evento;
+    }
+
+    /**
+     * Set ordem
+     *
+     * @param integer $ordem
+     *
+     * @return MusicaEvento
+     */
+    public function setOrdem($ordem)
+    {
+        $this->ordem = $ordem;
+
+        return $this;
+    }
+
+    /**
+     * Get ordem
+     *
+     * @return integer
+     */
+    public function getOrdem()
+    {
+        return $this->ordem;
     }
 
     /**
@@ -281,7 +253,7 @@ class Evento extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioCadastro
      *
-     * @return Evento
+     * @return MusicaEvento
      */
     public function setUsuarioCadastro(\Rep\SiteBundle\Entity\Usuario $usuarioCadastro = null)
     {
@@ -305,7 +277,7 @@ class Evento extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao
      *
-     * @return Evento
+     * @return MusicaEvento
      */
     public function setUsuarioUltimaAlteracao(\Rep\SiteBundle\Entity\Usuario $usuarioUltimaAlteracao = null)
     {
@@ -325,61 +297,51 @@ class Evento extends EntidadeBase {
     }
 
     /**
-     * Set projeto
+     * Set cargo
      *
-     * @param \Rep\SiteBundle\Entity\Projeto $projeto
+     * @param string $cargo
      *
-     * @return Evento
+     * @return ContatoCasa
      */
-    public function setProjeto(\Rep\SiteBundle\Entity\Projeto $projeto = null)
+    public function setCargo($cargo)
     {
-        $this->projeto = $projeto;
+        $this->cargo = $cargo;
 
         return $this;
     }
 
     /**
-     * Get projeto
+     * Get cargo
      *
-     * @return \Rep\SiteBundle\Entity\Projeto
+     * @return string
      */
-    public function getProjeto()
+    public function getCargo()
     {
-        return $this->projeto;
+        return $this->cargo;
     }
 
     /**
-     * Add musica
+     * Set contato
      *
-     * @param \Rep\SiteBundle\Entity\MusicaEvento $musica
+     * @param \Rep\SiteBundle\Entity\Contato $contato
      *
-     * @return Evento
+     * @return ContatoCasa
      */
-    public function addMusica(\Rep\SiteBundle\Entity\MusicaEvento $musica)
+    public function setContato(\Rep\SiteBundle\Entity\Contato $contato = null)
     {
-        $this->musicas[] = $musica;
+        $this->contato = $contato;
 
         return $this;
     }
 
     /**
-     * Remove musica
+     * Get contato
      *
-     * @param \Rep\SiteBundle\Entity\MusicaEvento $musica
+     * @return \Rep\SiteBundle\Entity\Contato
      */
-    public function removeMusica(\Rep\SiteBundle\Entity\MusicaEvento $musica)
+    public function getContato()
     {
-        $this->musicas->removeElement($musica);
-    }
-
-    /**
-     * Get musicas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMusicas()
-    {
-        return $this->musicas;
+        return $this->contato;
     }
 
     /**
@@ -387,7 +349,7 @@ class Evento extends EntidadeBase {
      *
      * @param \Rep\SiteBundle\Entity\Casa $casa
      *
-     * @return Evento
+     * @return ContatoCasa
      */
     public function setCasa(\Rep\SiteBundle\Entity\Casa $casa = null)
     {
@@ -404,29 +366,5 @@ class Evento extends EntidadeBase {
     public function getCasa()
     {
         return $this->casa;
-    }
-
-    /**
-     * Set cache
-     *
-     * @param string $cache
-     *
-     * @return Evento
-     */
-    public function setCache($cache)
-    {
-        $this->cache = $cache;
-
-        return $this;
-    }
-
-    /**
-     * Get cache
-     *
-     * @return string
-     */
-    public function getCache()
-    {
-        return $this->cache;
     }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE evento ADD cache NUMERIC(10, 2) NOT NULL;
